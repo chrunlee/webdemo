@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>雪花效果</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<style type="text/css">html,body{width:100%;height:100%;}</style>
+</head>
+<body>
+	
+</body>
+</html>
+<script type="text/javascript" src="http://byy.gcoder.win/byy/dist/byy.js"></script>
+<script type="text/javascript">
+	byy.setRequire({
+		base : '',
+		modules : {
+			snow : 'snow'
+		}
+	});
+	byy.require(['jquery','snow'],function(){
+		byy('body').snow({
+			time : 3000,
+			speed : 500,
+			maxSize : 20,
+			template : '<span style="position:absolute;"><img src="red.jpg" style="width:100px;height:80px;"></span>'
+		});
+		$('body').on('click','span',function(){
+			console.log('aaa');
+		})
+	});
+	
+</script>

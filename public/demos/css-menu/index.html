@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<style type="text/css">
+	
+	/*CSS源代码*/
+body{
+	background:#000;
+}
+ul.nice-menu {
+  list-style: none;
+  margin-top: 30px;
+  width: 300px;
+}
+
+ @-moz-keyframes expand {  
+  0% {
+    width: 5px;
+    padding-left: 0px;
+  }
+  
+  100% {
+    width: 200px;
+    padding-left: 20px;
+  }
+}
+
+@-moz-keyframes expand-bounce {
+  0% {
+    width: 5px;
+    padding-left: 0px;
+  }
+  
+  50% {
+    width: 200px;
+  }
+  
+  70% {
+    width: 170px;
+  }
+  
+  80% {
+    width: 200px;
+  }
+  
+  90% {
+    width: 190px;
+  }
+  
+  100% {
+    width: 200px;
+    padding-left: 20px;
+  }
+}
+
+@-webkit-keyframes expand {  
+  0% {
+    width: 5px;
+    padding-left: 0px;
+  }
+  
+  100% {
+    width: 200px;
+    padding-left: 20px;
+  }
+}
+
+@-webkit-keyframes expand-bounce {  
+  0% {
+    width: 5px;
+    padding-left: 0px;
+  }
+  
+  50% {
+    width: 200px;
+  }
+  
+  70% {
+    width: 170px;
+  }
+  
+  80% {
+    width: 200px;
+  }
+  
+  90% {
+    width: 190px;
+  }
+  
+  100% {
+    width: 200px;
+    padding-left: 20px;
+  }
+}
+
+@-moz-keyframes shrink {
+  
+  0% {
+    width: 200px;
+    padding-left: 20px;
+  }
+  
+  100% {
+    width: 5px;
+    padding-left: 0px;
+  }
+}
+
+@-moz-keyframes shrink-bounce {
+  
+  0% {
+    width: 200px;
+    padding-left: 20px;
+  }
+  
+  50% {
+    width: 5px;
+  }
+  
+  70% {
+    width: 35px;
+  }
+  
+  80% {
+    width: 5px;
+  }
+  
+  90% {
+    width: 15px;
+  }
+  
+  100% {
+    width: 5px;
+    padding-left: 0px;
+  }
+}
+
+@-webkit-keyframes shrink {
+  
+  0% {
+    width: 200px;
+    padding-left: 20px;
+  }
+  
+  100% {
+    width: 5px;
+    padding-left: 0px;
+  }
+}
+
+@-webkit-keyframes shrink-bounce {
+  
+  0% {
+    width: 200px;
+    padding-left: 20px;
+  }
+  
+  50% {
+    width: 5px;
+  }
+  
+  70% {
+    width: 35px;
+  }
+  
+  80% {
+    width: 5px;
+  }
+  
+  90% {
+    width: 15px;
+  }
+  
+  100% {
+    width: 5px;
+    padding-left: 0px;
+  }
+} 
+
+ul.nice-menu li {
+  width: 5px;
+  height: 30px;
+  line-height: 20px;
+  padding: 0px 0px 0px 0px;
+  margin-top: 3px;
+  background: transparent;
+  width: 5px;
+}
+
+ul.nice-menu.tight li {
+  margin-top: 0 !important;
+}
+
+ul.nice-menu li {
+  -moz-animation-name: shrink;
+  -moz-animation-duration: 0.5s;
+  -moz-animation-timing-function: ease-in-out;
+  -webkit-animation-name: shrink;
+  -webkit-animation-duration: 0.5s;
+  -webkit-animation-timing-function: ease-in-out;
+}
+
+ul.nice-menu.bounce li {
+  -moz-animation-name: shrink-bounce;
+  -moz-animation-duration: 0.5s;
+  -moz-animation-timing-function: ease-in-out;
+  -webkit-animation-name: shrink-bounce;
+  -webkit-animation-duration: 0.5s;
+  -webkit-animation-timing-function: ease-in-out;
+}
+
+ul.nice-menu li:hover {
+  width: 200px;
+  padding-left: 20px;
+  -moz-animation-name: expand;
+  -moz-animation-duration: 0.5s;
+  -moz-animation-timing-function: ease-in-out;
+  -webkit-animation-name: expand;
+  -webkit-animation-duration: 0.5s;
+  -webkit-animation-timing-function: ease-in-out;
+}
+
+ul.nice-menu.bounce li:hover {
+  -moz-animation-name: expand-bounce;
+  -moz-animation-duration: 0.5s;
+  -moz-animation-timing-function: ease-in-out;
+  -webkit-animation-name: expand-bounce;
+  -webkit-animation-duration: 0.5s;
+  -webkit-animation-timing-function: ease-in-out;
+}
+
+ul.nice-menu a {
+  width: 200px;
+  text-decoration: none;
+  font-size: 14px;
+  color: #FFF;
+  text-shadow: 0px 0px 3px #333;
+  font-weight: bold;
+  position: absolute;
+  padding: 5px 0px;
+  padding-left: 20px;
+}
+
+ul.nice-menu li.green {
+  background: rgb(107,186,112);
+}
+
+ul.nice-menu li.blue {
+  background: rgb(78,92,127);
+}
+
+ul.nice-menu li.orange {
+  background: rgb(216,121,40);
+}
+
+ul.nice-menu li.dark {
+  background: rgb(42,32,30);
+} 
+
+ul.nice-menu li.red {
+  background: rgb(178,59,30);
+}
+
+
+ul.nice-menu li.bright {
+  background: rgb(241,249,210);
+}	
+</style>
+<body>
+	<!-- HTML代码片段中请勿添加<body>标签 //-->
+<div id="container">
+	
+	     <ul class = "nice-menu">
+	       <li class = "orange"><a href = "">主页</a></li>
+	       <li class = "red"><a href = "">档案</a></li>
+	       <li class = "green"><a href = "">作品集</a></li>
+	       <li class = "blue"><a href = "">博客</a></li>
+	       <li class = "bright"><a href = "">联系我</a></li>
+
+	       <li class = "red"><a href = "">为啥不呢?</a></li>
+	     </ul>
+	   </div>
+	   <div class = "container" style = "">
+	     <ul class = "nice-menu bounce">
+	       <li class = "orange"><a href = "">魔法伤害</a></li>
+	       <li class = "red"><a href = "">物理伤害</a></li>
+	       <li class = "green"><a href = "">真实伤害</a></li>
+	       <li class = "blue"><a href = "">无视魔抗</a></li>
+	       <li class = "bright"><a href = "">无视护甲</a></li>
+	       <li class = "red"><a href = "">这游戏没法儿玩儿啦!(摔!</a></li>
+	     </ul>
+</div>
+
+</body>
+</html>

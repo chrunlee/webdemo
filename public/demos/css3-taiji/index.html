@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>纯CSS实现太极动画</title>
+	<style type="text/css">
+		
+		body{
+			background-color:#ccc;
+		}
+		.taiji {
+			position:absolute;
+			left:50%;
+			top:50%;
+			width:0px;
+			height:400px;
+			border-left:200px solid white;
+			border-right:200px solid black;
+			margin-left:-200px;
+			margin-top:-200px;
+			border-radius:50%;
+			animation: move 1s 2s infinite;
+		}
+		.taiji:before,.taiji:after{
+			content :"";
+			position:absolute;
+		}
+		.taiji:before{
+			width:200px;
+			height:200px;
+			position:absolute;
+			top:0px;
+			background-color:white;
+			border-radius:50%;
+			left:-100px;
+			box-shadow:0px 200px 0 #000;
+		}
+
+		.taiji:after{
+			width:60px;
+			height:60px;
+			left:-30px;
+			top:70px;
+			background-color:black;
+			border-radius:50%;
+			box-shadow:0px 200px 0 #fff;
+		}
+		@keyframes move{
+			0%{
+				transform : rotate(0deg);
+			}
+			100%{
+				transform : rotate(360deg);
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="taiji"></div>
+</body>
+</html>
