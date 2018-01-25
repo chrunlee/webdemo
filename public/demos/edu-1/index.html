@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>首页</title>
+	<link rel="stylesheet" type="text/css" href="/plugins/byy/css/default/byy.css">
+	<link rel="stylesheet" type="text/css" href="./css/index.css">
+	<link rel="stylesheet" type="text/css" href="./css/style1.css" id="byycss-index-skin">
+</head>
+<body>
+	<!-- 多个frame -->
+	<div class="index-frame hide"></div>
+	<!--右侧绝对定位-->
+	<header class="index-header"><!--绝对定位替换fixed-->
+		<ul class="byy-nav index-nav">
+			<span class="logo">
+				<img class="index-dom" src="./css/img/logo.png" style="width:292px;height:28px;margin-right:20px;" />	
+				<img class="app-dom hide" src="./css/img/logo-app.png" style="width:292px;height:28px;margin-right:20px;" />	
+			</span>
+			<li class="byy-nav-item byy-this" byy-filter="showDesk">
+				<a href="javascript:;">
+					<i class="index-icon home nav-icon index-dom"></i>
+					<i class="style-icon home-grey nav-icon app-dom hide"></i>
+					<span>我的主页</span>
+				</a>
+			</li>
+			<li class="byy-nav-item" byy-filter="showApp">
+				<a href="javascript:;">
+					<i class="index-icon yingyong nav-icon index-dom"></i>
+					<i class="style-icon yingyong nav-icon app-dom hide"></i>
+					<span>应用商店</span>
+				</a>
+			</li>
+			<li class="pull-right nav-right">
+				<!--换肤、消息、头像，各自带有下拉菜单-->
+				<span class="item">
+					<i class="index-icon zhuangban nav-icon index-dom"></i>
+					<i class="style-icon subject-ico-color nav-icon app-dom hide"></i>
+					<!--鼠标移入后显示-->
+					<div class="dropdown theme">
+						<span class="title">主题色</span>
+						<span class="theme-item" byy-filter="changeSkin" data-name="style1">
+							<i class="index-icon subject1"></i>	
+						</span>
+						<span class="theme-item" byy-filter="changeSkin" data-name="style2">
+							<i class="index-icon subject2"></i>	
+						</span>
+						<span class="theme-item" byy-filter="changeSkin" data-name="style3">
+							<i class="index-icon subject3"></i>	
+						</span>
+						<span class="theme-item" byy-filter="changeSkin" data-name="style4">
+							<i class="index-icon subject4"></i>	
+						</span>
+						<span class="theme-item" byy-filter="changeSkin" data-name="style5">
+							<i class="index-icon subject5"></i>	
+						</span>
+						<span class="byy-edge bottom"></span>
+					</div>
+				</span>
+				<span class="item">
+					<i class="index-icon lingdang nav-icon index-dom"></i>
+					<i class="style-icon remind-ico-color nav-icon app-dom hide"></i>
+					<span class="byy-badge-dot"></span>
+					<span class="dropdown notice">
+						<span class="byy-edge bottom"></span>
+						<span class="notice-tag">
+							<span class="title selected">消息</span><span class="title">状态</span>
+						</span>
+						<span class="notice-content hide" id="message">
+							<ul>
+								<li>
+									<i class="index-icon state"></i>
+									<p class="notice-title">学生选课</p>
+									<p class="notice-info byy-elip">2018年-2019年上学期选课已经开始啦案例始啦案例始啦案例始啦案例始啦案例始啦案例</p>
+								</li>
+								<li>
+									<i class="index-icon state"></i>
+									<p class="notice-title">学生选课</p>
+									<p class="notice-info byy-elip">2018年-2019年上学期选课已经开始啦案例始啦案例始啦案例始啦案例始啦案例始啦案例</p>
+								</li>
+								<li>
+									<i class="index-icon state"></i>
+									<p class="notice-title">学生选课</p>
+									<p class="notice-info byy-elip">2018年-2019年上学期选课已经开始啦案例始啦案例始啦案例始啦案例始啦案例始啦案例</p>
+								</li>
+							</ul>
+						</span>
+						<span class="notice-content" id="state">
+							<ul>
+								<li>
+									<i class="index-icon state"></i>
+									<p class="notice-title">学生选课1</p>
+									<p class="notice-info byy-elip">2018年-2019年上学期选课已经开始啦案例始啦案例始啦案例始啦案例始啦案例始啦案例</p>
+								</li>
+								<li>
+									<i class="index-icon state"></i>
+									<p class="notice-title">学生选课1</p>
+									<p class="notice-info byy-elip">2018年-2019年上学期选课已经开始啦案例始啦案例始啦案例始啦案例始啦案例始啦案例</p>
+								</li>
+								<li>
+									<i class="index-icon state"></i>
+									<p class="notice-title">学生选课1</p>
+									<p class="notice-info byy-elip">2018年-2019年上学期选课已经开始啦案例始啦案例始啦案例始啦案例始啦案例始啦案例</p>
+								</li>
+							</ul>
+						</span>
+						<span class="notice-btn">清空所有状态</span>
+					</span>
+				</span>
+				<div class="item language">
+					<span class="active" data-language="en" byy-filter="changeLanguage">EN</span>
+					<span data-language="zh" byy-filter="changeLanguage">中</span>
+				</div>
+				<span class="item avatar">
+					<img src="./css/img/avatar.jpg" alt="">
+					<span class="dropdown person-info">
+						<span class="byy-edge bottom"></span>
+						<span class="title">廖雪峰</span>
+						<ul>
+							<li><a>个人中心</a></li>
+							<li><a href="">退出系统</a></li>
+						</ul>
+					</span>
+				</span>
+			</li>
+		</ul>
+	</header>
+	<div class="index-body">
+		<div class="right-fixed index-dom">
+			<div class="right-item-top hide" title="返回顶部" byy-filter="backTop">
+				<i class="style-icon left-top"></i>
+			</div>
+			<div class="right-item" title="通知公告" byy-filter="scrollItem">
+				<i class="style-icon left-notice"></i>
+				<span class="des">通知公告</span>
+			</div>
+			<div class="right-item" title="校内新闻" byy-filter="scrollItem">
+				<i class="style-icon left-news"></i>
+				<span class="des">校内新闻</span>
+			</div>
+			<div class="right-item" title="资源学习" byy-filter="scrollItem">
+				<i class="style-icon left-stduy"></i>
+				<span class="des">资源学习</span>
+			</div>
+			<div class="right-item" title="我的周历" byy-filter="scrollItem">
+				<i class="style-icon left-weekcalendar"></i>
+				<span class="des">我的周历</span>
+			</div>
+		</div>
+		
+		<!--通知公告-->
+		<section class="notice-section section index-dom">
+			<!--渐变背景-->
+			<div class="gradient notice-gradient"></div>
+			<div class="section-content">
+				<div class="section-title">
+					<p class="title">Notice Bullection</p>
+					<p>
+						<span class="notice-btn">通知公告</span>
+					</p>
+				</div>
+				<div class="section-wrap">
+					<div class="byy-carousel" id="notice-slider">
+						<div carousel-item="">
+							<div>
+								<div class="notice-date">2017年12月31号</div>
+								<div class="notice-msg">
+									学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！
+									学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！
+									学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！
+									学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！
+								</div>
+							</div>
+							<div>
+								<div class="notice-date">2017年12月31号</div>
+								<div class="notice-msg">
+									学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！
+								</div>
+							</div>
+							<div>
+								<div class="notice-date">2017年12月31号</div>
+								<div class="notice-msg">
+									学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！
+								</div>
+							</div>
+							<div>
+								<div class="notice-date">2017年12月31号</div>
+								<div class="notice-msg">
+									学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！
+								</div>
+							</div>
+							<div>
+								<div class="notice-date">2017年12月31号</div>
+								<div class="notice-msg">
+									学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！学校开展一师一优课教师微课大赛的通知！
+								</div>
+							</div>
+						</div>
+					</div> 
+				</div>
+			</div>
+			<!--斜线-->
+			<div class="slant bottom"></div>
+		</section>
+		<!--校内新闻-->
+		<section class="news-section section index-dom">
+			<div class="section-content">
+				<div class="section-title">
+					<p class="section-title-name">校内新闻</p>
+					<p class="section-title-en">NEWS</p>
+					<span class="section-title-line"></span>
+				</div>
+				<div class="section-wrap">
+					<!--绝对定位-->
+					<div class="news-1">
+						<!--通过js将src设置为背景图-->
+						<div class="imgbox" src="./css/img/demo.jpg"></div>
+						<div class="info byy-elip">
+							校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品
+						</div>
+					</div>
+					<div class="news-2">
+						<!--通过js将src设置为背景图-->
+						<div class="imgbox" src="./css/img/demo.jpg"></div>
+						<div class="info byy-elip">
+							校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品
+						</div>
+					</div>
+					<div class="news-3">
+						<!--通过js将src设置为背景图-->
+						<div class="imgbox" src="./css/img/demo.jpg"></div>
+						<div class="info byy-elip">
+							校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品
+						</div>
+					</div>
+					<div class="news-4">
+						<!--通过js将src设置为背景图-->
+						<div class="imgbox" src="./css/img/demo.jpg"></div>
+						<div class="info byy-elip">
+							校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品
+						</div>
+					</div>
+					<div class="news-5">
+						<!--通过js将src设置为背景图-->
+						<div class="imgbox" src="./css/img/demo.jpg"></div>
+						<div class="info byy-elip">
+							校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品校园摄影比赛一等奖作品
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--资源学习-->
+		<section class="resource-section section index-dom">
+			<div class="gradient resource-gradient"></div>
+			<div class="section-content">
+				<div class="section-title">
+					<p class="section-title-name">资源学习</p>
+					<p class="section-title-en">RESOURCE</p>
+					<span class="section-title-line"></span>
+				</div>
+				<div class="section-wrap">
+					
+					<div class="resource-block">
+						<div class="resource-block-wrap">
+							<div class="imgbox" src="./css/img/demo.jpg"></div>
+							<div class="resource-title">
+								<p class="title byy-elip">小学一年级绘画题目课后练习题.doc</p>
+								<span class="user">
+									<img src="" alt="">
+									李老师
+								</span>
+							</div>
+							<div class="resource-tag byy-clear">
+								<div class="pull-left">
+									<span class="tag">语文</span>
+								</div>
+								<div class="pull-right">
+									2016-11-20
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="resource-block">
+						<div class="resource-block-wrap">
+							<div class="imgbox" src="./css/img/demo.jpg"></div>
+							<div class="resource-title">
+								<p class="title byy-elip">小学一年级绘画题目课后练习题.doc</p>
+								<span class="user">
+									<img src="" alt="">
+									李老师
+								</span>
+							</div>
+							<div class="resource-tag byy-clear">
+								<div class="pull-left">
+									<span class="tag">语文</span>
+								</div>
+								<div class="pull-right">
+									2016-11-20
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="resource-block">
+						<div class="resource-block-wrap">
+							<div class="imgbox" src="./css/img/demo.jpg"></div>
+							<div class="resource-title">
+								<p class="title byy-elip">小学一年级绘画题目课后练习题.doc</p>
+								<span class="user">
+									<img src="" alt="">
+									李老师
+								</span>
+							</div>
+							<div class="resource-tag byy-clear">
+								<div class="pull-left">
+									<span class="tag">语文</span>
+								</div>
+								<div class="pull-right">
+									2016-11-20
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="resource-block">
+						<div class="resource-block-wrap">
+							<div class="imgbox" src="./css/img/demo.jpg"></div>
+							<div class="resource-title">
+								<p class="title byy-elip">小学一年级绘画题目课后练习题.doc</p>
+								<span class="user">
+									<img src="" alt="">
+									李老师
+								</span>
+							</div>
+							<div class="resource-tag byy-clear">
+								<div class="pull-left">
+									<span class="tag">语文</span>
+								</div>
+								<div class="pull-right">
+									2016-11-20
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="resource-block">
+						<div class="resource-block-wrap">
+							<div class="imgbox" src="./css/img/demo.jpg"></div>
+							<div class="resource-title">
+								<p class="title byy-elip">小学一年级绘画题目课后练习题.doc</p>
+								<span class="user">
+									<img src="" alt="">
+									李老师
+								</span>
+							</div>
+							<div class="resource-tag byy-clear">
+								<div class="pull-left">
+									<span class="tag">语文</span>
+								</div>
+								<div class="pull-right">
+									2016-11-20
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="resource-block">
+						<div class="resource-block-wrap">
+							<div class="imgbox" src="./css/img/demo.jpg"></div>
+							<div class="resource-title">
+								<p class="title byy-elip">小学一年级绘画题目课后练习题.doc</p>
+								<span class="user">
+									<img src="" alt="">
+									李老师
+								</span>
+							</div>
+							<div class="resource-tag byy-clear">
+								<div class="pull-left">
+									<span class="tag">语文</span>
+								</div>
+								<div class="pull-right">
+									2016-11-20
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="resource-block">
+						<div class="resource-block-wrap">
+							<div class="imgbox" src="./css/img/demo.jpg"></div>
+							<div class="resource-title">
+								<p class="title byy-elip">小学一年级绘画题目课后练习题.doc</p>
+								<span class="user">
+									<img src="" alt="">
+									李老师
+								</span>
+							</div>
+							<div class="resource-tag byy-clear">
+								<div class="pull-left">
+									<span class="tag">语文</span>
+								</div>
+								<div class="pull-right">
+									2016-11-20
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="resource-block">
+						<div class="resource-block-wrap">
+							<div class="imgbox" src="./css/img/demo.jpg"></div>
+							<div class="resource-title">
+								<p class="title byy-elip">小学一年级绘画题目课后练习题.doc</p>
+								<span class="user">
+									<img src="" alt="">
+									李老师
+								</span>
+							</div>
+							<div class="resource-tag byy-clear">
+								<div class="pull-left">
+									<span class="tag">语文</span>
+								</div>
+								<div class="pull-right">
+									2016-11-20
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="slant top"></div>
+			<div class="slant bottom"></div>
+		</section>
+		<!--我的周历-->
+		<section class="week-section section index-dom">
+			<div class="section-content">
+				<div class="section-title">
+					<p class="section-title-name">我的周历</p>
+					<p class="section-title-en">WEEK CALENDARS</p>
+					<span class="section-title-line"></span>
+				</div>
+				<div class="section-wrap">
+					<div class="byy-carousel" id="week-slider">
+						<div carousel-item="">
+							<!--每隔4个分一个div-->
+							<div>
+								<div class="week-block">
+									<div class="week-title">
+										<span class="date">2017-12-29</span>
+									</div>
+									<div class="week-name">
+										2017年度全区中小学微课比赛集合
+									</div>
+									<div class="week-content">
+										2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合
+									</div>
+								</div>
+								<div class="week-block">
+									<div class="week-title">
+										<span class="date">2017-12-29</span>
+									</div>
+									<div class="week-name">
+										2017年度全区中小学微课比赛集合
+									</div>
+									<div class="week-content">
+										2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合
+									</div>
+								</div>
+								<div class="week-block">
+									<div class="week-title">
+										<span class="date">2017-12-29</span>
+									</div>
+									<div class="week-name">
+										2017年度全区中小学微课比赛集合
+									</div>
+									<div class="week-content">
+										2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合
+									</div>
+								</div>
+								<div class="week-block">
+									<div class="week-title">
+										<span class="date">2017-12-29</span>
+									</div>
+									<div class="week-name">
+										2017年度全区中小学微课比赛集合
+									</div>
+									<div class="week-content">
+										2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合
+									</div>
+								</div>
+							</div>
+							<!--每隔四个一个item-->
+							<div>
+								<div class="week-block">
+									<div class="week-title">
+										<span class="date">2017-12-29111</span>
+									</div>
+									<div class="week-name">
+										2017年度全区中小学微课比赛集合
+									</div>
+									<div class="week-content">
+										2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合
+									</div>
+								</div>
+								<div class="week-block">
+									<div class="week-title">
+										<span class="date">2017-12-29</span>
+									</div>
+									<div class="week-name">
+										2017年度全区中小学微课比赛集合
+									</div>
+									<div class="week-content">
+										2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合
+									</div>
+								</div>
+								<div class="week-block">
+									<div class="week-title">
+										<span class="date">2017-12-29</span>
+									</div>
+									<div class="week-name">
+										2017年度全区中小学微课比赛集合
+									</div>
+									<div class="week-content">
+										2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合
+									</div>
+								</div>
+								<div class="week-block">
+									<div class="week-title">
+										<span class="date">2017-12-29</span>
+									</div>
+									<div class="week-name">
+										2017年度全区中小学微课比赛集合
+									</div>
+									<div class="week-content">
+										2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合2017年度全区中小学微课比赛集合
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- app store 应用商店-->
+		<!--myappbox-->
+		<div class="row myappbox app-dom hide">
+			<div class="wrap myappbox-title">
+				<button id="appset-btn" class="gl" byy-filter="manageApp"><i class="setting-ico"></i>应用管理</button>
+				<p>我的应用</p>
+				<p class="title-en">MY APPLICATION</p>
+			</div>
+			<div class="wrap">
+				<div class="myappbox-contain byy-clear">
+					<div class="slipbtn"><i class="left-slipbox left-slip-disable" byy-filter="slipApp"></i><i class="right-slipbox right-slip-disable" byy-filter="slipApp"></i></div>
+					<div class="appline-box app-line">
+						<div class="app-list byy-clear">
+							<div class="appicobox col-xs-2" data-id="1" data-name="校内新闻1" data-code="news1" byy-filter="openBar">
+								<div><img src="./css/img/news.png" alt=""><i class="delete-ico" byy-filter="removeApp"></i></div>
+								<p>校内新闻1</p>
+							</div>
+							<div class="appicobox col-xs-2" data-id="2" data-name="校内新闻2" data-code="news2" byy-filter="openBar">
+								<div><img src="./css/img/news.png" alt=""><i class="delete-ico" byy-filter="removeApp"></i></div>
+								<p>校内新闻2</p>
+							</div>
+							<div class="appicobox col-xs-2" data-id="3" data-name="校内新闻3" data-code="news3" byy-filter="openBar">
+								<div><img src="./css/img/news.png" alt=""><i class="delete-ico" byy-filter="removeApp"></i></div>
+								<p>校内新闻3</p>
+							</div>
+							<div class="appicobox col-xs-2" data-id="4" data-name="校内新闻4" data-code="news4" byy-filter="openBar">
+								<div><img src="./css/img/news.png" alt=""><i class="delete-ico" byy-filter="removeApp"></i></div>
+								<p>校内新闻4</p>
+							</div>
+							<div class="appicobox col-xs-2" data-id="5" data-name="校内新闻5" data-code="news5" byy-filter="openBar">
+								<div><img src="./css/img/news.png" alt=""><i class="delete-ico" byy-filter="removeApp"></i></div>
+								<p>校内新闻5</p>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row appstorebox app-dom hide">
+			<div class="wrap appstore-title">
+				<p>应用商店</p>
+				<p class="title-en">MY APPLICATION</p>
+			</div>
+			<div class="tabbox wrap">
+				<div class="col-xs-12 tab-container3">
+					<div class="byy-tab byy-tab-brief" style="">
+						<ul class="byy-tab-title">
+							<li class="byy-tab-this">全部应用</li>
+							<li class="">教学教务</li>
+							<li class="">办公管理</li>
+						</ul>
+						<div class="byy-tab-content" style="">
+							<div class="byy-tab-item show">
+								<div class="appul byy-clear">
+									<div class="appli" data-id="1" data-name="数据管理1" data-code="manage1" byy-filter="openBar">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理1</p>
+									</div>
+									<div class="appli" data-id="2" data-name="数据管理2" data-code="manage2" byy-filter="openBar">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理2</p>
+									</div>
+									<div class="appli" data-id="3" data-name="数据管理3" data-code="manage3" byy-filter="openBar">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理3</p>
+									</div>
+									<div class="appli" data-id="4" data-name="数据管理4" data-code="manage4" byy-filter="openBar">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理4</p>
+									</div>
+									<div class="appli">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理</p>
+									</div>
+									<div class="appli">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理</p>
+									</div>
+								</div>
+								<div class="appul byy-clear">
+									<div class="appli">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理</p>
+									</div>
+									<div class="appli">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理</p>
+									</div>
+									<div class="appli">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理</p>
+									</div>
+									<div class="appli">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理</p>
+									</div>
+									<div class="appli">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理</p>
+									</div>
+									<div class="appli">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理</p>
+									</div>
+								</div>
+								<div class="appul">
+									<div class="appli">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理</p>
+									</div>
+									<div class="appli">
+										<img src="./css/img/quyu.png" alt="">
+										<p>区域数据管理</p>
+									</div>
+								</div>
+							</div>
+							<div class="byy-tab-item">教学教务</div>
+							<div class="byy-tab-item">办公管理</div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<!--底部版权-->
+		<footer style="height:200px;background-color:rgba(0,0,0,0.6);">
+			
+		</footer>
+	</div>
+	
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/src/byy.js"></script>
+<script type="text/javascript" src="index.js"></script>

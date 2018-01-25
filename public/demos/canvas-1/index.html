@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>canvas - 练习1 - 太阳系</title>
+</head>
+<body>
+	<canvas width="500px" id="canvas" height="500px"></canvas>
+</body>
+</html>
+<script type="text/javascript">
+	
+
+	var sun = new Image(),
+		earth = new Image(),
+		moon = new Image();
+	var imgs = ['https://mdn.mozillademos.org/files/1456/Canvas_sun.png','https://mdn.mozillademos.org/files/1429/Canvas_earth.png','https://mdn.mozillademos.org/files/1443/Canvas_moon.png'];
+	function loadImage( src ){
+		return new Promise(function(resolve,reject){
+			var img = new Image();
+			img.src = src;
+			img.onload = function(){
+				resolve(img);
+			}
+		});
+	}
+	
+	var sun,earth,moon;
+	function draw (){
+		var ctx = document.getElementById('canvas').getContext('2d');	
+		//在原图像上方显示目标图像
+		// ctx.globalCompositeOperation = 'destination-over';
+		//清楚绘图区域
+		// ctx.clearRect(0,0,500,500);
+		// ctx.fillStyle = 'rgba(0,0,0,0.3)';
+		// ctx.fillRect(0,0,500,500);
+		// ctx.save();
+		ctx.save();
+		ctx.drawImage(sun,0,0,500,500);
+		ctx.translate(250,250);
+		// ctx.save();
+		ctx.strokeStyle = 'rgba(0,153,255,0.4)';
+		ctx.arc(0,0,200,0,Math.PI*2,false);
+		ctx.stroke();
+
+		//旋转
+		var time = new Date(),
+			sec = time.getSeconds(),
+			hsec = time.getMilliseconds();
+		ctx.rotate( (Math.PI*2/60)*sec + (Math.PI*2/60000)*hsec );
+		ctx.translate(-200,0);
+		ctx.drawImage(earth,-15,15,30,30);
+		ctx.restore();
+		window.requestAnimationFrame(draw);
+	}
+	(function(){
+		Promise.all([loadImage(imgs[0]),loadImage(imgs[1]),loadImage(imgs[2])]).then(function(values){
+			sun = values[0];
+			earth = values[1];
+			moon = values[2];
+			draw();
+		});
+	})();
+
+</script>
