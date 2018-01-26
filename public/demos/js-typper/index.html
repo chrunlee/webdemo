@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JS 模拟打字效果</title>
+	<link rel="stylesheet" type="text/css" href="/plugins/byy/css/default/byy.css">
+	<style type="text/css">
+		.container{
+			width:500px;
+			margin:50px auto;
+			height:500px;	
+			padding-top:100px;
+		}
+	</style>
+</head>
+<body class="grey-bg">
+	<div class="container green-bg text-center">
+		专业打字员<br />
+		一分钟五个字<br />
+		<span style="color:red;font-weight:bold;">红色加粗</span><br />
+		hahahahahahah 
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+
+<script type="text/javascript">
+	byy.require(['jquery','typper'],function(){
+		byy.typper('.container',200);
+	});
+</script>
