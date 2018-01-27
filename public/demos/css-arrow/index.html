@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CSS3 实现向下箭头</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<style type="text/css">
+		span{
+			margin-right:30px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container-fluid">
+		
+		<br /><br/>
+		<div class="text-center">
+			<span class="byy-edge top"></span><br />
+			<span class="byy-edge bottom"></span><br />
+			<span class="byy-edge left"></span><br />
+			<span class="byy-edge right"></span><br />	
+		</div>
+		<br />
+		<h3>代码实现</h3>
+		<pre class="byy-code">
+.byy-edge{
+	position: absolute;
+    width: 0;
+    height: 0;
+    border-style: dashed;
+    border-color: transparent;
+    overflow: hidden;
+}
+.byy-edge.top{
+	border-top: 5px solid #555;
+}
+.byy-edge.bottom{
+	border-bottom: 5px solid #555;
+}
+.byy-edge.left{
+	border-left: 5px solid #555;
+}
+.byy-edge.right{
+	border-right: 5px solid #555;
+}
+
+		</pre>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
