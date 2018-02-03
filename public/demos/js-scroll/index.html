@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>js 实现向下滚动返回顶部</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<style type="text/css">
+		.right{
+			position:fixed;
+			width:50px;
+			height:50px;
+			font-size:30px;
+			background-color:#ccc;
+			right:20px;
+			top:200px;
+			text-align:center;
+			line-height:45px;
+			cursor:pointer;
+		}
+	</style>
+</head>
+<body height="2000px;" style="height:2000px;overflow:auto;">
+	<div class="right hide">
+		<i class="byyicon icon-arrow-up"></i>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+	byy.require('jquery',function(){
+		$(window).on('scroll',function(){
+			var height = $(window).scrollTop();
+			console.log(height);
+			if(height > 200){
+				$('.right').removeClass('hide');
+			}else{
+				$('.right').addClass('hide');
+			}
+		});
+		$('.right').on('click',function(){
+			$('html,body').animate({'scrollTop':'0px'},500,function(){});
+		});
+	});
+</script>

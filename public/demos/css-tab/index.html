@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>js 制作一个简单的tab小控件</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<style type="text/css">
+		.tab-container{width:100%;border:1px solid #aaa;position:relative;min-height:300px;border-radius:5px;}
+		.tab-title{width:100%;height:35px;line-height:35px;border-bottom:1px solid #aaa;}
+		.tab-title ul{display:block;margin:0px;padding:0px;list-style:none;}
+		.tab-title ul li{float:left;padding:0px 15px;height:35px;line-height:35px;text-align:center;border-right:1px solid #aaa;display:inline-block;cursor:pointer;background-color:rgba(0,0,0,0.1);color:white;transition:all 0.3 ease;}
+		.tab-title ul li:hover{background-color:rgba(0,0,0,0.2);}
+		.tab-title ul li:first-child{border-radius:5px 0px 0px 0px;}
+
+		.tab-title ul li.tab-this{background-color:white;border-bottom:1px solid white;color:#333;}
+		.tab-item{display:none;height:100%;width:100%;}
+		.tab-item iframe{width:100%;height:99%;}
+		.tab-content{
+			position:absolute;
+			left:0px;
+			top:35px;
+			bottom:0px;
+			right:0px;
+
+		}
+	</style>
+</head>
+<body class="grey-bg" style="padding:20px;">
+	<div class="container-fluid">
+		
+		<blockquote class="byy-quote">
+			js 实现一个tab小控件
+		</blockquote>
+		<pre class="byy-code">
+1.首先我们要实现一个静态的样式；
+2.根据静态的样式，通过js进行渲染；
+3.确定有哪些参数
+4.实现;
+		</pre>
+		<fieldset>
+			<legend>静态样式</legend>
+			<div class="tab-container">
+				<div class="tab-title">
+					<ul>
+						<li class="tab-this">设置</li>
+						<li>音乐</li>
+						<li>视频</li>
+					</ul>
+				</div>
+				<div class="tab-content">
+					<div class="tab-item show">
+						设置页面
+					</div>
+					<div class="tab-item">
+						音乐页面
+					</div>
+					<div class="tab-item">
+						视频页面
+					</div>
+				</div>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>实现步骤</legend>
+			<blockquote class="byy-quote">
+				1.要通过js来渲染；<br />
+				2.要有点击事件；<br />
+				3.面板数据能够传参、能够获得当前的面板信息；<br />
+				4.实现；
+			</blockquote>
+		</fieldset>
+		<fieldset>
+			<legend>动态展现<small>具体信息请F12查看源码。</small></legend>
+			<div class="tab-container" id="tab" data-test="abc"></div>
+		</fieldset>
+	</div>	
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+	//创建函数组件
+	/**
+	* 1. dom容器
+	* 2. 面板信息:title . 内容 或者frame
+	* 3. 事件
+	**/
+	function tab( opts ){
+		if(typeof opts != 'object')return;
+		if(!opts.elem)return;
+		if(!opts.data)return;
+
+		this.elem = typeof opts.elem == 'object' ? opts.elem : document.getElementById(opts.elem);
+		this.elem.innerHTML = '';
+		this.data = opts.data;
+		//渲染
+		this.renderByData();
+		//事件
+		this.event();
+		return this;
+	}
+
+	tab.prototype.renderByData = function(){
+		var tabTitle = document.createElement('div'),
+			tabTitleUl = document.createElement('ul'),
+			tabContent = document.createElement('div');
+		tabTitle.setAttribute('class','tab-title');
+		tabContent.setAttribute('class','tab-content');
+		var data = this.data;
+		data.forEach(function( item,index ){
+			var title = item.title,content = item.content;
+			var tabTitleLi = document.createElement('li');
+			//创建对应的content
+			var tabItem = document.createElement('div');
+			tabItem.setAttribute('class','tab-item');
+			//默认第一个选中
+			if(index === 0){
+				tabTitleLi.setAttribute('class','tab-this');
+				tabItem.setAttribute('class','tab-item show');
+			}
+			tabTitleLi.dataset.title = title;
+			tabTitleLi.dataset.index= index;
+			tabTitleLi.innerText = title;
+
+			tabTitleUl.appendChild(tabTitleLi);
+			//如果这里是frame ，则单独处理
+			content = content || '';
+			if(content.startWith('http')){
+				//如果已http开头，则认为是链接，此处应该加强校验。
+				var iframe = document.createElement('iframe');
+				iframe.src = content;
+				tabItem.appendChild(iframe);
+			}else{
+				var inhtml = typeof content == 'object' ? content.outterHTML : content;
+				tabItem.innerHTML = inhtml;	
+			}
+			tabContent.appendChild(tabItem);
+		});
+
+		tabTitle.appendChild(tabTitleUl);
+		this.elem.appendChild(tabTitle).appendChild(tabContent);
+	}
+	//点击事件
+	tab.prototype.event = function(){
+		var thiz = this;
+		var lis = thiz.elem.querySelectorAll('ul>li');
+		lis.forEach(function( item ){
+			console.log(item);
+			item.onclick = function(){
+				var licls = this.getAttribute('class')||'';
+				if(licls.indexOf('tab-this') > -1){
+					//当前已被选中，不处理
+				}else{
+					var dataset = this.dataset;
+					var index = dataset.index;
+					//取消其他选中
+					var selectNodes = thiz.elem.querySelectorAll('.tab-this');
+					selectNodes.forEach(function( selected ){
+						selected.setAttribute('class','');
+					});
+					this.setAttribute('class','tab-this');
+					//根据index查找item
+					var items = thiz.elem.querySelectorAll('.tab-item');
+					//展示内容
+					items.forEach(function( content,contentIndex ){
+						console.log(contentIndex);
+						if(contentIndex == index){
+							content.setAttribute('class','tab-item show');
+						}else{
+							content.setAttribute('class','tab-item');
+						}
+					});
+				}
+			}
+		});
+	}
+
+	new tab({
+		elem : 'tab',
+		data : [{
+			title : 'tab1',
+			content : 'tab1-content'
+		},{
+			title : 'tab2',
+			content : 'tab2-content'
+		},{
+			title : '链接',
+			content : 'http://www.byyui.com'
+		}]
+	});
+
+
+</script>
+<script type="text/javascript" src="/plugins/tongji.js"></script>

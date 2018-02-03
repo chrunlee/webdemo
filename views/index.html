@@ -30,17 +30,48 @@
 				<a href="/">Lab —— 我的实验室</a>
 			</li>
 			<span class="pull-right">
+				<input type="text" class="byy-form-input" id="search" placeholder="内容检索,请回车" autofocus style="margin-top:10px;width:350px;">
 				<span class="info">powered by chrunlee / 2017</span>
 			</span>
 		</ul>
 	</header>
+	<div class="search green-c" style="text-align:center;">
+		
+	</div>
 	<div class="container-fluid">
 		<div class="flex-box center">
 			
 			<div class="flex-item w-1of6 trs">
+				<a class="demo-link byy-clear" href="/demos/js-scroll/index.html" target="_blank">
+					<span class="img-wrap"><img src="/demos/js-scroll/post.png" alt=""></span>
+					<p class="demo-title byy-elip" title="js实现向下滚动返回顶部">js实现向下滚动返回顶部</p>
+					<p class="demo-des byy-elip" title="js实现页面向下滚动后出现返回顶部按钮，然后点击返回顶部。">
+						js实现页面向下滚动后出现返回顶部按钮，然后点击返回顶部。
+					</p>
+				</a>
+			</div>
+			<div class="flex-item w-1of6 trs">
+				<a class="demo-link byy-clear" href="/demos/css-button/index.html" target="_blank">
+					<span class="img-wrap"><img src="/demos/css-button/post.png" alt=""></span>
+					<p class="demo-title byy-elip" title="css实现的漂亮按钮">css实现的漂亮按钮</p>
+					<p class="demo-des byy-elip" title="css实现的漂亮按钮，有不同的背景、尺寸和图标。">
+						css实现的漂亮按钮，有不同的背景、尺寸和图标。
+					</p>
+				</a>
+			</div>
+			<div class="flex-item w-1of6 trs">
+				<a class="demo-link byy-clear" href="/demos/css-tab/index.html" target="_blank">
+					<span class="img-wrap"><img src="/demos/css-tab/post.png" alt=""></span>
+					<p class="demo-title byy-elip" title="js实现tab小控件">js实现tab小控件</p>
+					<p class="demo-des byy-elip" title="js实现tab小控件">
+						js实现tab小控件
+					</p>
+				</a>
+			</div>
+			<div class="flex-item w-1of6 trs">
 				<a class="demo-link byy-clear" href="/demos/css-arrow/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/css-arrow/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="form designer">css3实现下拉箭头</p>
+					<p class="demo-title byy-elip" title="css3实现下拉箭头">css3实现下拉箭头</p>
 					<p class="demo-des byy-elip" title="css3实现下拉箭头">
 						css3实现下拉箭头效果
 					</p>
@@ -49,7 +80,7 @@
 			<div class="flex-item w-1of6 trs">
 				<a class="demo-link byy-clear" href="/demos/canvas-2/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/canvas-2/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="form designer">canvas 学习，实现时钟效果</p>
+					<p class="demo-title byy-elip" title="canvas 学习，实现时钟效果">canvas 学习，实现时钟效果</p>
 					<p class="demo-des byy-elip" title="canvas 实现时钟效果-学习">
 						canvas 实现时钟效果-学习
 					</p>
@@ -58,7 +89,7 @@
 			<div class="flex-item w-1of6 trs">
 				<a class="demo-link byy-clear" href="/demos/js-typper/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/js-typper/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="form designer">JS 模拟打字效果</p>
+					<p class="demo-title byy-elip" title="JS 模拟打字效果">JS 模拟打字效果</p>
 					<p class="demo-des byy-elip" title="专业打字员">
 						专业打字员
 					</p>
@@ -67,7 +98,7 @@
 			<div class="flex-item w-1of6 trs">
 				<a class="demo-link byy-clear" href="/demos/edu-1/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/edu-1/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="form designer">博育云-新版数校首页</p>
+					<p class="demo-title byy-elip" title="博育云-新版数校首页">博育云-新版数校首页</p>
 					<p class="demo-des byy-elip" title="博育云新版数校首页">
 						博育云新版数校首页
 					</p>
@@ -143,4 +174,49 @@
 </body>
 </html>
 <script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+	byy.require(['jquery','win'],function(){
+		$('#search').on('keyup',function(ev){
+			if(ev.keyCode === 13){
+				var v = $('#search').val();
+				$('#search').val('');
+				$('#search').focus();
+				if($.trim(v) == ''){
+					showAll();
+					return;
+				}
+				v= v.split(' ');
+				hideSome(v);			
+			}
+		});
+		function showAll (){
+			$('.search').html('');
+			$('.trs').removeClass('hide');
+		}
+		function hideSome(arr){
+			$('.search').html('检索关键字:'+arr.join(','));
+			$('.trs').each(function(){
+				var $trs = $(this);
+				var str = $trs.find('.demo-title').attr('title') + $trs.find('.demo-des').attr('title');
+				var hasContent = false;
+				arr.forEach(function( item ){
+					item = $.trim(item);
+					if(item != '' && str.indexOf(item) > -1){
+						hasContent = true;
+					}
+				});
+				if(hasContent){
+					$trs.removeClass('hide');
+				}else{
+					$trs.addClass('hide');
+				}
+				
+			});
+			//如果最后都没有，给一个提示
+			if($('.trs:not(.hide)').length == 0){
+				byy.win.msg('没有检索到任何内容');
+			}
+		}
+	});
+</script>
 <script type="text/javascript" src="/plugins/tongji.js"></script>
