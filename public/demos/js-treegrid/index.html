@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jquery treegrid 扩展</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+
+</head>
+<body>
+	<div class="container-fluid">
+		<blockquote class="byy-quote">
+			项目中使用treegrid，找了一个jquery的treegrid，比较轻量级的。但是:只有静态渲染，没有远程数据加载、没有单选复选、没有选中、没有级联等等。自己动手，丰衣足食！<br />
+			1.远程数据加载；<br />
+			2.远程加载带有参数；<br />
+			3.分页；<br />
+			4.标准数据和简单数据；<br />
+			5.隔行变色；<br />
+			6.单选、多选；<br />
+			7.级联选中；<br />
+			8.级联取消；<br />
+			9.点击、选中、加载成功、加载失败的事件；<br />
+			<a href="http://www.byyui.com/byy/dist/lib/treegrid.js" target="_blank">源码在此</a>
+		</blockquote>
+
+		<fieldset>
+			<legend>
+				简单的
+			</legend>
+			<div class="byy-btn-group">
+				<span class="byy-btn small" filter="getSelected">获得当前选中</span>
+				
+				<span class="byy-btn small" filter="reload">重新加载</span>
+				<span class="byy-btn small" filter="expand">展开</span>
+				<span class="byy-btn small" filter="collapse">合并</span>
+			</div>
+			<br />
+			<div class="table-content">
+				<table class="byy-table" id="table1"></table>
+			</div>
+		</fieldset>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+	byy.require(['win','treegrid'],function(){
+		var events = {
+			getSelected : function(){
+				var nodes = $('#table1').treegrid('getSelectedNodes');
+				byy.win.msg(byy.stringfy(nodes))
+			},
+			check2 : function(){
+
+			},
+			reload : function(){
+				$('#table1').treegrid('reload');
+			},
+			expand : function(){
+				$('#table1').treegrid('expandAll');
+			},
+			collapse : function(){
+				$('#table1').treegrid('collapseAll');
+			}
+		};
+		$('body').on('click','[filter]',function(ev){
+			var $this = $(this),type = $this.attr('filter');
+			if(events && type && events[type]){
+				events[type].call($this,ev);
+			}
+		});
+		$('#table1').treegrid({
+			idColumn : 'id',
+            parentColumn : 'parentId',
+            type : 'GET',
+            url : '/demos/js-treegrid/treegrid.json',
+            ajaxParams : {},
+            striped: true,
+            bordered: 1, 
+            expandAll: false, 
+            pagination : true,
+            pagesize : 1,
+            iconName : 'icon',
+            cascadeCheck : 'up',
+            cascadeCancel : 'down',
+			columns : [
+				{
+                    title: '名称',
+                    field: 'title',
+                    formatter : function(v,d,i){
+                        return '<span class="blue-c">'+v+'</span>';
+                    }
+                },
+                {
+                    title: '描述',
+                    field: 'des'
+                },
+                {
+                    title : '操作',
+                    field : 'opt',
+                    formatter : function(v,d,i){
+                        return '<span class="byy-btn mini" data-id="'+d.id+'" byy-filter="edit">编辑</span>';
+                    }
+                }
+            ]
+		});
+	});
+
+
+</script>
+<script type="text/javascript" src="/plugins/tongji.js"></script>

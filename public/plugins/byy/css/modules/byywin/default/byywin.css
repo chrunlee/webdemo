@@ -11,6 +11,7 @@ html #byycss-skinbyywincss{display: none; position: absolute; width: 1989px;}
 .byy-byywin-content{position:relative;}
 .byy-byywin-border{border: 1px solid #B2B2B2; border: 1px solid rgba(0,0,0,.1); box-shadow: 1px 1px 5px rgba(0,0,0,.2);}
 .byy-byywin-load{background:url(loading-1.gif) #eee center center no-repeat;}
+.byy-byywin-load3{background:url(loading-0.gif) #eee center center no-repeat;}
 .byy-byywin-ico{ background:url(icon.png) no-repeat;}
 .byy-byywin-dialog .byy-byywin-ico,
 .byy-byywin-setwin a,
@@ -22,42 +23,82 @@ html #byycss-skinbyywincss{display: none; position: absolute; width: 1989px;}
 /* 动画 */
 .byy-byywin{border-radius: 2px; -webkit-animation-fill-mode: both; animation-fill-mode: both; -webkit-animation-duration:.3s; animation-duration:.3s;}
 
-@-webkit-keyframes bounceIn { /* 默认 */
-	0% {opacity: 0; -webkit-transform: scale(.5); transform: scale(.5)}
-	100% {opacity: 1; -webkit-transform: scale(1); transform: scale(1)}
+@-webkit-keyframes win-bounceIn { /* 默认 */
+  0% {opacity: 0; -webkit-transform: scale(.5); transform: scale(.5)}
+  100% {opacity: 1; -webkit-transform: scale(1); transform: scale(1)}
 }
-@keyframes bounceIn {
-	0% {opacity: 0; -webkit-transform: scale(.5); -ms-transform: scale(.5); transform: scale(.5)}
-	100% {opacity: 1; -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1)}
+@keyframes win-bounceIn {
+  0% {opacity: 0; -webkit-transform: scale(.5); -ms-transform: scale(.5); transform: scale(.5)}
+  100% {opacity: 1; -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1)}
 }
 
 .byywin-anim{-webkit-animation-fill-mode: both; animation-fill-mode: both; -webkit-animation-duration:.3s; animation-duration:.3s;}
 
-.byywin-anim-00{-webkit-animation-name: bounceIn;animation-name: bounceIn}
+.byywin-anim-00{-webkit-animation-name: win-bounceIn;animation-name: win-bounceIn}
 
-@-webkit-keyframes zoomInDown{0%{opacity:0;-webkit-transform:scale(.1) translateY(-2000px);transform:scale(.1) translateY(-2000px);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}60%{opacity:1;-webkit-transform:scale(.475) translateY(60px);transform:scale(.475) translateY(60px);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}}@keyframes zoomInDown{0%{opacity:0;-webkit-transform:scale(.1) translateY(-2000px);-ms-transform:scale(.1) translateY(-2000px);transform:scale(.1) translateY(-2000px);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}60%{opacity:1;-webkit-transform:scale(.475) translateY(60px);-ms-transform:scale(.475) translateY(60px);transform:scale(.475) translateY(60px);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}}.byywin-anim-01{-webkit-animation-name:zoomInDown;animation-name:zoomInDown}
+@-webkit-keyframes win-zoomInDown{
+  0%{opacity:0;-webkit-transform:scale(.1) translateY(-2000px);transform:scale(.1) translateY(-2000px);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}
+  60%{opacity:1;-webkit-transform:scale(.475) translateY(60px);transform:scale(.475) translateY(60px);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}
+}
+@keyframes win-zoomInDown{
+  0%{opacity:0;-webkit-transform:scale(.1) translateY(-2000px);-ms-transform:scale(.1) translateY(-2000px);transform:scale(.1) translateY(-2000px);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}
+  60%{opacity:1;-webkit-transform:scale(.475) translateY(60px);-ms-transform:scale(.475) translateY(60px);transform:scale(.475) translateY(60px);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}
+}
+.byywin-anim-01{-webkit-animation-name:win-zoomInDown;animation-name:win-zoomInDown}
 
-@-webkit-keyframes fadeInUpBig{0%{opacity:0;-webkit-transform:translateY(2000px);transform:translateY(2000px)}100%{opacity:1;-webkit-transform:translateY(0);transform:translateY(0)}}@keyframes fadeInUpBig{0%{opacity:0;-webkit-transform:translateY(2000px);-ms-transform:translateY(2000px);transform:translateY(2000px)}100%{opacity:1;-webkit-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0)}}.byywin-anim-02{-webkit-animation-name:fadeInUpBig;animation-name:fadeInUpBig}
+@-webkit-keyframes win-fadeInUpBig{
+  0%{opacity:0;-webkit-transform:translateY(2000px);transform:translateY(2000px)}100%{opacity:1;-webkit-transform:translateY(0);transform:translateY(0)}
+}
+@keyframes win-fadeInUpBig{
+  0%{opacity:0;-webkit-transform:translateY(2000px);-ms-transform:translateY(2000px);transform:translateY(2000px)}100%{opacity:1;-webkit-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0)}
+}
+.byywin-anim-02{-webkit-animation-name:win-fadeInUpBig;animation-name:win-fadeInUpBig}
 
-@-webkit-keyframes zoomInLeft{0%{opacity:0;-webkit-transform:scale(.1) translateX(-2000px);transform:scale(.1) translateX(-2000px);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}60%{opacity:1;-webkit-transform:scale(.475) translateX(48px);transform:scale(.475) translateX(48px);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}}@keyframes zoomInLeft{0%{opacity:0;-webkit-transform:scale(.1) translateX(-2000px);-ms-transform:scale(.1) translateX(-2000px);transform:scale(.1) translateX(-2000px);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}60%{opacity:1;-webkit-transform:scale(.475) translateX(48px);-ms-transform:scale(.475) translateX(48px);transform:scale(.475) translateX(48px);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}}.byywin-anim-03{-webkit-animation-name:zoomInLeft;animation-name:zoomInLeft}
+@-webkit-keyframes win-zoomInLeft{
+  0%{opacity:0;-webkit-transform:scale(.1) translateX(-2000px);transform:scale(.1) translateX(-2000px);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}
+  60%{opacity:1;-webkit-transform:scale(.475) translateX(48px);transform:scale(.475) translateX(48px);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}
+}
+@keyframes win-zoomInLeft{
+  0%{opacity:0;-webkit-transform:scale(.1) translateX(-2000px);-ms-transform:scale(.1) translateX(-2000px);transform:scale(.1) translateX(-2000px);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}
+  60%{opacity:1;-webkit-transform:scale(.475) translateX(48px);-ms-transform:scale(.475) translateX(48px);transform:scale(.475) translateX(48px);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}
+}
+.byywin-anim-03{-webkit-animation-name:win-zoomInLeft;animation-name:win-zoomInLeft}
 
-@-webkit-keyframes rollIn{0%{opacity:0;-webkit-transform:translateX(-100%) rotate(-120deg);transform:translateX(-100%) rotate(-120deg)}100%{opacity:1;-webkit-transform:translateX(0px) rotate(0deg);transform:translateX(0px) rotate(0deg)}}@keyframes rollIn{0%{opacity:0;-webkit-transform:translateX(-100%) rotate(-120deg);-ms-transform:translateX(-100%) rotate(-120deg);transform:translateX(-100%) rotate(-120deg)}100%{opacity:1;-webkit-transform:translateX(0px) rotate(0deg);-ms-transform:translateX(0px) rotate(0deg);transform:translateX(0px) rotate(0deg)}}.byywin-anim-04{-webkit-animation-name:rollIn;animation-name:rollIn}
+@-webkit-keyframes win-rollIn{
+  0%{opacity:0;-webkit-transform:translateX(-100%) rotate(-120deg);transform:translateX(-100%) rotate(-120deg)}100%{opacity:1;-webkit-transform:translateX(0px) rotate(0deg);transform:translateX(0px) rotate(0deg)}
+}
+@keyframes win-rollIn{
+  0%{opacity:0;-webkit-transform:translateX(-100%) rotate(-120deg);-ms-transform:translateX(-100%) rotate(-120deg);transform:translateX(-100%) rotate(-120deg)}100%{opacity:1;-webkit-transform:translateX(0px) rotate(0deg);-ms-transform:translateX(0px) rotate(0deg);transform:translateX(0px) rotate(0deg)}
+}
+.byywin-anim-04{-webkit-animation-name:win-rollIn;animation-name:win-rollIn}
 
-@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}.byywin-anim-05{-webkit-animation-name:fadeIn;animation-name:fadeIn}
+@keyframes win-fadeIn{0%{opacity:0}100%{opacity:1}}
+.byywin-anim-05{-webkit-animation-name:win-fadeIn;animation-name:win-fadeIn}
 
-@-webkit-keyframes shake{0%,100%{-webkit-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%,90%{-webkit-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%,80%{-webkit-transform:translateX(10px);transform:translateX(10px)}}@keyframes shake{0%,100%{-webkit-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%,90%{-webkit-transform:translateX(-10px);-ms-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%,80%{-webkit-transform:translateX(10px);-ms-transform:translateX(10px);transform:translateX(10px)}}.byywin-anim-06{-webkit-animation-name:shake;animation-name:shake}@-webkit-keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+@-webkit-keyframes win-shake{
+  0%,100%{-webkit-transform:translateX(0);transform:translateX(0)}
+  10%,30%,50%,70%,90%{-webkit-transform:translateX(-10px);transform:translateX(-10px)}
+  20%,40%,60%,80%{-webkit-transform:translateX(10px);transform:translateX(10px)}
+}
+@keyframes win-shake{
+  0%,100%{-webkit-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}
+  10%,30%,50%,70%,90%{-webkit-transform:translateX(-10px);-ms-transform:translateX(-10px);transform:translateX(-10px)}
+  20%,40%,60%,80%{-webkit-transform:translateX(10px);-ms-transform:translateX(10px);transform:translateX(10px)}
+}
+.byywin-anim-06{-webkit-animation-name:win-shake;animation-name:win-shake}
+@-webkit-keyframes win-fadeIn{0%{opacity:0}100%{opacity:1}}
 
-@-webkit-keyframes bounceOut { /* 关闭动画 */
+@-webkit-keyframes win-bounceOut { /* 关闭动画 */
   100% {opacity: 0; -webkit-transform: scale(.7); transform: scale(.7)}
   30% {-webkit-transform: scale(1.05); transform: scale(1.05)}
   0% {-webkit-transform: scale(1); transform: scale(1);}
 }
-@keyframes bounceOut {
+@keyframes win-bounceOut {
   100% {opacity: 0; -webkit-transform: scale(.7); -ms-transform: scale(.7); transform: scale(.7);}
   30% {-webkit-transform: scale(1.05); -ms-transform: scale(1.05); transform: scale(1.05);}
   0% {-webkit-transform: scale(1); -ms-transform: scale(1);transform: scale(1);}
 }
-.byywin-anim-close{-webkit-animation-name: bounceOut;animation-name: bounceOut; -webkit-animation-duration:.2s; animation-duration:.2s;}
+.byywin-anim-close{-webkit-animation-name: win-bounceOut;animation-name: win-bounceOut; -webkit-animation-duration:.2s; animation-duration:.2s;}
 
 /* 标题栏 */
 .byy-byywin-title{padding:0 80px 0 20px; height:42px; line-height:42px; border-bottom:1px solid #eee; font-size:14px; color:#333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background-color: #F8F8F8; border-radius: 2px 2px 0 0;}

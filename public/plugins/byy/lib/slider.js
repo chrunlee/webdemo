@@ -1,7 +1,313 @@
-/*
-	@company 博育云
-	@site : www.boyuyun.cn
-	@author boyuyun
-*/
+/**
 
-byy.define("jquery",function(a){"use strict";var b=window.jQuery||byy.jquery,c=(byy.device(),{config:{},set:function(a){var c=this;return c.config=b.extend({},c.config,a),c}}),d="byy-this",e="byy-carousel-arrow",f="byy-carousel-ind",g=function(a){var d=this;d.config=b.extend({},d.config,c.config,a),d.render()};g.prototype.config={width:"600px",height:"280px",full:!1,arrow:"hover",indicator:"inside",autoplay:!0,interval:3e3,anim:"",trigger:"click",index:0},g.prototype.render=function(){var a=this,c=a.config;c.elem=b(c.elem),c.elem[0]&&(a.elemItem=c.elem.find(">*[carousel-item]>*"),c.index<0&&(c.index=0),c.index>=a.elemItem.length&&(c.index=a.elemItem.length-1),c.interval<800&&(c.interval=800),c.full?c.elem.css({position:"fixed",width:"100%",height:"100%",zIndex:9999}):c.elem.css({width:c.width,height:c.height}),c.elem.attr("byy-anim",c.anim),a.elemItem.eq(c.index).addClass(d),a.elemItem.length<=1||(a.indicator(),a.arrow(),a.autoplay(),a.events()))},g.prototype.reload=function(a){var c=this;clearInterval(c.timer),c.config=b.extend({},c.config,a),c.render()},g.prototype.prevIndex=function(){var a=this,b=a.config,c=b.index-1;return c<0&&(c=a.elemItem.length-1),c},g.prototype.nextIndex=function(){var a=this,b=a.config,c=b.index+1;return c>=a.elemItem.length&&(c=0),c},g.prototype.addIndex=function(a){var b=this,c=b.config;a=a||1,c.index=c.index+a,c.index>=b.elemItem.length&&(c.index=0)},g.prototype.subIndex=function(a){var b=this,c=b.config;a=a||1,c.index=c.index-a,c.index<0&&(c.index=b.elemItem.length-1)},g.prototype.autoplay=function(){var a=this,b=a.config;b.autoplay&&(a.timer=setInterval(function(){a.slide()},b.interval))},g.prototype.arrow=function(){var a=this,c=a.config,d=b(['<button class="'+e+'" byy-type="sub">'+("updown"===c.anim?'<i class="byyicon icon-arrow-up"></i>':'<i class="byyicon icon-arrow-left"></i>')+"</button>",'<button class="'+e+'" byy-type="add">'+("updown"===c.anim?'<i class="byyicon icon-arrow-down"></i>':'<i class="byyicon icon-arrow-right"></i>')+"</button>"].join(""));c.elem.attr("byy-arrow",c.arrow),c.elem.find("."+e)[0]&&c.elem.find("."+e).remove(),c.elem.append(d),d.on("click",function(){var c=b(this),d=c.attr("byy-type");a.slide(d)})},g.prototype.indicator=function(){var a=this,c=a.config,d=a.elemInd=b(['<div class="'+f+'"><ul>',function(){var b=[];return byy.each(a.elemItem,function(a){b.push("<li"+(c.index===a?' class="byy-this"':"")+"></li>")}),b.join("")}(),"</ul></div>"].join(""));c.elem.attr("byy-indicator",c.indicator),c.elem.find("."+f)[0]&&c.elem.find("."+f).remove(),c.elem.append(d),"updown"===c.anim&&d.css("margin-top",-d.height()/2),d.find("li").on("hover"===c.trigger?"mouseover":c.trigger,function(){var d=b(this),e=d.index();e>c.index?a.slide("add",e-c.index):e<c.index&&a.slide("sub",c.index-e)})},g.prototype.slide=function(a,b){var c=this,e=c.elemItem,f=c.config,g=f.index;f.elem.attr("byy-filter");c.haveSlide||("sub"===a?(c.subIndex(b),e.eq(f.index).addClass("byy-carousel-prev"),setTimeout(function(){e.eq(g).addClass("byy-carousel-right"),e.eq(f.index).addClass("byy-carousel-right")},50)):(c.addIndex(b),e.eq(f.index).addClass("byy-carousel-next"),setTimeout(function(){e.eq(g).addClass("byy-carousel-left"),e.eq(f.index).addClass("byy-carousel-left")},50)),setTimeout(function(){e.removeClass(d+" byy-carousel-prev byy-carousel-next byy-carousel-left byy-carousel-right"),e.eq(f.index).addClass(d),c.haveSlide=!1},300),c.elemInd.find("li").eq(f.index).addClass(d).siblings().removeClass(d),c.haveSlide=!0)},g.prototype.events=function(){var a=this,b=a.config;b.elem.data("haveEvents")||(b.elem.on("mouseenter",function(){clearInterval(a.timer)}).on("mouseleave",function(){a.autoplay()}),b.elem.data("haveEvents",!0))},c.render=function(a){return new g(a)},a("slider",c)});
+ @Name：layui.carousel 轮播模块
+ @Author：贤心
+ @License：MIT
+    
+ */
+ 
+byy.define('jquery', function(exports){
+  "use strict";
+  
+  var $ = window.jQuery || byy.jquery
+  ,device = byy.device()
+
+  //外部接口
+  ,carousel = {
+    config: {} //全局配置项
+
+    //设置全局项
+    ,set: function(options){
+      var that = this;
+      that.config = $.extend({}, that.config, options);
+      return that;
+    }
+    
+    //事件监听
+    // ,on: function(events, callback){
+    //   return layui.onevent.call(this, MOD_NAME, events, callback);
+    // }
+  }
+  
+  //字符常量
+  ,MOD_NAME = 'slider', ELEM = '.byy-carousel', THIS = 'byy-this', SHOW = 'show', HIDE = 'hide', DISABLED = 'byy-disabled'
+  
+  ,ELEM_ITEM = '>*[carousel-item]>*', ELEM_LEFT = 'byy-carousel-left', ELEM_RIGHT = 'byy-carousel-right', ELEM_PREV = 'byy-carousel-prev', ELEM_NEXT = 'byy-carousel-next', ELEM_ARROW = 'byy-carousel-arrow', ELEM_IND = 'byy-carousel-ind'
+  
+  //构造器
+  ,Class = function(options){
+    var that = this;
+    that.config = $.extend({}, that.config, carousel.config, options);
+    that.render();
+  };
+  
+  //默认配置
+  Class.prototype.config = {
+    width: '600px'
+    ,height: '280px'
+    ,full: false //是否全屏
+    ,arrow: 'hover' //切换箭头默认显示状态：hover/always/none
+    ,indicator: 'inside' //指示器位置：inside/outside/none
+    ,autoplay: true //是否自动切换
+    ,interval: 3000 //自动切换的时间间隔，不能低于800ms
+    ,anim: '' //动画类型：default/updown/fade
+    ,trigger: 'click' //指示器的触发方式：click/hover
+    ,index: 0 //初始开始的索引
+  };
+  
+  //轮播渲染
+  Class.prototype.render = function(){
+    var that = this
+    ,options = that.config;
+
+    options.elem = $(options.elem);
+    if(!options.elem[0]) return;
+    that.elemItem = options.elem.find(ELEM_ITEM);
+    
+    if(options.index < 0) options.index = 0;
+    if(options.index >= that.elemItem.length) options.index = that.elemItem.length - 1;
+    if(options.interval < 800) options.interval = 800;
+
+    //是否全屏模式
+    if(options.full){
+      options.elem.css({
+        position: 'fixed'
+        ,width: '100%'
+        ,height: '100%'
+        ,zIndex: 9999
+      });
+    } else {
+      options.elem.css({
+        width: options.width
+        ,height: options.height
+      });
+    }
+    
+    options.elem.attr('byy-anim', options.anim);
+    
+    //初始焦点状态
+    that.elemItem.eq(options.index).addClass(THIS);
+
+    //指示器等动作
+    if(that.elemItem.length <= 1) return;
+    that.indicator();
+    that.arrow();
+    that.autoplay();
+    that.events();
+  };
+  
+  //重置轮播
+  Class.prototype.reload = function(options){
+    var that = this;
+    clearInterval(that.timer);
+    that.config = $.extend({}, that.config, options);
+    that.render();
+  };
+  
+  //获取上一个等待条目的索引
+  Class.prototype.prevIndex = function(){
+    var that = this
+    ,options = that.config;
+    
+    var prevIndex = options.index - 1;
+    if(prevIndex < 0){
+      prevIndex = that.elemItem.length - 1;
+    }
+    return prevIndex;
+  };
+  
+  //获取下一个等待条目的索引
+  Class.prototype.nextIndex = function(){
+    var that = this
+    ,options = that.config;
+    
+    var nextIndex = options.index + 1;
+    if(nextIndex >= that.elemItem.length){
+      nextIndex = 0;
+    }
+    return nextIndex;
+  };
+  
+  //索引递增
+  Class.prototype.addIndex = function(num){
+    var that = this
+    ,options = that.config;
+    
+    num = num || 1;
+    options.index = options.index + num;
+      
+    //index不能超过轮播总数量
+    if(options.index >= that.elemItem.length){
+      options.index = 0;
+    }
+  };
+  
+  //索引递减
+  Class.prototype.subIndex = function(num){
+    var that = this
+    ,options = that.config;
+    
+    num = num || 1;
+    options.index = options.index - num;
+      
+    //index不能超过轮播总数量
+    if(options.index < 0){
+      options.index = that.elemItem.length - 1;
+    }
+  };
+  
+  //自动轮播
+  Class.prototype.autoplay = function(){
+    var that = this
+    ,options = that.config;
+    
+    if(!options.autoplay) return;
+    
+    that.timer = setInterval(function(){
+      that.slide();
+    }, options.interval);
+  };
+  
+  //箭头
+  Class.prototype.arrow = function(){
+    var that = this
+    ,options = that.config;
+    
+    //模板
+    var tplArrow = $([
+      '<button class="'+ ELEM_ARROW +'" byy-type="sub">'+ (options.anim === 'updown' ? '<i class="byyicon icon-arrow-up"></i>' : '<i class="byyicon icon-arrow-left"></i>') +'</button>'
+      ,'<button class="'+ ELEM_ARROW +'" byy-type="add">'+ (options.anim === 'updown' ? '<i class="byyicon icon-arrow-down"></i>' : '<i class="byyicon icon-arrow-right"></i>') +'</button>'
+    ].join(''));
+    
+    //预设基础属性
+    options.elem.attr('byy-arrow', options.arrow);
+    
+    //避免重复插入
+    if(options.elem.find('.'+ELEM_ARROW)[0]){
+      options.elem.find('.'+ELEM_ARROW).remove();
+    };
+    options.elem.append(tplArrow);
+    
+    //事件
+    tplArrow.on('click', function(){
+      var othis = $(this)
+      ,type = othis.attr('byy-type')
+      that.slide(type);
+    });
+  };
+  
+  //指示器
+  Class.prototype.indicator = function(){
+    var that = this
+    ,options = that.config;
+    
+    //模板
+    var tplInd = that.elemInd = $(['<div class="'+ ELEM_IND +'"><ul>'
+      ,function(){
+        var li = [];
+        byy.each(that.elemItem, function(index){
+          li.push('<li'+ (options.index === index ? ' class="byy-this"' : '') +'></li>');
+        });
+        return li.join('');
+      }()
+    ,'</ul></div>'].join(''));
+    
+    //预设基础属性
+    options.elem.attr('byy-indicator', options.indicator);
+    
+    //避免重复插入
+    if(options.elem.find('.'+ELEM_IND)[0]){
+      options.elem.find('.'+ELEM_IND).remove();
+    };
+    options.elem.append(tplInd);
+    
+    if(options.anim === 'updown'){
+      tplInd.css('margin-top', -(tplInd.height()/2));
+    }
+    
+    //事件
+    tplInd.find('li').on(options.trigger === 'hover' ? 'mouseover' : options.trigger, function(){
+      var othis = $(this)
+      ,index = othis.index();
+      if(index > options.index){
+        that.slide('add', index - options.index);
+      } else if(index < options.index){
+        that.slide('sub', options.index - index);
+      }
+    });
+  };
+  
+  //滑动切换
+  Class.prototype.slide = function(type, num){
+    var that = this
+    ,elemItem = that.elemItem
+    ,options = that.config
+    ,thisIndex = options.index
+    ,filter = options.elem.attr('byy-filter');
+    
+    if(that.haveSlide) return;
+    
+    //滑动方向
+    if(type === 'sub'){
+      that.subIndex(num);
+      elemItem.eq(options.index).addClass(ELEM_PREV);
+      setTimeout(function(){
+        elemItem.eq(thisIndex).addClass(ELEM_RIGHT);
+        elemItem.eq(options.index).addClass(ELEM_RIGHT);
+      }, 50);
+    } else { //默认递增滑
+      that.addIndex(num);
+      elemItem.eq(options.index).addClass(ELEM_NEXT);
+      setTimeout(function(){
+        elemItem.eq(thisIndex).addClass(ELEM_LEFT);
+        elemItem.eq(options.index).addClass(ELEM_LEFT);
+      }, 50);  
+    };
+    
+    //移除过度类
+    setTimeout(function(){
+      elemItem.removeClass(THIS + ' ' + ELEM_PREV + ' ' + ELEM_NEXT + ' ' + ELEM_LEFT + ' ' + ELEM_RIGHT);
+      elemItem.eq(options.index).addClass(THIS);
+      that.haveSlide = false; //解锁
+    }, 300);
+    
+    //指示器焦点
+    that.elemInd.find('li').eq(options.index).addClass(THIS)
+    .siblings().removeClass(THIS);
+    
+    that.haveSlide = true;
+    
+    // layui.event.call(this, MOD_NAME, 'change('+ filter +')', {
+    //   index: options.index
+    //   ,prevIndex: thisIndex
+    //   ,item: elemItem.eq(options.index)
+    // });
+  };
+  
+  //事件处理
+  Class.prototype.events = function(){
+    var that = this
+    ,options = that.config;
+    
+    if(options.elem.data('haveEvents')) return;
+    
+    //移入移出容器
+    options.elem.on('mouseenter', function(){
+      clearInterval(that.timer);
+    }).on('mouseleave', function(){
+      that.autoplay();
+    });
+    
+    options.elem.data('haveEvents', true);
+  };
+  
+  //核心入口
+  carousel.render = function(options){
+    var inst = new Class(options);
+    return inst;
+  };
+  
+  exports(MOD_NAME, carousel);
+});
+
+ 

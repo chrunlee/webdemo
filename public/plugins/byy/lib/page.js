@@ -1,7 +1,213 @@
-/*
-	@company 博育云
-	@site : www.boyuyun.cn
-	@author boyuyun
-*/
+/***
+ * @Name byy page 分页组件
+ * @Author lixun
+ * @since 2017年2月4日 13:51:25
+ * @version 1.0.1 修复下拉框的bug
+ * @version 1.0.2 修复在always 总是显示的情况下，当total=0的时候，不显示第一页。
+ ***/
 
-byy.define(function(a){"use strict";function b(a){new i(a)}var c=document,d="getElementsByTagName",e={},f={},g=0,h=0,i=function(a){var b=this;(b.config=a||{}).item=g++,a.selector in f||(f[a.selector]=a.pagesize,e[a.selector]=!1),b.render(!0)};i.on=function(a,b,c){return a.attachEvent?a.attachEvent("on"+b,function(){c.call(a,window.even)}):a.addEventListener(b,c,!1),i},i.prototype.type=function(){var a=this.config;if("object"==typeof a.selector)return void 0===a.selector.length?2:3},i.prototype.view=function(){var a=this,b=a.config,c=[],d={};if(b.pageArray=!!byy.isArray(b.pageArray)&&b.pageArray,b.curr=0|b.curr||1,b.total=b.total||0,b.pagesize=b.pagesize||10,b.always=b.always||!1,b.pages=0==b.total||b.pagesize<1?0:b.total%b.pagesize==0?b.total/b.pagesize:parseInt(b.total/b.pagesize+1,10),b.showTotal="showTotal"in b&&!0===b.showTotal,b.increment="increment"in b?0|b.increment:5,h=b.increment,b.first="first"in b?b.first:byy.lang.page.first,b.last="last"in b?b.last:byy.lang.page.last,b.prev="prev"in b?b.prev:byy.lang.page.prev,b.next="next"in b?b.next:byy.lang.page.next,!b.always&&b.pages<=1&&!e[b.selector])return"";for(b.increment>b.pages&&(b.increment=b.pages),!0===b.showTotal&&c.push('<span class="byy-page-text" style="background-color:transparent;">'+byy.formatStr(byy.lang.page.total,b.total||0)+"</span>"),b.pageArray.length>0&&c.push('<span class="byy-page-text" style="background-color:transparent;"><select class="byy-page-select">'+function(a){return a.map(function(a){return"<option value="+a+" "+(b.pagesize==a?"selected":"")+">"+a+"</option>"}).join("")}(b.pageArray)+"</select></span>"),d.index=Math.ceil((b.curr+(b.increment>1&&b.increment!==b.pages?1:0))/(0===b.increment?1:b.increment)),b.curr>1&&b.prev&&c.push('<a href="javascript:;" class="byy-page-prev" data-page="'+(b.curr-1)+'">'+b.prev+"</a>"),d.index>1&&b.first&&0!==b.increment&&c.push('<a href="javascript:;" class="byy-page-first" data-page="1"  title="'+byy.lang.page.first+'">'+b.first+"</a><span>&#x2026;</span>"),d.poor=Math.floor((b.increment-1)/2),d.start=d.index>1?b.curr-d.poor:1,d.end=d.index>1?function(){var a=b.curr+(b.increment-d.poor-1);return a>b.pages?b.pages:a}():b.increment,d.end-d.start<b.increment-1&&(d.start=d.end-b.increment+1);d.start<=d.end;d.start++)d.start===b.curr?c.push('<span class="byy-page-curr"><em class="byy-page-em" '+(/^#/.test(b.skin)?'style="background-color:'+b.skin+';"':"")+"></em><em>"+d.start+"</em></span>"):c.push('<a href="javascript:;" data-page="'+d.start+'">'+d.start+"</a>");return 0===d.end&&b.always&&c.push('<span class="byy-page-curr"><em class="byy-page-em" '+(/^#/.test(b.skin)?'style="background-color:'+b.skin+';"':"")+"></em><em>"+d.start+"</em></span>"),b.pages>b.increment&&d.end<b.pages&&b.last&&0!==b.increment&&c.push('<span>&#x2026;</span><a href="javascript:;" class="byy-page-last" title="'+byy.lang.page.last+'"  data-page="'+b.pages+'">'+b.last+"</a>"),d.flow=!b.prev&&0===b.increment,(b.curr!==b.pages&&b.next||d.flow)&&c.push(function(){return d.flow&&b.curr===b.pages?'<span class="byy-page-nomore" title="'+byy.lang.page.nomore+'">'+b.next+"</span>":0==b.pages?"":'<a href="javascript:;" class="byy-page-next" data-page="'+(b.curr+1)+'">'+b.next+"</a>"}()),'<div class="byy-content-box byy-page byy-page-'+(b.skin?function(a){return/^#/.test(a)?"molv":a}(b.skin):"default")+'" id="byy-page-'+a.config.item+'">'+c.join("")+function(){return b.skip?'<span class="byy-page-total">'+byy.lang.page.jumpB+' <input type="number" min="1" onkeyup="this.value=this.value.replace(/\\D/, \'\');" value="'+b.curr+'" class="byy-page-skip"> '+byy.lang.page.jumpA+' <button type="button" class="byy-page-btn">'+byy.lang.page.okBtn+"</button></span>":""}()+"</div>"},i.prototype.callback=function(a){if(a){for(var b=this,c=b.config,g=a.children,j=a[d]("button")[0],k=a[d]("input")[0],l=a[d]("select")[0],m=0,n=g.length;m<n;m++)"a"===g[m].nodeName.toLowerCase()&&i.on(g[m],"click",function(){var a=0|this.getAttribute("data-page");c.curr=a,c.callback&&c.callback(c),b.render()});j&&i.on(j,"click",function(){var a=0|k.value.replace(/\s|\D/g,"");a&&a<=c.pages&&(c.curr=a,b.render())}),l&&i.on(l,"change",function(){try{c.pagesize=parseInt(l.value,10),c.pagesize>f[c.selector]?e[c.selector]=!0:e[c.selector]=!1}catch(a){}c.increment=h,c.curr=1,c.callback&&c.callback(c)})}},i.prototype.render=function(a){var b=this,d=b.config,e=b.type(),f=b.view();2===e?($(d.selector).html(f),$(d.selector).attr("page-curr",d.curr),$(d.selector).attr("page-size",d.pagesize)):3===e?(d.selector.html(f),d.selector.data("obj",d),$(d.selector).attr("page-curr",d.curr),$(d.selector).attr("page-size",d.pagesize)):($(d.selector).html(f),$(d.selector).data("obj",d),$(d.selector).attr("page-curr",d.curr),$(d.selector).attr("page-size",d.pagesize)),b.callback(c.getElementById("byy-page-"+d.item)),d.hash&&!a&&(location.hash="!"+d.hash+"="+d.curr)},a("page",b)});
+byy.define(function(exports){
+  "use strict";
+
+  function byypage(options){
+    var skin = 'byypagecss';
+    new Page(options);
+  }
+
+  var doc = document, id = 'getElementById', tag = 'getElementsByTagName',_esMap ={},_bsMap = {};
+  var index = 0,tempIncrement = 0, Page = function(options){
+    var that = this;
+    var conf = that.config = options || {};
+    conf.item = index++;
+    if(options.selector in _bsMap){}else{
+      _bsMap[options.selector] = options.pagesize;
+      _esMap[options.selector] = false;
+    }
+    that.render(true);
+  };
+
+  Page.on = function(elem, even, fn){
+    elem.attachEvent ? elem.attachEvent('on'+ even, function(){
+      fn.call(elem, window.even); //for ie, this指向为当前dom元素
+    }) : elem.addEventListener(even, fn, false);
+    return Page;
+  };
+
+  //判断传入的容器类型
+  Page.prototype.type = function(){
+    var conf = this.config;
+    if(typeof conf.selector === 'object'){
+      return conf.selector.length === undefined ? 2 : 3;
+    }
+  };
+
+  //分页视图
+  Page.prototype.view = function(){
+    var that = this, conf = that.config, view = [], dict = {};
+    conf.pageArray = byy.isArray(conf.pageArray)  ? conf.pageArray : false;
+    conf.curr = (conf.curr|0) || 1;
+    conf.total = conf.total||0;
+    conf.pagesize = conf.pagesize || 10;
+    conf.always = conf.always || false;//是否总是显示分页，默认false(当分页小于等于1的时候，不显示)
+    conf.pages = (conf.total == 0 || conf.pagesize < 1 ) ? 0 : (conf.total % conf.pagesize == 0 ? (conf.total / conf.pagesize) : parseInt(((conf.total / conf.pagesize)+1),10));//总页数，根据总数和每页的条数进行计算
+    conf.showTotal = 'showTotal' in conf ? (conf.showTotal === true ? true : false) : false;
+    conf.increment = 'increment' in conf ? (conf.increment|0) : 5;
+    tempIncrement = conf.increment;
+    conf.first = 'first' in conf ? conf.first : byy.lang.page.first;
+    conf.last = 'last' in conf ? conf.last : byy.lang.page.last;
+    conf.prev = 'prev' in conf ? conf.prev : byy.lang.page.prev;
+    conf.next = 'next' in conf ? conf.next : byy.lang.page.next;
+    
+    if(!conf.always && conf.pages <= 1 && !_esMap[conf.selector]){
+      return '';
+    }
+    
+    if(conf.increment > conf.pages){
+      conf.increment = conf.pages;
+    }
+    //判断是否显示总数量
+    if(conf.showTotal === true){
+      view.push('<span class="byy-page-text" style="background-color:transparent;">'+(byy.formatStr(byy.lang.page.total,(conf.total||0)))+'</span>');
+    }
+    
+    //判断是否显示修改页码数下拉框
+    if(conf.pageArray.length > 0){
+      view.push('<span class="byy-page-text" style="background-color:transparent;"><select class="byy-page-select">'+
+        (function(arr){
+          return arr.map(function(ele){
+            return '<option value='+ele+' '+(conf.pagesize == ele ? 'selected' : '')+'>'+ele+'</option>';
+          }).join('');
+        })(conf.pageArray)
+      +'</select></span>');
+    }
+
+    //计算当前组
+    dict.index = Math.ceil((conf.curr + ((conf.increment > 1 && conf.increment !== conf.pages) ? 1 : 0))/(conf.increment === 0 ? 1 : conf.increment));
+    
+    //当前页非首页，则输出上一页
+    if(conf.curr > 1 && conf.prev){
+      view.push('<a href="javascript:;" class="byy-page-prev" data-page="'+ (conf.curr - 1) +'">'+ conf.prev +'</a>');
+    }
+    
+    //当前组非首组，则输出首页
+    if(dict.index > 1 && conf.first && conf.increment !== 0){
+      view.push('<a href="javascript:;" class="byy-page-first" data-page="1"  title="'+(byy.lang.page.first)+'">'+ conf.first +'</a><span>&#x2026;</span>');
+    }
+    
+    //输出当前页组
+    dict.poor = Math.floor((conf.increment-1)/2);
+    dict.start = dict.index > 1 ? conf.curr - dict.poor : 1;
+    dict.end = dict.index > 1 ? (function(){
+      var max = conf.curr + (conf.increment - dict.poor - 1);
+      return max > conf.pages ? conf.pages : max;
+    }()) : conf.increment;
+    if(dict.end - dict.start < conf.increment - 1){ //最后一组状态
+      dict.start = dict.end - conf.increment + 1;
+    }
+    for(; dict.start <= dict.end; dict.start++){
+      if(dict.start === conf.curr){
+        view.push('<span class="byy-page-curr"><em class="byy-page-em" '+ (/^#/.test(conf.skin) ? 'style="background-color:'+ conf.skin +';"' : '') +'></em><em>'+ dict.start +'</em></span>');
+      } else {
+        view.push('<a href="javascript:;" data-page="'+ dict.start +'">'+ dict.start +'</a>');
+      }
+    }
+    //hack : 如果total == 0,显示一个
+    if(dict.end === 0 && conf.always){
+        view.push('<span class="byy-page-curr"><em class="byy-page-em" '+ (/^#/.test(conf.skin) ? 'style="background-color:'+ conf.skin +';"' : '') +'></em><em>'+ dict.start +'</em></span>');
+    }
+    //总页数大于连续分页数，且当前组最大页小于总页，输出尾页
+    if(conf.pages > conf.increment && dict.end < conf.pages && conf.last && conf.increment !== 0){
+       view.push('<span>&#x2026;</span><a href="javascript:;" class="byy-page-last" title="'+byy.lang.page.last+'"  data-page="'+ conf.pages +'">'+ conf.last +'</a>');
+    }
+    
+    //当前页不为尾页时，输出下一页
+    dict.flow = !conf.prev && conf.increment === 0;
+    if(conf.curr !== conf.pages && conf.next || dict.flow){
+      view.push((function(){
+        return (dict.flow && conf.curr === conf.pages) 
+        ? '<span class="byy-page-nomore" title="'+byy.lang.page.nomore+'">'+ conf.next +'</span>'
+        : (conf.pages == 0 ? '' : '<a href="javascript:;" class="byy-page-next" data-page="'+ (conf.curr + 1) +'">'+ conf.next +'</a>');
+      }()));
+    }
+
+    return '<div class="byy-content-box byy-page byy-page-'+ (conf.skin ? (function(skin){
+      return /^#/.test(skin) ? 'molv' : skin;
+    }(conf.skin)) : 'default') +'" id="byy-page-'+ that.config.item +'">'+ view.join('') + function(){
+      return conf.skip 
+      ? '<span class="byy-page-total">'+byy.lang.page.jumpB+' <input type="number" min="1" onkeyup="this.value=this.value.replace(/\\D/, \'\');" value="'+ conf.curr +'" class="byy-page-skip"> '+byy.lang.page.jumpA+' '
+      + '<button type="button" class="byy-page-btn">'+byy.lang.page.okBtn+'</button></span>' 
+      : '';
+    }() +'</div>';
+  };
+
+  //跳页
+  Page.prototype.callback = function(elem){
+    if(!elem) return;
+    var that = this, conf = that.config, childs = elem.children;
+    var btn = elem[tag]('button')[0];
+    var input = elem[tag]('input')[0];
+    var select = elem[tag]('select')[0];
+    for(var i = 0, len = childs.length; i < len; i++){
+      if(childs[i].nodeName.toLowerCase() === 'a'){
+        Page.on(childs[i], 'click', function(){
+          var curr = this.getAttribute('data-page')|0;
+          conf.curr = curr;
+          conf.callback && conf.callback(conf);
+          that.render();
+          
+        });
+      }
+    }
+    if(btn){
+      Page.on(btn, 'click', function(){
+        var curr = input.value.replace(/\s|\D/g, '')|0;
+        if(curr && curr <= conf.pages){
+          conf.curr = curr;
+          that.render();
+        }
+      });
+    }
+    if(select){
+      Page.on(select,'change',function(){
+        try{
+          conf.pagesize = parseInt(select.value,10);
+          conf.pagesize > _bsMap[conf.selector] ? _esMap[conf.selector] = true : _esMap[conf.selector] = false;
+        }catch(e){}
+        conf.increment = tempIncrement;
+        conf.curr = 1;
+        conf.callback && conf.callback(conf);
+      });
+    }
+  };
+
+  //渲染分页
+  Page.prototype.render = function(load){
+    var that = this, conf = that.config, type = that.type();
+    var view = that.view();
+    //将相关的配置放在page元素中，用于其他的时候获得调用
+    if(type === 2){
+      $(conf.selector).html(view);
+      $(conf.selector).attr('page-curr',conf.curr);
+      $(conf.selector).attr('page-size',conf.pagesize);
+    } else if(type === 3){
+      conf.selector.html(view);
+      conf.selector.data('obj',conf);
+      $(conf.selector).attr('page-curr',conf.curr);
+      $(conf.selector).attr('page-size',conf.pagesize);
+    } else {
+      $(conf.selector).html(view);
+      $(conf.selector).data('obj',conf);
+      $(conf.selector).attr('page-curr',conf.curr);
+      $(conf.selector).attr('page-size',conf.pagesize);
+    }
+    
+
+    that.callback(doc[id]('byy-page-' + conf.item));
+    if(conf.hash && !load){
+      location.hash = '!'+ conf.hash +'='+ conf.curr;
+    }
+  };
+  
+  exports('page', byypage);
+
+});
