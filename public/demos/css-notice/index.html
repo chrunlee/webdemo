@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>实现一个右侧滑出的效果</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<style>
+		.right-msg{
+			position:fixed;
+			width:400px;
+			top:0px;
+			bottom:0px;
+			right:-400px;
+			box-shadow:-2px 0px 10px 1px rgba(0,0,0,0.3);
+		}
+		.right-msg.show{right:0px;}
+		.right-msg-title{
+			height:40px;
+			line-height:40px;
+			width:100%;
+			padding:0px 20px;
+			color:#333;
+			font-size:18px;
+			box-sizing:border-box;
+			border-bottom:1px solid #ccc;
+			position:absolute;
+			background-color:white;
+			z-index:2;
+		}
+		.right-msg-content{
+			height:100%;
+			overflow-y:auto;
+			padding-top:40px;
+			box-sizing:border-box;
+		}
+		.right-msg-close{
+			position:absolute;
+			right:10px;
+			width:20px;
+			height:20px;
+			display:inline-block;
+			top:10px;
+			line-height:16px;
+			border-radius:50%;
+			text-align:center;
+			cursor:pointer;
+		}
+		.right-msg-block{
+			width:100%;
+			padding:5px 10px;
+			box-sizing:border-box;
+			border-bottom:1px dotted #eee;
+		}
+		.right-msg-block .info,.right-msg-block .content{
+			font-size:12px;
+			color:#999;
+			width:100%;
+			box-sizing:border-box;
+		}
+	</style>
+</head>
+<body>
+	<div class="text-center">
+		<span class="byy-btn" filter="showMsg">点击弹出消息</span>	
+	</div>
+	<div class="right-msg">
+		<div class="right-msg-title">
+			消息列表
+			<span class="right-msg-close green-bg" filter="hideMsg"><i class="byyicon icon-close"></i></span>
+		</div>
+		<div class="right-msg-content">
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+			<div class="right-msg-block">
+				<div class="title">
+					<a href="javascript:;" filter="alertMsg" id="1">放假啦</a>
+				</div>
+				<div class="info">
+					<span>时间:</span><span>2018年2月8日 10:55:29</span>
+				</div>
+				<div class="content byy-elip">
+					暂定2月14号放假，普天同庆，不过有可能早放，有可能晚放。请各位及时注意通知。
+				</div>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+	//事件监听
+	var events = {
+		showMsg : function(){
+			$('.right-msg').addClass('show').removeClass('bounceOutRight').addClass('animated').addClass('bounceInRight');
+		},
+		hideMsg : function(){
+			$('.right-msg').removeClass('bounceInRight').addClass('bounceOutRight');
+		},
+		alertMsg : function(){
+			alert($(this).attr('id'));
+		}
+	};
+	byy.require(['jquery','animate'],function(){
+		$('body').on('click','[filter]',function(ev){
+			var $this = $(this),type = $this.attr('filter');
+			events[type].call($this,ev);
+			
+		});
+	});
+</script>
