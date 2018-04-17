@@ -3,6 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Lab - 前端实验室</title>
+	<meta name="keywords" content="chrunlee,前端,实验室,demo展示,javascript demo,css demo,前端实验室,工具集合">
+	<meta name="content" content="把工作、生活中自己学习、感兴趣的小页面或工具集中在一起，以后再有类型的需求可以直接进行参考，也欢迎大家发邮件把自己想要实现的一些页面或小工具发给我，我会尽力实现的。@mailto:chrunlee@foxmail.com">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
 	<style>
 		.trs{
@@ -10,17 +13,35 @@
 			-o-transition: all .3s ease;
 			transition: all .3s ease;
 		}
-		.flex-box{flex-wrap:wrap;}
+		.block-wrap{
+		}
+		.demo-block{
+			width:20%;
+			margin:2%;
+			min-width:300px;
+			float:left;
+			box-sizing:border-box;border:none;background-color:white;border:1px dashed #ccc;border-radius:10px;
+		}
+		.demo-block:hover{box-shadow:0px 0px 10px 3px rgba(0,0,0,0.3);}
+		.demo-block img{max-width:100%;max-height:200px;display:inline-block;margin:0px auto;}
+		.demo-block p{width:100%;padding:0px 10px;}
+		.demo-block a{cursor:pointer;}
+		.demo-block p.demo-title{font-size:18px;font-weight:bold;color:#555;height:30px;line-height:30px;}
+		.demo-block p.demo-des{font-size:12px;font-weight:normal;color:#999;}
 		.container-fluid{padding:20px;}
-		.flex-item{margin:20px;box-sizing:border-box;border:none;background-color:white;border:1px dashed #ccc;border-radius:10px;}
-		.flex-item:hover{box-shadow:0px 0px 10px 3px rgba(0,0,0,0.3);}
-		.flex-item .img-wrap{display:inline-block;width:100%;height:200px;line-height:200px;text-align:center;}
-		.flex-item img{max-width:100%;max-height:200px;display:inline-block;margin:0px auto;}
-		.flex-item p{width:100%;padding:0px 10px;}
-		.flex-item a{cursor:pointer;}
-		.flex-item p.demo-title{font-size:18px;font-weight:bold;color:#555;height:30px;line-height:30px;}
-		.flex-item p.demo-des{font-size:12px;font-weight:normal;color:#999;}
+		.demo-block .img-wrap{display:inline-block;width:100%;height:200px;line-height:200px;text-align:center;}
 		.info{font-size:12px;color:#999;}
+		#search{margin-top:10px;width:350px;}
+		/*小屏*/
+		@media screen and (max-width:768px){
+			.demo-block{
+				width:90%;
+				margin:4%;
+			}
+			#search{width:150px;}
+			.info{display:none;}
+
+		}
 	</style>
 </head>
 <body class="grey-bg">
@@ -30,7 +51,7 @@
 				<a href="/">Lab —— 我的实验室</a>
 			</li>
 			<span class="pull-right">
-				<input type="text" class="byy-form-input" id="search" placeholder="内容检索,请回车" autofocus style="margin-top:10px;width:350px;">
+				<input type="text" class="byy-form-input" id="search" placeholder="内容检索,请回车" autofocus>
 				<span class="info">powered by chrunlee / 2017</span>
 			</span>
 		</ul>
@@ -39,9 +60,18 @@
 		
 	</div>
 	<div class="container-fluid">
-		<div class="flex-box center">
+		<div class="block-wrap byy-clear">
 			
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
+				<a class="demo-link byy-clear" href="/demos/js-caculator/index.html" target="_blank">
+					<span class="img-wrap"><img src="/demos/js-caculator/post.png" alt=""></span>
+					<p class="demo-title byy-elip" title="小工具-模拟实现计算器">小工具-模拟实现计算器</p>
+					<p class="demo-des byy-elip" title="实现一个简单的计算器...简单的">
+						实现一个简单的计算器...简单的
+					</p>
+				</a>
+			</div>
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/css-notice/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/css-notice/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="css右侧消息展示">css右侧消息展示</p>
@@ -50,7 +80,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/js-treegrid/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/js-treegrid/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="jquery treegrid扩展">jquery treegrid扩展</p>
@@ -59,7 +89,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/js-scroll/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/js-scroll/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="js实现向下滚动返回顶部">js实现向下滚动返回顶部</p>
@@ -68,7 +98,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/css-button/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/css-button/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="css实现的漂亮按钮">css实现的漂亮按钮</p>
@@ -77,7 +107,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/css-tab/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/css-tab/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="js实现tab小控件">js实现tab小控件</p>
@@ -86,7 +116,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/css-arrow/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/css-arrow/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="css3实现下拉箭头">css3实现下拉箭头</p>
@@ -95,7 +125,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/canvas-2/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/canvas-2/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="canvas 学习，实现时钟效果">canvas 学习，实现时钟效果</p>
@@ -104,7 +134,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/js-typper/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/js-typper/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="JS 模拟打字效果">JS 模拟打字效果</p>
@@ -113,7 +143,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/edu-1/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/edu-1/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="博育云-新版数校首页">博育云-新版数校首页</p>
@@ -122,7 +152,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/form-designer/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/form-designer/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="form designer">form designer</p>
@@ -131,7 +161,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/css3-taiji/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/css3-taiji/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="css3 太极">css3 太极</p>
@@ -140,7 +170,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/js-cangku-filter/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/js-cangku-filter/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="物品分类过滤插件">物品分类过滤插件</p>
@@ -149,7 +179,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/js-brain/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/js-brain/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="物品分类过滤插件">jquery 脑图实现</p>
@@ -158,7 +188,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/css-menu/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/css-menu/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="css 动画菜单">css 动画菜单</p>
@@ -167,7 +197,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/js-dropdown/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/js-dropdown/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="js 下拉菜单">js 下拉菜单</p>
@@ -176,7 +206,7 @@
 					</p>
 				</a>
 			</div>
-			<div class="flex-item w-1of6 trs">
+			<div class="demo-block trs">
 				<a class="demo-link byy-clear" href="/demos/canvas-snow/index.html" target="_blank">
 					<span class="img-wrap"><img src="/demos/canvas-snow/post.png" alt=""></span>
 					<p class="demo-title byy-elip" title="雪花效果">雪花效果</p>

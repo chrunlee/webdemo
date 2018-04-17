@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<title>js 模拟实现网页版计算器-初级</title>
+	<style>
+		.caculator{
+			width:500px;
+			box-sizing:border-box;
+		}
+		.info{
+			height:200px;
+			border:1px solid #ccc;
+			border-bottom:none;
+		}
+		.line{
+			box-sizing:border-box;
+			display:block;
+			width:100%;
+			clear:both;
+			*zoom:1;
+		}
+		.line:after{
+			content:'\20';
+			display:block;
+			clear:both;
+			*zoom:1;
+			height:0;
+		}
+		.control{
+			box-sizing:border-box;
+			width:100%;
+			border:1px solid #ccc;
+			position:relative;
+			border-bottom:none;
+		}
+		.dot{
+			display:inline-block;
+			width:25%;
+			height:50px;
+			box-sizing:border-box;
+			border-right:1px solid #ccc;
+			line-height:50px;
+			text-align:center;
+			float:left;
+			border-bottom:1px solid #ccc;
+			font-size:20px;
+			color:#333;
+			cursor:pointer;
+			/**不被选中**/
+			-moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;
+		}
+		.dot:hover,.dot:active,.dot:active{
+			background-color:#f2f2f2;
+		}
+		.dot:last-child{
+			border-right:none;
+		}
+		.equal{
+			position:absolute;
+			right:0px;
+			bottom:0px;
+			width:25%;
+			height:100px;
+			line-height:100px;
+			text-align:center;
+			border-left:1px solid #ccc;
+			border-bottom:1px solid #ccc;
+			background-color:#ff6600;
+			cursor:pointer;
+		}
+		.equal:hover,.equal:active,.equal:active{
+			background-color:#ff3300;
+		}
+		.show{text-align:right;height:40px;line-height:40px;font-size:26px;color:#555;padding:0px 10px;}
+		.show#now{font-size:20px;color:#aaa;}
+	</style>
+</head>
+<body>
+	<div class="caculator">
+		<div class="info">
+			<div class="show"></div>
+			<div class="show"></div>
+			<div class="show"></div>
+			<div class="show" id="now1"></div>
+			<div class="show" id="now">0</div>
+		</div>
+		<div class="control">
+			<div class="line">
+				<span class="dot" type="10">AC</span>
+				<span class="dot" type="11">DEL</span>
+				<span class="dot" type="12">➗</span>
+				<span class="dot" type="13">✖</span>
+			</div>
+			<div class="line">
+				<span class="dot" type="7">7</span>
+				<span class="dot" type="8">8</span>
+				<span class="dot" type="9">9</span>
+				<span class="dot" type="14">➖</span>
+			</div>
+			<div class="line">
+				<span class="dot" type="4">4</span>
+				<span class="dot" type="5">5</span>
+				<span class="dot" type="6">6</span>
+				<span class="dot" type="15">➕</span>
+			</div>
+			<div class="line">
+				<span class="dot" type="1">1</span>
+				<span class="dot" type="2">2</span>
+				<span class="dot" type="3">3</span>
+			</div>
+			<div class="line">
+				<span class="dot" type="16">%</span>
+				<span class="dot" type="0">0</span>
+				<span class="dot" type=".">·</span>
+			</div>
+			<div class="equal" id="result">
+				=
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	//DOM操作\
+
+	var DOME = {
+		ida : 'now1',
+		idb : 'now',
+		cache : [],
+		getNowValue : function(){
+			return document.getElementById(DOME.ida).innerText;
+		},
+		isEmpty :  function(){
+			return DOME.getNowValue() === '' || DOME.getNowValue() === '0';
+		},
+		setNowValue : function( str ){
+			document.getElementById(DOME.ida).innerText = str;
+		},
+		appendValue : function( str ){
+			var a = document.getElementById(DOME.ida).innerText;
+			document.getElementById(DOME.ida).innerText = a + str;
+		},
+		setResult : function( str ){
+			document.getElementById(DOME.idb).innerText = str;
+		},
+		//求结果
+		result : function(){
+			//cache的数据提取与当前进行计算
+			var now = parseInt(DOME.getNowValue(),10);
+			if(DOME.cache.length == 0){
+				DOME.setResult('='+now);
+			}else{
+				var result = 0;
+				DOME.cache.forEach(function( item ){
+					//item.key ,item.value
+
+				});
+			}
+		}
+	};
+	//事件
+	var events = {
+		//输出0
+		0 : function(){
+			if(DOME.isEmpty()){
+				DOME.setNowValue('0');
+			}else{
+				DOME.appendValue('0');
+			}
+			DOME.result();
+		},
+		//1-9类似
+		1 : function(){
+			//判断是否有零-0，如果没有
+
+		}
+	};
+	document.querySelectorAll('.dot').forEach(function( item ){
+		var type = item.getAttribute('type');
+		item.onclick = (function(t,z){
+			return function(){
+				if(events && events[t] ) events[t].call(z);
+			}
+		})(type,item);
+	});
+</script>
