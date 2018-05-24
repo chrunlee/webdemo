@@ -42,15 +42,15 @@ Speed.prototype.put = function(){
 		success : function(res){
 			var resobj = byy.json(res);
 			if(resobj.success){
-				var msg = resobj.msg +'<a href="/demos/speed/rank.html">查看排行榜</a>';
+				var msg = resobj.msg +'<a href="/speed/rank">查看排行榜</a>';
 				$('.rank').html(msg);
 			}else{
 				byy.win.msg(res.obj.msg);
-				$('.rank').html('<a href="/demos/speed/rank.html">查看排行榜</a>');
+				$('.rank').html('<a href="/speed/rank">查看排行榜</a>');
 			}
 		},
 		error : function(){
-			$('.rank').html('<a href="/demos/speed/rank.html">查看排行榜</a>');
+			$('.rank').html('<a href="/speed/rank">查看排行榜</a>');
 		}
 	});
 }
