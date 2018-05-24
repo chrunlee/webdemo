@@ -1,0 +1,125 @@
+@charset "utf-8";
+*{
+    box-sizing:border-box;
+}
+.class-seat{
+    width:980px;
+    position: relative;
+    
+}
+.class-seat-heiban {
+    background-image: url(images/heiban.png);
+    min-height : 214px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.class-seat-heiban-name{
+    display:block;
+    font-size:32px;
+    color:white;
+    font-family: "微软雅黑";
+    text-align: center;
+    height : 100px;
+    line-height:150px;
+}
+.class-seat-heiban-num{
+    display:block;
+    font-size:32px;
+    color : white;
+    font-family: "微软雅黑";
+    text-align: center;
+    height: 100px;
+    line-height: 50px;
+}
+.class-seat-wrap{
+    border-left:1px solid #ddd;
+    border-right:1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    overflow-x:scroll;
+}
+.class-seat-content{
+    padding-top:10px;
+    padding-bottom: 10px;
+    display:inline-block;
+    min-width:970px;
+}
+.seat-num{
+    display:inline-block;
+    float:left;
+    background-image: url(images/num.png);
+    background-position: 1px center;
+    background-repeat: no-repeat;
+    width:30px;
+    margin-top:15px;
+    color:white;
+    text-align: center;
+    padding-right:5px;
+}
+.seat {
+    height:60px;
+    width : 100px;
+    float:left;
+    background-image: url(images/desk.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.seat.over{
+    border:1px dashed black;
+}
+.seat-name{
+    color:white;
+    font-weight: bold;
+    display: block;
+    text-align: center;
+    height:30px;
+    line-height: 40px;
+}
+.class-seat-right{
+    position:absolute;
+    width : 30px;
+    height : 40px;
+    border:1px solid red;
+    top:214px;
+    right:-30px;
+    cursor:pointer;
+}
+.studentlist{
+    border:1px solid #aaa;
+    width:180px;
+    display:inline-block;
+    position: absolute;
+    top:214px;
+    right:5px;
+    padding-left:10px;
+    padding-right:5px;
+    border-radius: 5px;
+}
+.student-title{
+    height:40px;
+    line-height: 40px;
+    display: block;
+    border-bottom: 1px solid #ddd;
+    margin-left:-10px;
+    margin-right:-5px;
+    text-align: center;
+}
+.student-name{
+    display: block;
+    text-align: center;
+    border:1px solid #ddd;
+    border-radius: 5px;
+    margin-top:2px;
+    line-height: 30px;
+    height:30px;
+    cursor:move;
+    margin-bottom: 2px;
+    min-width: 100px;
+}
+.student-name.ondrag{
+    border:1px dashed black;
+}
+.student-name.move{
+    position: absolute;
+    
+}

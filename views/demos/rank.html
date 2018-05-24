@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>手速排行榜</title>
+	<link rel="stylesheet" href="/demos/speed/rank.css">
+</head>
+<body>
+	<div class="wrapper">
+		<h1>手速排行榜</h1>
+		<h6>来来来...看看大神都是啥手速<a href="/demos/speed/speed.html">不服再来</a></h6>
+		<hr>
+		<div class="rank-list">
+			{{ each ranklist value i}}
+			<div class="rank-block">
+				<span class="rank">{{value.rank}}</span>
+				<span class="name">{{value.name}}</span>
+				<span class="usetime">{{value.usetime}}</span>
+				<span class="time">{{value.createtime}}</span>
+			</div>
+			{{ /each }}
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript" src="/demos/speed/ls.js"></script>
+<script type="text/javascript">
+	byy.require('jquery',function(){
+		var name = val('name');
+		if(name){
+			$('.name').each(function(){
+				if($(this).html() == name){
+					$(this).addClass('light');
+				}
+			});
+		}
+	})
+</script>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>挑战你的手速</title>
+	<link rel="stylesheet" href="speed.css">
+</head>
+<body>
+	<div class="wrapper">
+		<h1>挑战你的手速</h1>
+		<em>规则:按下空格开始后，最快的速度输入A-Z26个字母成功即为结束。</em>
+		<div class="letter">
+			
+		</div>
+		<div class="time-show">
+		</div>
+		<div class="opt">
+			<span class="start-btn">爆发吧！我的小宇宙..</span>	
+		</div>
+		<div class="rank">
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript" src="ls.js"></script>
+<script type="text/javascript" src="speed.js"></script>
+<script type="text/javascript">
+	//开始后记时间，完毕后记录时间，中间记录过程，完成后保存数据库
+	byy.require(['jquery','win'],function(){
+		if(!val('name')){
+			window.location.href = '/demos/speed/index.html'
+		}else{
+			var s = new Speed();	
+		}
+	})
+</script>
