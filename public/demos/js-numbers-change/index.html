@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>数字变化长大</title>
+	<style>
+		body{background-color:#3a3842;}
+		.num{
+			font-size:64px;
+			text-align:center;
+			margin:10px;
+			font-weight:bold;
+			font-family:"仿宋";
+			color:#35b192;
+		}
+	</style>
+</head>
+<body>
+	<div class="num" id="test1"></div>
+	<div class="num" id="test2"></div>
+	<div class="num" id="test3"></div>
+	<div class="num" id="test4"></div>
+	<div class="num" id="test5"></div>
+</body>
+</html>
+<script type="text/javascript">
+	
+	function grow(growend,growtime,growdom){
+		//在规定的时间内增长
+		var start = 0,growend = growend || 0;
+		function rts(){
+			var that = this;
+			that.diff = 10;
+			that.end = growend;
+			that.now = start;
+			that.time = growtime;
+			that.growdom = growdom;
+			that.incroment = Math.floor(( that.end - that.now ) / (that.time / that.diff));
+			that.start = function(){
+				that.timer = setInterval(that.next,that.diff);	
+			}
+			that.next = function(){
+				that.now += that.incroment;
+				if(that.now > that.end){
+					that.now = that.end;
+					clearInterval(that.timer);
+				}
+				that.growdom.innerHTML = that.now;
+			}
+			return this;
+		};
+		return new rts();
+	}
+
+	var growIns1 = grow(345621,5000,document.getElementById('test1'));
+	growIns1.start();
+	var growIns2 = grow(273091,4000,document.getElementById('test2'));
+	growIns2.start();
+	var growIns3 = grow(839021,3000,document.getElementById('test3'));
+	growIns3.start();
+	var growIns4 = grow(129462,2000,document.getElementById('test4'));
+	growIns4.start();
+</script>
