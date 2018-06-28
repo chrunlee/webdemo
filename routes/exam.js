@@ -40,5 +40,23 @@ router.get('/get', function(req, res, next) {
 		res.end(JSON.stringify({success : false,msg : '服务器错误'}));
 	})
 });
+//获取详细信息，如果是解析题目，则获取具体的小项目和选项
+router.post('/get',function(req,res,next){
+	var id = req.body.id,
+		ttype = parseInt(req.body.ttype,10);
+	//根据不同的题目类型查找数据，主要是选项
+	var sql = {
+		sql : 'select * from tiganitem where tiganid=? order by seq',
+		params : [id]
+	};
+	if(ttype < 3){//0 1 2(判断题目)
+		query(sql).then(function(list){
+			var rs = list[0];
+			res.end(JSON.stringify(rs));
+		});
+	}else{
+		res.end(JSON.stringify([]));
+	}
+});
 
 module.exports = router;
