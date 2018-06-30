@@ -73,7 +73,7 @@ router.post('/get',function(req,res,next){
 				var tempList = [];
 				item.forEach(function(temp2){
 					if(temp2.tiganid == tiganId){
-						tempList.add(temp2);
+						tempList.push(temp2);
 					}
 				});
 				arr.push(temp);
