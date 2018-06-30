@@ -17,7 +17,7 @@ router.get('/get', function(req, res, next) {
 		sql : 'select * from tigan where ttype=2 order by rand() limit 10',
 		params : []
 	},{
-		sql : 'select * from tigan where ttype=3 order by rand() limit 10'
+		sql : 'select * from jiexi order by rand() limit 10'
 	}
 	];
 	query(sql).then(function(list){
@@ -53,6 +53,32 @@ router.post('/get',function(req,res,next){
 		query(sql).then(function(list){
 			var rs = list[0];
 			res.end(JSON.stringify(rs));
+		});
+	}else if(ttype == 3){
+		//解析题目
+		var sql = [{
+			sql : 'select * from tigan where jiexiid=? order by id asc',
+			params : [id]
+		},{
+			sql : 'select * from tiganitem where tiganid in (select id from tigan where jiexiid=? ) order by seq asc',
+			params : [id]
+		}];
+		query(sql).then(function(list){
+			var tigan = list[0],item = list[1];
+			//重新进行组装
+			var arr = [];
+			tigan.forEach(function(temp,index){
+				//根据item查找选项
+				var tiganId =temp.id;
+				var tempList = [];
+				item.forEach(function(temp2){
+					if(temp2.tiganid == tiganId){
+						tempList.add(temp2);
+					}
+				});
+				arr.push(temp);
+			});
+			res.end(JSON.stringify(arr));
 		});
 	}else{
 		res.end(JSON.stringify([]));
