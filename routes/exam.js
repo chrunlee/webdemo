@@ -76,6 +76,7 @@ router.post('/get',function(req,res,next){
 						tempList.push(temp2);
 					}
 				});
+				temp.itemList = tempList;
 				arr.push(temp);
 			});
 			res.end(JSON.stringify(arr));
