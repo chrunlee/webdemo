@@ -85,5 +85,16 @@ router.post('/get',function(req,res,next){
 		res.end(JSON.stringify([]));
 	}
 });
-
+router.post('/getAll',function(req,res,next){
+	var type = req.body.type;
+	//根据类型获取该类型所有的数据，按照顺序
+	var sql = {
+		sql : type == 3 ? 'select * from jiexi order by id asc' : 'select * from tigan where ttype=? order by id asc',
+		params : type == 3 ? [] :[type]
+	};
+	query(sql).then(function(list){
+		var rs = list[0];
+		res.end(JSON.stringify(rs));
+	})
+})
 module.exports = router;
