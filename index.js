@@ -29,6 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/exam',require('./routes/exam'));
 app.use('/speed',require('./routes/speed'));
+//疫苗批号
+app.use('/ymcx',require('./routes/ymcx'));
 app.use('', index);
 
 // catch 404 and forward to error handler
