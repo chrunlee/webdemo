@@ -58,8 +58,9 @@ router.get('/key',function(req,res,next){
 	key = key.trim();
 	if(key!= ''){
 		var rs = [];
+		var reg = new ExpReg('^'+key);
 		pihaoArr.forEach(function( item ){
-			if(item.toLowerCase().indexOf(key)> -1){
+			if(item.toLowerCase().match(reg)){
 				rs.push(item);
 			}
 		});
