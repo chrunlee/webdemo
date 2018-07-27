@@ -4,6 +4,7 @@ var fs = require('fs');
 
 //读取到内存中
 var data = require('../ym');
+var knowledge = require('../ymzs');
 var pihaoArr = [];
 //循环做一个map
 var map = {};
@@ -18,7 +19,7 @@ data.forEach(function(list){
 		map[hao] = arr;
 	});
 });
-//疫苗查询
+//疫苗查询 POST
 router.post('/', function(req, res, next) {
 	var pihao = req.body.pihao.trim();
 	if(null != pihao && ""!= pihao){
@@ -35,6 +36,7 @@ router.post('/', function(req, res, next) {
 		}));
 	}
 });
+//GET 方式获取信息
 router.get('/',function(req,res,next){
 	var pihao = req.query.pihao.trim();
 	if(null != pihao && ""!= pihao){
@@ -68,5 +70,10 @@ router.get('/key',function(req,res,next){
 	}else{
 		res.end('[]');
 	}
+});
+
+//获取疫苗相关的知识信息
+router.get('/know',function(req,res,next){
+	res.end(JSON.stringify(knowledge));
 })
 module.exports = router;
