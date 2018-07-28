@@ -4,9 +4,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var URL = require('url');
+
+var uautil = require('./lib/UA');
+var sqlquery = require('simple-mysql-query');
+sqlquery(require('./lib/config').mysql);
 
 
-var index = require('./routes/index');
+
 
 var app = express();
 
@@ -20,17 +25,50 @@ app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req,res,next){
+  var url = req.url;
+  var urlobj = URL.parse(url);
+  //获得时间
+  var ip = req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+  var ua = req.headers['user-agent'];
+  var usrs = uautil(ua);
+  var rs = {
+    url : urlobj.pathname,
+    ctime : new Date(),
+    ip : ip.replace('::ffff:',''),
+    xitong : usrs.android ? 'android'  : (usrs.ios ? 'ios' : usrs.os),
+    browser : usrs.chrome ? 'chrome' : (usrs.ff ?'firefox' : (usrs.safari ? 'safari' : (usrs.opera ? 'opera' : ''))),
+    originurl : urlobj.href
+  };
+  //保存数据库
+  sqlquery({
+    sql : 'insert into logs (url,ip,xitong,ctime,browser,originurl) values (?,?,?,?,?,?)',
+    params : [rs.url,rs.ip,rs.xitong,rs.ctime,rs.browser,rs.originurl]
+  });
+  next();
+});
+
+//小程序知识点
 app.use('/exam',require('./routes/exam'));
+//小游戏：练习速度
 app.use('/speed',require('./routes/speed'));
 //疫苗批号
 app.use('/ymcx',require('./routes/ymcx'));
+//菜谱
+app.use('/caipu',require('./routes/caipu'));
+
+//首页
+var index = require('./routes/index');
 app.use('', index);
 
 // catch 404 and forward to error handler
