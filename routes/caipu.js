@@ -121,6 +121,43 @@ router.get('/list',function(req,res,next){
 	}
 	
 });
+
+/*根据菜名模糊查询*/
+router.all('/find',function(req,res,next){
+	var name = req.body.name || req.query.name;
+	var start = req.body.start || req.query.start || 0;
+	var pagesize = req.body.pagesize || req.query.pagesize || 10;
+	try{
+		start = parseInt(start,10)
+	}catch(e){start = 0;}
+	try{
+		pagesize = parseInt(pagesize,10);
+	}catch(e){pagesize=10;}
+	if(name){
+		query({
+			sql : 'select * from caipu_item where title like ? limit ?,?',
+			params : ['%'+name+'%',start,pagesize]
+		})
+		.then(function(rs){
+			var rst = rs[0];
+			res.end(JSON.stringify({
+				success : true,
+				msg : '请求成功',
+				result : rst
+			}));
+		}).catch(function(err){
+			res.end(JSON.stringify({
+				success : false,
+				msg : '对不起，服务器宕机了。'
+			}));
+		})
+	}else{
+		res.end(JSON.stringify({
+			success : false,
+			msg : '未传递关键词参数'
+		}));
+	}
+})
 /*根据菜谱ID获得数据*/
 router.all('/get',function(req,res,next){
 	var id = req.body.id || req.query.id;
