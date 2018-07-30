@@ -49,10 +49,18 @@ router.all('/category',function(req,res,next){
 //根据分类获得简易信息
 router.all('/item',function(req,res,next){
 	var cid = req.body.cid || req.query.cid;
+	var start = req.body.start || req.query.start || 0;
+	var pagesize = req.body.pagesize || req.query.pagesize || 10;
+	try{
+		start = parseInt(start,10)
+	}catch(e){start = 0;}
+	try{
+		pagesize = parseInt(pagesize,10);
+	}catch(e){pagesize=10;}
 	if(cid){
 		query({
-			sql : 'select * from caipu_item where cid=? ',
-			params : [cid]
+			sql : 'select * from caipu_item where cid=? limit ?,?',
+			params : [cid,start,pagesize]
 		}).then(function(rs){
 			var itemList = rs[0] || [];
 			res.end(JSON.stringify({
