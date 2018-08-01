@@ -7,6 +7,7 @@ lib-cov
 *.pid
 *.gz
 wx.json
+wx-dev.json
 ym.json
 ymzs.json
 pids
