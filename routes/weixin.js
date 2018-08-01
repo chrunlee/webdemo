@@ -45,15 +45,4 @@ router.post('/',function(req,res,next){
 	});
 })
 
-// module.exports = router;
-
-//测试 token
-
-// getToken().then(function(token){
-// 	console.log('token : '+token)
-// }).catch(function(err){
-// 	console.log(err);
-// });
-
-//测试签名
-checkSignature('1111','222','abc');
+module.exports = router;
