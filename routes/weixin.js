@@ -4,7 +4,7 @@ var express = require('express');
 
 var router = express.Router();
 
-var wx = require('./wx');
+var wx = require('../wx');
 
 router.get('/',function(req,res,next){
 	res.end(wx.token)
