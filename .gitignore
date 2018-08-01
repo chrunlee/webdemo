@@ -13,5 +13,6 @@ pids
 results
 public/cookbook
 public/pic
+public/peitu
 node_modules
 npm-debug.log
