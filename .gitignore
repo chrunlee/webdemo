@@ -10,6 +10,7 @@ lib-cov
 pids
 logs
 results
-
+public/cookbook
+public/pic
 node_modules
 npm-debug.log
