@@ -88,5 +88,24 @@ router.post('/location',function(req,res,next){
 		res.end(JSON.stringify('[]'));
 	})
 })
+//分析不同地理位置
+router.post('/path',function(req,res,next){
+	var type = req.body.type || 'day';
+	var min = 1440;
+	if(type == 'week'){
+		min = 1440 * 7;
+	}else if(type == 'month'){
+		min = 1440 * 30;
+	}
+	query({
+		sql : 'select url,count(1) as num from logs t where t.ctime>DATE_ADD(NOW(), INTERVAL -'+min+' MINUTE) group by url',
+		params : []
+	}).then(function(rs){
+		var rst = rs[0];
+		res.end(JSON.stringify(rst));
+	}).catch(function(){
+		res.end(JSON.stringify('[]'));
+	})
+})
 
 module.exports = router;

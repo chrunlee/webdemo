@@ -57,6 +57,18 @@
 				<div class="chart4" id="chart4"></div>
 			</div>
 		</div>
+		<div class="w33">
+			<div class="item-title">访问路径
+				<span class="opt">
+					<span class="type active" type="path" filter="load" time="day">昨天</span>
+					<span class="type" type="path" filter="load" time="week">7天</span>
+					<span class="type" type="path" filter="load" time="month">30天</span>
+				</span>
+			</div>
+			<div class="content">
+				<div class="chart5" id="chart5"></div>
+			</div>
+		</div>
 
 	</section>
 	<footer class="fixed">
@@ -76,6 +88,7 @@ class main {
 		this.url2 = '/log/os';
 		this.url3 = '/log/browser';
 		this.url4 = '/log/location';
+		this.url5 = '/log/path';
 		this.colors = ["#fa8564", "#e1e076", "#c2ea7d", "#77bd61", "#61bd9e", "#2dc3b0", "#2dbcc3", "#2dacc3", "#5ca1d7", "#7cb2dc"];
 		this.init();
 	}
@@ -119,6 +132,10 @@ class main {
 				that.loadLocation(time).then(function(d){
 					that.renderLocaltion(d);	
 				});
+			}else if(type == 'path'){
+				that.loadPath(time).then(function(d){
+					that.renderPath(d);	
+				});
 			}
 		})
 	}
@@ -130,8 +147,7 @@ class main {
 		that.bindEvents();
 
 		//加载数据渲染
-		Promise.all([that.loadDay(),that.loadOS(),that.loadBrowser(),that.loadLocation()]).then(function(values){
-			console.log('加载完毕')
+		Promise.all([that.loadDay(),that.loadOS(),that.loadBrowser(),that.loadLocation(),that.loadPath()]).then(function(values){
 			$('.hide').removeClass('hide');
 			$('.loading').addClass('hide');
 			$('.fixed').removeClass('fixed');
@@ -140,12 +156,14 @@ class main {
 			that.chart2 = echarts.init(document.getElementById('chart2'));
 			that.chart3 = echarts.init(document.getElementById('chart3'));
 			that.chart4 = echarts.init(document.getElementById('chart4'));
+			that.chart5 = echarts.init(document.getElementById('chart5'));
 
 			//渲染
 			that.renderDay(values[0]);
 			that.renderOS(values[1]);
 			that.renderBrowser(values[2]);
 			that.renderLocaltion(values[3]);
+			that.renderPath(values[4]);
 			
 		});
 	}
@@ -191,7 +209,16 @@ class main {
 			});
 		});
 	}
-
+	loadPath(type){
+		var that = this;
+		type = type || 'day';
+		return new Promise(function(resolve,reject){
+			that.ajax(that.url5,{type : type},function(res){
+				var resobj = $.parseJSON(res);
+				resolve(resobj);
+			});
+		});
+	}
 	renderLocaltion(data){
 		var maxvalue = 0;
 		var loc = [];
@@ -316,7 +343,7 @@ class main {
 			});
 		});
 		var option = {
-			color : that.getColors(2),
+			color : that.getColors(5),
 		    tooltip: {
 		        trigger: 'item',
 		        formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -368,7 +395,7 @@ class main {
 			});
 		});
 		var option = {
-			color : that.getColors(2),
+			color : that.getColors(5),
 		    tooltip: {
 		        trigger: 'item',
 		        formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -408,6 +435,60 @@ class main {
 		    ]
 		};
 		that.chart3.setOption(option,true);
+	}
+
+	renderPath (data) {
+		var that = this;
+		var x = [],y = [];
+		data.forEach(function(item){
+			x.push(item.url);
+			y.push({
+				value : item.num,
+				name : item.url
+			});
+		});
+		var option = {
+			color : that.colors,
+		    tooltip: {
+		        trigger: 'item',
+		        formatter: "{a} <br/>{b}: {c} ({d}%)"
+		    },
+		    legend: {
+		        orient: 'vertical',
+		        x: 'left',
+		        textStyle : {color : '#f2f2f2'},
+		        data:x
+		    },
+		    series: [
+		        {
+		            name:'路径分布',
+		            type:'pie',
+		            center : ['70%','50%'],
+		            radius: ['40%', '60%'],
+		            avoidLabelOverlap: false,
+		            label: {
+		                normal: {
+		                    show: false,
+		                    position: 'center'
+		                },
+		                emphasis: {
+		                    show: true,
+		                    textStyle: {
+		                        fontSize: '30',
+		                        fontWeight: 'bold'
+		                    }
+		                }
+		            },
+		            labelLine: {
+		                normal: {
+		                    show: false
+		                }
+		            },
+		            data:y
+		        }
+		    ]
+		};
+		that.chart5.setOption(option,true);
 	}
 }
 new main();

@@ -88,13 +88,13 @@ section{
 	clear:both;
 }
 .w33{
-	width:30%;
+	width:22%;
 	float:left;
 }
 .w33 + .w33{
-	margin-left:5%;
+	margin-left:4%;
 }
-.chart2,.chart3,.chart4{
+.chart2,.chart3,.chart4,.chart5{
 	height:400px;
 }
 footer{
