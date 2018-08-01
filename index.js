@@ -76,8 +76,13 @@ app.use('/ymcx',require('./routes/ymcx'));
 app.use('/caipu',require('./routes/caipu'));
 //log 日志
 app.use('/log',require('./routes/logs'));
+
+//微信
+app.use('/wx',require('./routes/weixin'));
+
 //首页
 var index = require('./routes/index');
+
 app.use('', index);
 
 // catch 404 and forward to error handler

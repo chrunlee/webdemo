@@ -6,7 +6,9 @@ lib-cov
 *.out
 *.pid
 *.gz
-
+wx.json
+ym.json
+ymzs.json
 pids
 results
 public/cookbook
