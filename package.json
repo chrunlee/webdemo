@@ -29,6 +29,7 @@
     "mysql": "^2.15.0",
     "serve-favicon": "^2.4.5",
     "simple-mysql-query": "^1.0.0",
+    "superagent": "^3.8.3",
     "xml2js": "^0.4.19"
   }
 }
