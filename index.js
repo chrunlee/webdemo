@@ -10,7 +10,7 @@ var uautil = require('./lib/UA');
 var sqlquery = require('simple-mysql-query');
 sqlquery(require('./lib/config').mysql);
 
-
+var superagent = require('superagent');
 
 
 var app = express();
@@ -42,19 +42,27 @@ app.use(function(req,res,next){
         req.connection.socket.remoteAddress;
   var ua = req.headers['user-agent'];
   var usrs = uautil(ua);
-  var rs = {
-    url : urlobj.pathname,
-    ctime : new Date(),
-    ip : ip.replace('::ffff:',''),
-    xitong : usrs.android ? 'android'  : (usrs.ios ? 'ios' : usrs.os),
-    browser : usrs.chrome ? 'chrome' : (usrs.ff ?'firefox' : (usrs.safari ? 'safari' : (usrs.opera ? 'opera' : ''))),
-    originurl : urlobj.href
-  };
-  //保存数据库
-  sqlquery({
-    sql : 'insert into logs (url,ip,xitong,ctime,browser,originurl) values (?,?,?,?,?,?)',
-    params : [rs.url,rs.ip,rs.xitong,rs.ctime,rs.browser,rs.originurl]
-  });
+  ip = ip.replace('::ffff:','');
+  superagent.get('http://ip.taobao.com/service/getIpInfo.php?ip='+ip).end(function(err,res){
+    if(res && res.text){
+      var ooo = JSON.parse(res.text);
+      var region = ooo.data.region;
+      var rs = {
+        url : urlobj.pathname,
+        ctime : new Date(),
+        ip : ip,
+        region : region == 'XX' || region == '' ? '未知' : region,
+        xitong : usrs.android ? 'android'  : (usrs.ios ? 'ios' : usrs.os),
+        browser : usrs.chrome ? 'chrome' : (usrs.ff ?'firefox' : (usrs.safari ? 'safari' : (usrs.opera ? 'opera' : ''))),
+        originurl : urlobj.href
+      };
+      //保存数据库
+      sqlquery({
+        sql : 'insert into logs (url,ip,xitong,ctime,browser,originurl,region) values (?,?,?,?,?,?,?)',
+        params : [rs.url,rs.ip,rs.xitong,rs.ctime,rs.browser,rs.originurl,rs.region]
+      });
+    }
+  })
   next();
 });
 
@@ -66,7 +74,8 @@ app.use('/speed',require('./routes/speed'));
 app.use('/ymcx',require('./routes/ymcx'));
 //菜谱
 app.use('/caipu',require('./routes/caipu'));
-
+//log 日志
+app.use('/log',require('./routes/logs'));
 //首页
 var index = require('./routes/index');
 app.use('', index);

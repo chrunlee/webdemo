@@ -143,8 +143,8 @@ router.all('/find',function(req,res,next){
 	}catch(e){pagesize=10;}
 	if(name){
 		query({
-			sql : 'select * from caipu_item where title like ? limit ?,?',
-			params : ['%'+name+'%',start,pagesize]
+			sql : 'select * from caipu_item where title like ? or ingredients like ? limit ?,?',
+			params : ['%'+name+'%','%'+name+'%',start,pagesize]
 		})
 		.then(function(rs){
 			var rst = rs[0];
