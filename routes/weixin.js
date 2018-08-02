@@ -6,7 +6,7 @@ var router = express.Router();
 
 var weixin = require('../lib/weixin');
 
-var domain = require('../lib/config').domain;
+var domain = require('../wx').domain;
 
 var wx = new weixin();
 
