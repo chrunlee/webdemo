@@ -214,4 +214,57 @@ router.all('/get',function(req,res,next){
 	}
 })
 
+
+/**菜谱相关的页面处理**/
+router.get('/home',function(req,res,next){
+	res.render('caipu/home');
+})
+
+//三级详情页面
+router.get('/show/:id',function(req,res,next){
+	var id = req.params.id || '';
+	//根据ID，查询，如果没有，从数据库随机3个菜谱
+	if(id){
+		var sqlopt = [{
+			sql : 'select * from caipu_item where id=? ',
+			params : [id.trim()]
+		},{
+			sql : 'select * from caipu_step where itemid=? order by seq',
+			params : [id.trim()]
+		},{
+			sql : 'select * from caipu_item where category=(select category from caipu_item where id=?) order by rand() limit 0,3',
+			params : [id.trim()]
+		}];
+		query(sqlopt).then(function(rs){
+			var caipuObj = rs[0][0];
+			var steps = rs[1];
+			var links = rs[2];
+			//对caipuObj进行处理
+			caipuObj.tags = caipuObj.tags.split(';');
+			caipuObj.ingredients = caipuObj.ingredients.split(';').map(function(item){
+				var arr = item.split(',');
+				return {
+					name :arr[0] || '',
+					num : arr[1] || ''
+				}
+			});
+			caipuObj.burden = caipuObj.burden.split(';').map(function(item){
+				var arr = item.split(',');
+				return {
+					name :arr[0] || '',
+					num : arr[1] || ''
+				}
+			});
+			res.render('caipu/detail',{
+				caipu : caipuObj,
+				steps : steps,
+				links : links
+			});
+		}).catch(function(err){
+			res.redirect('caipu/error');
+		})
+	}else{
+		res.redirect('caipu/error');
+	}
+})
 module.exports = router;

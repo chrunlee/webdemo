@@ -30,10 +30,8 @@ router.get('/',function(req,res,next){
  *
  ***/
 router.post('/',function(req,res,next){
-	console.log('接受到消息')
 	res.type('xml');
 	wx.getJsonFromReq(req).then( json => {
-		console.log(json);
 		var fromUser = json.xml.FromUserName[0];//获得发送人ID，后续使用
 		var msgType = json.xml.MsgType[0];//消息类型，text:文本消息
 		var defaultXml = wx.createTextXml(fromUser,'感谢同学的关注，您的建议我们已经收到！');
@@ -44,7 +42,7 @@ router.post('/',function(req,res,next){
 
 			//此处处理文本
 			var caipuReg = new RegExp('菜谱+([.]*)');
-			if(/^菜谱\+([\s\S]*)$/.test(content.trim())){
+			if(/^菜谱[\+]?([\s\S]*)$/.test(content.trim())){
 				var rst = /^菜谱\+([\s\S]*)$/.exec(content.trim());
 				var keyword = rst[1];
 				//根据关键词查询数据库，并将数据展示给用户。然后添加一个链接即可。
@@ -86,7 +84,6 @@ router.post('/',function(req,res,next){
 					res.end(xml);
 				})
 			}else if(eventType == 'unsubscribe'){
-				console.log('有人已经离开了我们....去了不知道还会不会回来')
 				var xml = wx.createTextXml(fromUser,'期待您的再次光临...');
 				res.end(xml);
 			}else if(eventType == 'click' && eventKey == 'caipu'){
@@ -118,16 +115,8 @@ router.post('/',function(req,res,next){
 			res.end(xml)
 		}
 	}).catch( err => {
-		console.log(err);
 		res.end('');
 	});
 })
-//刷新菜单配置
-router.get('/menu',function(req,res,next){
-	wx.deleteMenu().then(()=>{
-		return wx.createMenu();
-	}).then( ()=> {
-		res.end('菜单刷新成功')
-	});
-})
+
 module.exports = router;
