@@ -54,7 +54,7 @@ router.post('/',function(req,res,next){
 					var xml = '';
 					if(rst.length > 0){
 						var resobj = rst[0];
-						xml = wx.createPicTextXml(fromUser,resobj.title,'介绍:\n'+resobj.intro+'\n 材料:\n'+resobj.ingredients,domain+resobj.albums,domain+'/caipu/show?id='+resobj.id);
+						xml = wx.createPicTextXml(fromUser,resobj.title,'介绍:\n'+resobj.intro+'\n 材料:\n'+resobj.ingredients,domain+resobj.albums,domain+'/caipu/show/'+resobj.id);
 					}else{
 						xml = wx.createTextXml(fromUser,'对不起，您检索的菜谱信息我们没有查到!');
 					}
