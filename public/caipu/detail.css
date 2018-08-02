@@ -1,0 +1,97 @@
+/*菜谱详情样式表*/
+html,body{padding:0px;margin:0px;width:100%;}
+body{
+	background-color:#f2f2f2;
+}
+.album{position:relative;}
+.album img{
+	width:100%;
+}
+.des{
+	margin-top:-5px;
+	padding:15px 15px;
+	text-align:left;
+	font-size:1.2em;
+	color:#333;
+	background-color:#dfe4df;
+	line-height:20px;
+}
+.content{padding:10px 0px;}
+.title{
+	padding:15px 0px;
+	text-align:center;
+	color:black;
+	font-size:1.5em;
+}
+table{
+	width:100%;
+	border:none;
+	border-collapse: collapse; 
+	border-spacing: 0;
+}
+table tr{border:none;height:2.5em;line-height:2.5em;}
+table tr td{width:50%;text-align:left;font-size:1em;padding-left:2em;border:none;border-collapse:collapse;}
+
+table tr:nth-child(odd){
+	background-color:#c9e8e4;
+}
+.step-item{position:relative;}
+.step-content{
+	padding:1em 4em;
+}
+.step-content img{width:100%;border:5px solid white;box-shadow:0px 0px 10px 0px rgba(0,0,0,0.4);border-radius:10px;}
+.step-content p{margin-top:5px;line-height:1.2em;font-size:1em;color:#846d5c;font-weight:100;}
+.seq{position:absolute;top:1em;font-size:2em;width:2em;text-align:center;}
+.link-item{
+	padding:10px 20px;
+	position:relative;
+	margin-bottom:20px;
+}
+.right-content{
+	padding-left:100px;
+}
+.left-pic{
+	position:absolute;
+	width:80px;
+	height:80px;
+	text-align:center;
+}
+.left-pic img{
+	max-width:80px;
+	max-height:80px;
+	border:2px solid white;
+	box-shadow:0px 0px 10px 0px rgba(0,0,0,0.3);
+}
+
+.top-title{font-size:1.2em;color:#333;}
+.bottom-des{
+	height:60px;
+	overflow:hidden;
+	font-size:0.8em;
+	color:#999;
+	line-height:20px;
+}
+.link a{text-decoration:none;}
+/*二维码*/
+.scan{
+	position:absolute;
+	width:100px!important;
+	height:100px!important;
+	z-index:100;
+	right:10px;
+	bottom:10px;
+}
+.share{
+	text-align: center;
+    font-size: 0.8em;
+    padding: 10px;
+    border-bottom: 1px dashed rgba(0,0,0,0.3);
+    color: #208e66;
+}
+.share img{
+	width:20px;height:20px;
+	margin-right:10px;
+	margin-left:10px;
+	position: relative;
+	top:5px;
+}
