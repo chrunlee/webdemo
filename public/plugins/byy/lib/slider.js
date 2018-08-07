@@ -3,7 +3,7 @@
  @Name：layui.carousel 轮播模块
  @Author：贤心
  @License：MIT
-    
+  @edited by lixun on 2018年4月28日 11:15:20:增加暂停和播放的函数 
  */
  
 byy.define('jquery', function(exports){
@@ -283,7 +283,17 @@ byy.define('jquery', function(exports){
     //   ,item: elemItem.eq(options.index)
     // });
   };
-  
+  //增加暂停和继续的函数
+  Class.prototype.stop = function(){
+    var that = this
+        ,options = that.config;
+      clearInterval(that.timer);
+  };
+  Class.prototype.play = function(){
+    var that = this
+        ,options = that.config;
+      that.autoplay();
+  }
   //事件处理
   Class.prototype.events = function(){
     var that = this

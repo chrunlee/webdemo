@@ -4,13 +4,7 @@ var query = require('simple-mysql-query');
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
-query({
-	port : '3306',
-	host : '127.0.0.1',
-	user : 'root',
-	password : 'root',
-	database : 'items'
-});
+
 router.all('/category',function(req,res,next){
 	//返回所有的菜谱分类并归纳
 	query({

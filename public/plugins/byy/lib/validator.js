@@ -35,7 +35,7 @@
 							}
 						}
 						element = getShowEle(element);
-						byy.win.tips(error.get(0).innerHTML,element,{tipsMore:true,tips:2,tipsAuto : false});
+						byy.win.tips(error.get(0).innerHTML,element,{tipsMore:true,tips:2,tipsAuto : false,eleOnly : true});
 					};
 					var cfg = function( opts ){
 						opts = opts || {};

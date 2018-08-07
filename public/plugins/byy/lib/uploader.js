@@ -1,3 +1,6 @@
+/**
+ * 1.变更offset 弹窗位置
+ **/
 var logInfo = function( msg ){
 	if(console && console.log){
 		console.log('%cINFO : '+ msg+'','color:red;');
@@ -8,9 +11,26 @@ var noop = function(){};
 
 //全局配置
 //      通用文件               excel				pdf					word				image			txt					zip				audio				movie				ppt
-var ext = ['fa-file-o','fa-file-excel-o','fa-file-pdf-o','fa-file-word-o','fa-file-image-o','fa-file-text-o','fa-file-zip-o','fa-file-audio-o','fa-file-movie-o','fa-file-powerpoint-o'],
+//图标重定义
+var ext = [
+	'icon-file',//通用文件
+	'icon-file-excel',//excel
+	'icon-file-pdf',//pdf
+	'icon-file-word',//word
+	'icon-file-image',//image
+	'icon-file-text',//text
+	'icon-file-zip',//zip
+	'icon-file-audio',//audio
+	'icon-file-video',//video
+	'icon-file-ppt',//ppt
+	'icon-close',//关闭
+	'icon-checkbox-checked',//上传完毕
+	'icon-play',//启动
+	'icon-pause'//暂停
+],
+// var ext = ['fa-file-o','fa-file-excel-o','fa-file-pdf-o','fa-file-word-o','fa-file-image-o','fa-file-text-o','fa-file-zip-o','fa-file-audio-o','fa-file-movie-o','fa-file-powerpoint-o'],
 config = {
-	extpre : 'fa',
+	extpre : 'byyicon',
 	extmap : {
 		'def' : ext[0],
 		'xls' : ext[1],
@@ -109,10 +129,10 @@ ready = {
 	Uploader.fn.init.prototype = Uploader.fn;
 	byy.extend(Uploader,{
 		getIcon : function( type ){
-			if(!type)return '<i class="fa '+(config.extmap['def'])+' "></i>';
+			if(!type)return '<i class="'+config.extpre+' '+(config.extmap['def'])+' "></i>';
 			type = type.replace('.','');
 			type = (''+type).toLowerCase();
-			return '<i class="fa '+(config.extmap[type] ? config.extmap[type] : config.extmap['def'] )+' "></i>';
+			return '<i class="'+config.extpre+' '+(config.extmap[type] ? config.extmap[type] : config.extmap['def'] )+' "></i>';
 		}
 	});
 	Uploader.prototype.addCss = function(){
@@ -200,9 +220,23 @@ ready = {
 				btn:[],
 				id : thiz.id,
 				skin : 'uploader-win',
-				restore : function(lll){$('#'+id).parent().find('.uploader-tip-a').show();},
-				min : function(lll){lll.css({'right':'','bottom':''});$('#'+id).parent().find('.uploader-tip-a').hide();},
-				offset : 'rb',
+				restore : function(lll){
+					$('#'+id).parent().find('.uploader-tip-a').show();
+					$('#'+thiz.id).parent().css({
+						top : thiz.winConfig.offset[0] ,
+						left : thiz.winConfig.offset[1]
+					});
+				},
+				min : function(lll){
+					// thiz.hideWin();
+					// lll.css({'bottom':''});
+					$('#'+id).parent().find('.uploader-tip-a').hide();
+					$('#'+thiz.id).parent().css({
+						top : thiz.winConfig.offset[0] + 400 - 45,
+						left : thiz.winConfig.offset[1] + 600 - 200
+					});
+				},
+				offset : [parent === window ? $(window).height() - 405 : $(window).height() - 440,$(window).width() - 620],
 				cancel : function(index,dom){
 					//设置
 					$('#'+id).parent().hide();
@@ -230,16 +264,16 @@ ready = {
 	//添加文件UI
 	Uploader.prototype.addFileUI = function( file ){
 		var thiz = this,format = thiz.formatSize,tid = thiz.id;
-		var ext = file.ext,name = file.name,size = format(file.size),id = file.id;
+		var extname = file.ext,name = file.name,size = format(file.size),id = file.id;
 		var $t = $('#'+tid);
-		var iconStr = thiz.getFileTypeIcon(ext);
+		var iconStr = thiz.getFileTypeIcon(extname);
 		//此处判断浏览器版本，如果低于10，则截取字符串\
 		var showName = name;
 		var device = byy.device();
 		if(device.ie && device.ie < 10){
 			showName = showName.substring(0,10)+(showName.length > 10 ? '...' : '');
 		}
-		var html = '<div class="file-block" id="'+id+'"><div class="pro"></div><span title="'+name+'" class="name">'+iconStr+name+'</span><span class="status"></span><span class="size">'+size+'</span><span class="operate"><i class="fa fa-close" title="'+byy.lang.upload.removeFile+'"></i></span></div>';
+		var html = '<div class="file-block" id="'+id+'"><div class="pro"></div><span title="'+name+'" class="name">'+iconStr+name+'</span><span class="status"></span><span class="size">'+size+'</span><span class="operate"><i class="'+(config.extpre + ' '+ext[10])+'" title="'+byy.lang.upload.removeFile+'"></i></span></div>';
 		$t.append(html);
 		return thiz;
 	};
@@ -250,7 +284,7 @@ ready = {
 		if($pro.length > 0)$pro.css('width','0%');
 		$file.addClass('upload-error');
 		$status.html('<span style="font-size:12px;">'+(byy.lang.upload.uploadFailP)+':<span style="color:red;">'+(byy.lang.upload.uploadFail)+(retry < 2 ? byy.lang.upload.uploadFailTry : '')+'</span></span>');
-		$opr.html('<i class="fa fa-close" style="color:red;" title="'+byy.lang.upload.removeFile+'"></i>');		
+		$opr.html('<i class="'+(config.extpre+' '+ext[10])+'" style="color:red;" title="'+byy.lang.upload.removeFile+'"></i>');		
 	};
 	//更新扫描MD5进度
 	Uploader.prototype.updateStatus = function(file ,msg,issuccess){
@@ -262,7 +296,7 @@ ready = {
 		
 		if(issuccess){
 			//上传成功
-			msg = '<i class="fa fa-check-square"></i>' + msg;
+			msg = '<i class="'+(config.extpre+' '+ext[11])+'"></i>' + msg;
 			$status.attr('complete',true);
 		}
 		$status.html(msg);
@@ -294,6 +328,7 @@ ready = {
 		var $t = $('#'+tid),$file = $t.find('#'+id);
 		//先根据id获得file对象
 		var fileObj = webupload.getFile(id);
+		webupload.cancelFile( fileObj );
 		webupload.removeFile(id,true);
 		$file.animate({
 			opacity : 0
@@ -314,7 +349,7 @@ ready = {
 		var id = file.id;
 		var $file = $t.find('#'+id);
 		$file.find('.pro').css('width','0%');
-		$file.find('.operate').html('<i class="fa fa-close" title="'+byy.lang.upload.removeFile+'"></i>');
+		$file.find('.operate').html('<i class="'+(config.extpre+' '+ext[10])+'" title="'+byy.lang.upload.removeFile+'"></i>');
 		return thiz;
 	};
 	//改变操作按钮
@@ -326,7 +361,7 @@ ready = {
 		var $t = $('#'+tid);
 		var id = file.id;
 		var $file = $t.find('#'+id);
-		$file.find('.operate').html('<i class="fa fa-pause" title="'+byy.lang.upload.pauseFile+'"></i>');
+		$file.find('.operate').html('<i class="'+(config.extpre+' '+ext[13])+'" title="'+byy.lang.upload.pauseFile+'"></i>');
 		return thiz;
 	};
 	Uploader.prototype.emptyOperate = function( file ){
@@ -343,7 +378,7 @@ ready = {
 		var $t = $('#'+tid);
 		var $file = $t.find('#'+id);
 		var $ope = $file.find('.operate');
-		$ope.html('<i class="fa fa-play" title="'+byy.lang.upload.startFile+'"></i>');
+		$ope.html('<i class="'+(config.extpre+' '+ext[12])+'" title="'+byy.lang.upload.startFile+'"></i>');
 		var webupload = thiz.webUpload;
 		webupload.stop(id);
 		if(opts.onStop){
@@ -358,7 +393,7 @@ ready = {
 		var $t = $('#'+tid);
 		var $file = $t.find('#'+id);
 		var $ope = $file.find('.operate');
-		$ope.html('<i class="fa fa-pause" title="'+byy.lang.upload.pauseFile+'"></i>');
+		$ope.html('<i class="'+(config.extpre+' '+ext[13])+'" title="'+byy.lang.upload.pauseFile+'"></i>');
 		var webupload = thiz.webUpload;
 		webupload.upload(id);
 		if(opts.onStart){
@@ -384,19 +419,19 @@ ready = {
 	Uploader.prototype.listen = function(){
 		var thiz = this,webUpload = thiz.webUpload,opts = thiz.opts,tid = thiz.id;
 		var dialog = opts.dialog;
-		$('body').on('click','#'+tid+' .fa-close',function(){
+		$('body').on('click','#'+tid+' .'+ext[10],function(){
 			//将该文件从队列中移除
 			var $this = $(this),$file = $this.parent().parent(),id = $file.attr('id');
 			thiz.deleteFile(id);
 		});
 		
-		$('body').on('click','#'+tid+' .fa-pause',function(){
+		$('body').on('click','#'+tid+' .'+ext[13],function(){
 			//将该文件从队列中移除
 			var $this = $(this),$file = $this.parent().parent(),id = $file.attr('id');
 			thiz.stopFile(id);
 		});
 		
-		$('body').on('click','#'+tid+' .fa-play',function(){
+		$('body').on('click','#'+tid+' .'+ext[12],function(){
 			//将该文件从队列中移除
 			var $this = $(this),$file = $this.parent().parent(),id = $file.attr('id');
 			thiz.startFile(id);
@@ -457,6 +492,9 @@ ready = {
 							}else{
 								var success = resobj.success,
 									msg = resobj.msg;
+								if(!!!webUpload.getFile(file.id)){
+									return;//没有从队列中找到文件，认为是中途取消，所以取消上传；
+								}
 								if(success){//查询到信息,判断是否全部上传，如果没有，则获得分片记录
 									var fileInfo = resobj.file,
 									issuccess = fileInfo.issuccess == 'true' || fileInfo.issuccess == true ? true : false,

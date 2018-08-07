@@ -5,7 +5,7 @@ var languageMap = {
 		cancel : '取消',
 		info : '信息',
 		maxlength : '最多输入{0}个字数',
-		nopic : '没有图片',
+		nopic : '暂无图片',
 		picerror : '当前图片地址异常<br>是否继续查看下一张？',
 		picnext : '下一张',
 		picover : '不看了'
@@ -72,6 +72,15 @@ var languageMap = {
 	list : {
 		hsearch : '更多查询',
 		more : '更多'
+	},
+	tab : {
+		refresh : '刷新当前页',
+		close : '关闭当前标签页',
+		others : '关闭其他标签页',
+		all : '关闭所有标签页'
+	},
+	table : {
+		nodata : '没有检索到符合条件的数据'
 	}
 };
 byy.define(function( exports ){

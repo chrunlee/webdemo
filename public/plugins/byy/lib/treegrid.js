@@ -77,10 +77,6 @@ byy.define(['jquery','cookie','page'],function( exports ){
                     $this.treegrid('setSettings', settings);
                     //1.加载数据
                     $this.treegrid('loadData',settings);
-
-
-                    // settings.getRootNodes.apply(this, [$(this)]).treegrid('initNode', settings);
-                    // $this.treegrid('getRootNodes').treegrid('render');
                     //默认展开状态
                     if (!settings.expandAll) {
                         $this.treegrid('collapseAll');
@@ -88,21 +84,18 @@ byy.define(['jquery','cookie','page'],function( exports ){
                 });
             },
             //tr 加载子节点,isreload == true ,则覆盖渲染
-            loadChildNodes : function( isreload ){
+            loadChildNodes : function( isreload ,otherParams ){
                 var $this = $(this);
                 var trItem = $this.data('obj');
-                
-                var beforeFn = $this.treegrid('getSetting','onBefore');
+                var $tree = $this.closest('table');
+                var settings = $tree.data('settings');
+                var beforeFn = settings.beforeFn,url = settings.url,type = settings.type,data = settings.ajaxParams,parentColumn = settings.parentColumn,idColumn = settings.idColumn,expanderCollapsedClass = settings.expanderCollapsedClass,expanderExpandedClass = settings.expanderExpandedClass,iconName = settings.iconName,onSuccess = settings.onSuccess,onError = settings.onError;
+
                 if(typeof beforeFn === 'function' && !beforeFn.apply($this)){
                     //如果返回false，则停止继续加载
                     return;
                 }
-
-                var url = $this.treegrid('getSetting','url'),
-                    type = $this.treegrid('getSetting','type'),
-                    data = $this.treegrid('getSetting','ajaxParams'),
-                    parentColumn = $this.treegrid('getSetting','parentColumn'),
-                    idColumn = $this.treegrid('getSetting','idColumn');
+                data = byy.extend(data,otherParams||{});
                 data[parentColumn] = trItem[idColumn];
                 $.ajax({
                     url : url,
@@ -120,54 +113,77 @@ byy.define(['jquery','cookie','page'],function( exports ){
                         }
 
                         $this.treegrid('renderChild',data);
-                        //渲染完毕后，重新加载事件等
-                        var $tree = $this.closest('table');
-                        var settings = $tree.data('settings');
-                        settings.getRootNodes.apply(this, [$tree]).treegrid('initNode', settings);
-                        $tree.treegrid('getRootNodes').treegrid('render');
+                        //渲染完毕后，重新加载事件等,如果只刷新子节点，则此处只需要获得子节点然后进行渲染即可。
+                        $this.treegrid('initNode',settings);
+                        $this.treegrid('render');
                         //当前节点展开
                         var expander = $this.treegrid('getSetting', 'getExpander').apply($this);
-                        var iconName = $this.treegrid('getSetting','iconName');
                         if(expander && !iconName){
-                            expander.removeClass($this.treegrid('getSetting', 'expanderCollapsedClass'));
-                            expander.addClass($this.treegrid('getSetting', 'expanderExpandedClass'));
+                            expander.removeClass(expanderCollapsedClass);
+                            expander.addClass(expanderExpandedClass);
                         }
                         trItem['sync'] = true;
                         $(this).data('obj',trItem);
                         $this.treegrid('cascade');//级联选中或取消
                         byy.initUI();
-                        //渲染分页数据 
-                        //UNDO
                         //调用加载成功函数
-                        if (typeof($this.treegrid('getSetting', 'onSuccess')) === "function") {
-                            $this.treegrid('getSetting', 'onSuccess').apply($this,[res]);
+                        if (typeof(onSuccess) === "function") {
+                            onSuccess.apply($this,[res]);
                         }
                         window.treegridIsLoading = false;
                         delete window.treegridIsLoading;
                     },
                     error : function(req,txt){
-                        if (typeof($this.treegrid('getSetting', 'onError')) === "function") {
-                            $this.treegrid('getSetting', 'onError').apply($this,[req,status,error]);
+                        if (typeof(onError) === "function") {
+                            onError.apply($this,[req,status,error]);
                         }
                     }
                 });
             },
+            //根据数据、属性、设置等返回一个td对象
+            getTdByItem : function( item , column,index,treeColumn,checkOrRadio,checkName,checkColumn,idCol,disableCheckColumn){
+                var td = $('<td></td>');
+                var hasDefaultCheck = item[checkColumn] == 'true' || item[checkColumn] == true ? true : false;
+                if(column['width']){
+                    var noww = column['width']+'';
+                    var cw = noww.indexOf('px')>-1 ? noww : ( noww.indexOf('%')>-1 ? noww : noww+'px');
+                    td.css('width',cw);
+                }
+                if(column['align']){
+                    td.css('text-align',column['align']);
+                }
+                if(column['style']){
+                    td.attr('style',style);
+                }
+                //add formatter
+                var showTxt = item[column.field] == null || item[column.field] == undefined || item[column.field] == 'null' ? '-' : item[column.field];
+                if(column['formatter']){
+                    showTxt = column['formatter'](showTxt,item);
+                }
+                if(index == treeColumn){
+                    if(checkOrRadio !== false){
+                        var isDisabled = item[disableCheckColumn] == true || item[disableCheckColumn] == 'true' ? 'disabled' : '';
+                        td.append(( checkOrRadio == 'check' ? '<span class="list-check-span"><input type="checkbox" title=" " '+(isDisabled)+' byy-skin="primary" name="'+checkName+'" value="'+(item[idCol])+'" '+(hasDefaultCheck ? 'checked' : '')+' class="byy-form-checkbox"/></span>'+showTxt : '<span class="list-check-span"><input type="radio" name="'+checkName+'" '+(isDisabled)+' '+(hasDefaultCheck ? 'checked' : '')+' value="'+(item[idCol])+'" class="byy-form-radio" title=" "/></span>'+showTxt)+'');
+                    }else{
+                        td.html(showTxt);        
+                    }
+                }else{
+                    td.html(showTxt);        
+                }
+                return td;
+            },
             //加载子级节点
             renderChild : function( data ){
                 var $this = $(this);
-                var isTreedData = $this.treegrid('getSetting', 'treedData');
-                var parentCol = $this.treegrid('getSetting', 'parentColumn');
-                var sortCol = $this.treegrid('getSetting', 'sortColumn');
-                var cols = $this.treegrid('getSetting', 'columns');
-                var checkOrRadio = $this.treegrid('getSetting','checkOrRadio');
-                var idCol = $this.treegrid('getSetting', 'idColumn');
-                var treeColumn = $this.treegrid('getSetting','treeColumn');
-                var rootValue = $this.treegrid('getSetting','rootValue');
-                var checkName = $this.treegrid('getSetting','checkName');
-                var checkColumn = $this.treegrid('getSetting','checkedColumn');
+                var trItem = $this.data('obj');
+
+                var $tree = $this.closest('table');
+                var settings = $tree.data('settings');
+                var isTreedData = settings.isTreedData,parentCol = settings.parentColumn,sortCol = settings.sortColumn,cols = settings.columns,checkOrRadio = settings.checkOrRadio,idCol = settings.idColumn,treeColumn = settings.treeColumn,checkName = settings.checkName,checkColumn = settings.checkColumn,disableCheckColumn = settings.disableCheckColumn;
+                var rootValue = trItem[idCol];
                 var rootNodes = getRootNodesFromData(data, isTreedData, parentCol, sortCol,rootValue);
                 var parentIndex = $this.treegrid('getNodeId');
-                var $beforeTr = $this.next('tr'),$tbody = $this.closest('table').find('tbody');
+                var $beforeTr = $this.next('tr'),$tbody = $tree.find('tbody');
                 if (rootNodes && rootNodes.length > 0) {
                     $.each(rootNodes, function (i, item) {
                         var tr = $('<tr></tr>');
@@ -176,34 +192,12 @@ byy.define(['jquery','cookie','page'],function( exports ){
                         tr.addClass('treegrid-parent-' + parentIndex);
                         var hasDefaultCheck = item[checkColumn] == 'true' || item[checkColumn] == true ? true : false;
                         $.each(cols, function (index, column) {
-                            var td = $('<td></td>');
-                            if(column['width']){
-                                var noww = column['width']+'';
-                                var cw = noww.indexOf('px')>-1 ? noww : ( noww.indexOf('%')>-1 ? noww : noww+'px');
-                                td.css('width',cw);
-                            }
-                            if(column['align']){
-                                td.css('text-align',column['align']);
-                            }
-                            if(column['style']){
-                                td.attr('style',style);
-                            }
-                            //add formatter
-                            var showTxt = item[column.field] == null || item[column.field] == undefined || item[column.field] == 'null' ? '-' : item[column.field];
-                            if(column['formatter']){
-                                showTxt = column['formatter'](showTxt,item,i);
-                            }
-                            if(index == treeColumn){
-                                if(checkOrRadio !== false){
-                                    td.append(( checkOrRadio == 'check' ? '<span class="list-check-span"><input type="checkbox" title=" " byy-skin="primary" name="'+checkName+'" value="'+(item[idCol])+'" '+(hasDefaultCheck ? 'checked' : '')+' class="byy-form-checkbox"/></span>'+showTxt : '<span class="list-check-span"><input type="radio" name="'+checkName+'" value="'+(item[idCol])+'" class="byy-form-radio" title=" "/></span>'+showTxt)+'');
-                                }else{
-                                    td.html(showTxt);        
-                                }
-                            }else{
-                                td.html(showTxt);        
-                            }
+                            var td = $this.treegrid('getTdByItem',item,column,index,treeColumn,checkOrRadio,checkName,checkColumn,idCol,disableCheckColumn);
                             tr.append(td);
                         });
+                        if(hasDefaultCheck){
+                            tr.addClass('selected');
+                        }
                         //看有没有下一个，body
                         $beforeTr.length >0 ? $beforeTr.before(tr) : $tbody.append(tr);
                         $this.treegrid('renderChildList', data, item, nodeCount, cols, idCol, parentCol, sortCol,checkOrRadio,treeColumn,tr);
@@ -215,9 +209,10 @@ byy.define(['jquery','cookie','page'],function( exports ){
             //异步加载渲染子节点
             renderChildList : function(data, parentData, parentIndex, columns, idColumn, parentColumn, sortColumn,checkOrRadio,treeColumn,ptr){
                 var $this = $(this);
-                var checkName = $this.treegrid('getSetting','checkName');
-                var checkColumn = $this.treegrid('getSetting','checkedColumn');
-                var $beforeTr = ptr.next('tr'),$tbody = $this.closest('table').find('tbody');
+                var $tree = $this.closest('table');
+                var settings = $tree.data('settings');
+                var checkName = settings.checkName,checkColumn = settings.checkColumn,disableCheckColumn = settings.disableCheckColumn;
+                var $beforeTr = ptr.next('tr'),$tbody = $tree.find('tbody');
                 var nodes = getListChildNodesFromData(data, parentData, idColumn, parentColumn, sortColumn);
                 if (nodes && nodes.length > 0) {
                     $.each(nodes, function (i, item) {
@@ -228,34 +223,12 @@ byy.define(['jquery','cookie','page'],function( exports ){
                         tr.addClass('treegrid-' + nowParentIndex);
                         tr.addClass('treegrid-parent-' + parentIndex);
                         $.each(columns, function (index, column) {
-                            var td = $('<td></td>');
-                            if(column['width']){
-                                var noww = column['width']+'';
-                                var cw = noww.indexOf('px')>-1 ? noww : ( noww.indexOf('%')>-1 ? noww : noww+'px');
-                                td.css('width',cw);
-                            }
-                            if(column['align']){
-                                td.css('text-align',column['align']);
-                            }
-                            if(column['style']){
-                                td.attr('style',style);
-                            }
-                            //add formatter
-                            var showTxt = item[column.field] == null || item[column.field] == undefined || item[column.field] == 'null' ? '-' : item[column.field];
-                            if(column['formatter']){
-                                showTxt = column['formatter'](showTxt,item,i);
-                            }
-                            if(index == treeColumn){
-                                if(checkOrRadio !== false){
-                                    td.append(''+( checkOrRadio == 'check' ? '<span class="list-check-span"><input type="checkbox" byy-skin="primary" title=" " name="'+checkName+'" '+(hasDefaultCheck ? 'checked' : '')+' value="'+(item[idColumn])+'" class="byy-form-checkbox"/></span>'+showTxt : '<span class="list-check-span"><input type="radio" name="'+checkName+'" value="'+(item[idColumn])+'" class="byy-form-radio" title=" " /></span> '+showTxt)+'');
-                                }else{
-                                    td.html(showTxt);        
-                                }
-                            }else{
-                                td.html(showTxt);        
-                            }
+                            var td = $this.treegrid('getTdByItem',item,column,index,treeColumn,checkOrRadio,checkName,checkColumn,idColumn,disableCheckColumn);
                             tr.append(td);
                         });
+                        if(hasDefaultCheck){
+                            tr.addClass('selected');
+                        }
                         //看有没有下一个，body
                         $beforeTr.length >0 ? $beforeTr.before(tr) : $tbody.append(tr);
                         $this.treegrid('renderChildList', data, item, nowParentIndex, columns, idColumn, parentColumn, sortColumn,checkOrRadio,treeColumn,tr);
@@ -263,7 +236,7 @@ byy.define(['jquery','cookie','page'],function( exports ){
                 }
             },
             //加载数据，settings 是配置，pageparams 是分页参数
-            loadData : function(settings,pageparams){
+            loadData : function(settings,pageparams,otherParams){
                 var $this = $(this);
                 var beforeFn = $this.treegrid('getSetting','onBefore');
                 if(typeof beforeFn === 'function' && !beforeFn.apply($this)){
@@ -279,11 +252,11 @@ byy.define(['jquery','cookie','page'],function( exports ){
                         settings.ajaxParams = byy.extend(settings.ajaxParams,{rows : pagesize,page : 1});
                     }
                 }
-                
+                var searchdata = byy.extend(settings.ajaxParams,otherParams);
                 $.ajax({
                     url : settings.url,
                     type : settings.type,
-                    data : settings.ajaxParams,
+                    data : searchdata,
                     dataType : 'JSON',
                     success : function( res ){
                         res = byy.json(res);
@@ -294,8 +267,6 @@ byy.define(['jquery','cookie','page'],function( exports ){
                         $this.treegrid('getRootNodes').treegrid('render');
                         byy.initUI();
                         //渲染分页数据 
-                        //UNDO
-                        //调用加载成功函数
                         if (typeof($this.treegrid('getSetting', 'onSuccess')) === "function") {
                             $this.treegrid('getSetting', 'onSuccess').apply($this,[res]);
                         }
@@ -361,19 +332,31 @@ byy.define(['jquery','cookie','page'],function( exports ){
                     //如果是treegrid-expander 则不监听事件
                     methods.clickRow.apply($tr);
                 });
+                //全选或取消
+                $this.off('click','thead .list-check-span').on('click','thead .list-check-span',function( ev ){
+                    var $checkspan = $(this);
+                    var checked = $checkspan.find('[name="checkAll"]').prop('checked');
+                    var $tree = $checkspan.closest('table');
+                    var checkName = $tree.treegrid('getSetting','checkName');
+                    $tree.find('input[name="'+checkName+'"]:enabled').prop('checked',checked);
+                    byy($tree).initUI();
+                    return;
+                });
                 return $this;
             },
             //刷新父节点,根据ID，重新刷新子节点，如果没有节点，则重新加载。
             reload : function( id ){
                 var $this = $(this);
+                var idColumn = $this.treegrid('getSetting','idColumn');
                 var settings = $(this).data('settings');
-                var $tr = $this.treegrid('getNodeByDataId',id);
+                var realId = typeof id == 'object' ? id[idColumn] : id;
+                var $tr = $this.treegrid('getNodeByDataId',realId);
                 if($tr == null || $tr.length == 0){
                     console && console.log && console.log('没有找到该节点，请检查ID：'+id);
                     //重新刷新当前数据
-                    $this.treegrid('loadData',settings);
+                    $this.treegrid('loadData',settings,null,id);
                 }else{
-                    $tr.treegrid('loadChildNodes',true);
+                    $tr.treegrid('loadChildNodes',true , id);
                 }
             },
             //根据数据ID获得对应的tr
@@ -385,7 +368,7 @@ byy.define(['jquery','cookie','page'],function( exports ){
                 return settings.getNodeByDataId.apply($tree,[id,$tree,idColumn]);
             },
             //选中行，仅限当前页面
-            clickRow : function(){
+            clickRow : function(flag){
                 var $tr = $(this);
                 if($tr.hasClass('treegridExt-header')){
                     return;
@@ -394,30 +377,41 @@ byy.define(['jquery','cookie','page'],function( exports ){
                 var checkOrRadio = $tr.treegrid('getSetting','checkOrRadio');//单选还是复选
                 var checkName = $tr.treegrid('getSetting','checkName');
                 var hasSel = $tr.hasClass('selected');
-                if(single === true){//单选，则取消其他选择
-                    $tr.closest('table').find('tr.selected').removeClass('selected');
-                    $tr.closest('table').find('[name="'+checkName+'"]').prop('checked',false);
-                }
-                hasSel ? $tr.removeClass('selected') : $tr.addClass('selected');
-                $tr.find('[name="'+checkName+'"]').prop('checked',!hasSel);
-                byy($tr.closest('table')).initUI();
-                //callback oncheck
-                if(typeof $tr.treegrid('getSetting','onCheck') === 'function'){
-                    var item = $tr.data('obj');
-                    $tr.treegrid('getSetting','onCheck').apply($tr,[item,!hasSel]);
+                
+                //如果当前行有checkbox,而且被禁用了，那么禁止操作
+                if($tr.find('[name="'+checkName+'"]:enabled').length > 0 || $tr.find('[name="'+checkName+'"]').length == 0){
+                    if(single === true){//单选，则取消其他选择
+                        $tr.closest('table').find('tr.selected').removeClass('selected');
+                        $tr.closest('table').find('[name="'+checkName+'"]:enabled').prop('checked',false);
+                    }
+                    flag ? $tr.addClass('selected') : (hasSel ? $tr.removeClass('selected') : $tr.addClass('selected'));
+                    $tr.find('[name="'+checkName+'"]:enabled').prop('checked',!hasSel);
+
+                    byy($tr.closest('table')).initUI();
+                    $tr.treegrid('cascade');
+                     //callback oncheck
+                    if(typeof $tr.treegrid('getSetting','onCheck') === 'function'){
+                        var item = $tr.data('obj');
+                        $tr.treegrid('getSetting','onCheck').apply($tr,[item,!hasSel]);
+                    }
+                }else if($tr.find('[name="'+checkName+'"]').length == 0){//没有单选或复选
+                    if(single === true){//单选，则取消其他选择
+                        $tr.closest('table').find('tr.selected').removeClass('selected');
+                    }
+                    flag ? $tr.addClass('selected') : (hasSel ? $tr.removeClass('selected') : $tr.addClass('selected'));
+                    byy($tr.closest('table')).initUI();
+                    $tr.treegrid('cascade');
                 }
                 //callback
                 if(typeof $tr.treegrid('getSetting','onClick') === 'function'){
                     var item = $tr.data('obj');
                     $tr.treegrid('getSetting','onClick').apply($tr,[item]);
                 }
-                $tr.treegrid('cascade');
+                
                 return $tr;
             },
+            //调用某个tr的cascade关联设置，必须是复选框
             cascade : function(){//this == tr
-                //1.当前必须是复选框
-                //2.选中后需要同时选中行selected
-                //3.
                 var $this = $(this);
                 var checkOrRadio = $this.treegrid('getSetting','checkOrRadio');//单选还是复选
                 if(checkOrRadio === 'check'){//复选框
@@ -438,8 +432,10 @@ byy.define(['jquery','cookie','page'],function( exports ){
                     }
                     if(needCheck.length > 0){
                         needCheck.forEach(function( item ){
-                            isChecked ? item.addClass('selected') : item.removeClass('selected');
-                            item.find('input[name="'+checkName+'"]').prop('checked',isChecked);
+                            if(item.find('input[name="'+checkName+'"]:enabled').length > 0){
+                                // isChecked ? item.addClass('selected') : item.removeClass('selected');
+                                item.find('input[name="'+checkName+'"]:enabled').prop('checked',isChecked);
+                            }
                             if(typeof item.treegrid('getSetting','onCheck') === 'function'){
                                 var itemData = item.data('obj');
                                 item.treegrid('getSetting','onCheck').apply(item,[itemData,isChecked]);
@@ -449,6 +445,7 @@ byy.define(['jquery','cookie','page'],function( exports ){
                     byy($tree).initUI();
                 }
             },
+            //渲染表头
             renderHead: function () {
                 var $this = $(this);
                 //debugger;
@@ -473,19 +470,14 @@ byy.define(['jquery','cookie','page'],function( exports ){
                 thr.appendTo(thead);
                 return $this.append(thead);
             },
+            //渲染body
             renderBody: function (data) {
                 var $this = $(this);
+                var $tree = $this.closest('table');
+                var settings = $tree.data('settings');
                 var tbody = $('<tbody></tbody>');
-                var isTreedData = $this.treegrid('getSetting', 'treedData');
-                var parentCol = $this.treegrid('getSetting', 'parentColumn');
-                var sortCol = $this.treegrid('getSetting', 'sortColumn');
-                var cols = $this.treegrid('getSetting', 'columns');
-                var checkOrRadio = $this.treegrid('getSetting','checkOrRadio');
-                var idCol = $this.treegrid('getSetting', 'idColumn');
-                var treeColumn = $this.treegrid('getSetting','treeColumn');
-                var rootValue = $this.treegrid('getSetting','rootValue');
-                var checkName = $this.treegrid('getSetting','checkName');
-                var checkColumn = $this.treegrid('getSetting','checkedColumn');
+                var isTreedData = settings.isTreedData,parentCol = settings.parentColumn,sortCol = settings.sortColumn,cols = settings.columns,checkOrRadio = settings.checkOrRadio,idCol = settings.idColumn,treeColumn = settings.treeColumn,rootValue = settings.rootValue,checkName = settings.checkName,checkColumn = settings.checkColumn,disableCheckColumn = settings.disableCheckColumn;
+
                 var rootNodes = getRootNodesFromData(data, isTreedData, parentCol, sortCol,rootValue);
                 if (rootNodes && rootNodes.length > 0) {
                     $.each(rootNodes, function (i, item) {
@@ -494,35 +486,12 @@ byy.define(['jquery','cookie','page'],function( exports ){
                         tr.addClass('treegrid-' + (++nodeCount));
                         var hasDefaultCheck = item[checkColumn] == 'true' || item[checkColumn] == true ? true : false;
                         $.each(cols, function (index, column) {
-                            var td = $('<td></td>');
-                            //add formatter
-                            if(column['width']){
-                                var noww = column['width']+'';
-                                var cw = noww.indexOf('px')>-1 ? noww : ( noww.indexOf('%')>-1 ? noww : noww+'px');
-                                td.css('width',cw);
-                            }
-                            if(column['align']){
-                                td.css('text-align',column['align']);
-                            }
-                            if(column['style']){
-                                td.attr('style',style);
-                            }
-                            var showTxt = item[column.field] == null || item[column.field] == undefined || item[column.field] == 'null' ? '-' : item[column.field];
-                            if(column['formatter']){
-                                showTxt = column['formatter'](showTxt,item,i);
-                            }
-                            if(index == treeColumn){
-                                if(checkOrRadio !== false){
-                                    td.append(( checkOrRadio == 'check' ? '<span class="list-check-span"><input type="checkbox" title=" " byy-skin="primary" name="'+checkName+'" '+(hasDefaultCheck ? 'checked' : '')+' value="'+(item[idCol])+'" class="byy-form-checkbox"/></span>'+showTxt : '<span class="list-check-span"><input type="radio" name="'+checkName+'" value="'+(item[idCol])+'" class="byy-form-radio" title=" "/></span>'+showTxt)+'');
-                                }else{
-                                    td.html(showTxt);        
-                                }
-                            }else{
-                                td.html(showTxt);        
-                            }
+                            var td = $this.treegrid('getTdByItem',item,column,index,treeColumn,checkOrRadio,checkName,checkColumn,idCol,disableCheckColumn);
                             tr.append(td);
                         });
-                        
+                        if(hasDefaultCheck){
+                            tr.addClass('selected');
+                        }
                         tbody.append(tr);
                         $this.treegrid('renderListDataTr', data, item, nodeCount, cols, idCol, parentCol, sortCol, tbody,checkOrRadio,treeColumn);
                     });
@@ -542,19 +511,33 @@ byy.define(['jquery','cookie','page'],function( exports ){
                 }
                 return datas;
             },
+            //获得选中的行
+            getCheckedNodes : function(){
+                var $this = $(this);
+                var checkName = $this.treegrid('getSetting','checkName');
+                var checks = $this.find('input[name="'+checkName+'"]:checked');
+                var trs = [];
+                if(checks.length > 0){
+                    checks.each(function(){
+                        var tr = $(this).closest('tr');
+                        trs.push(tr.data('obj'));
+                    });
+                }
+                return trs;
+            },
+            //渲染子节点
             renderListDataTr: function (data, parentData, parentIndex, columns, idColumn, parentColumn, sortColumn, tbody,checkOrRadio,treeColumn) {
                 var $this = $(this);
-                var isTreedData = $this.treegrid('getSetting', 'treedData');
-                var checkName = $this.treegrid('getSetting','checkName');
-                var checkColumn = $this.treegrid('getSetting','checkedColumn');
+                var $tree = $this.closest('table');
+                var settings = $tree.data('settings');
+                var isTreedData = settings.isTreedData,checkName = settings.checkName,checkColumn = settings.checkColumn,childCol = settings.childColumn,disableCheckColumn = settings.disableCheckColumn;
+
                 var nodes = [];
                 if(isTreedData){
-                    var childCol = $this.treegrid('getSetting','childColumn');
                     nodes = getTreeChildNodesFromdata(parentData,childCol,sortColumn);
                 }else{
                     nodes = getListChildNodesFromData(data, parentData, idColumn, parentColumn, sortColumn);
                 }
-                // var nodes = getListChildNodesFromData(data, parentData, idColumn, parentColumn, sortColumn);
                 if (nodes && nodes.length > 0) {
                     $.each(nodes, function (i, item) {
                         var tr = $('<tr></tr>');
@@ -564,34 +547,12 @@ byy.define(['jquery','cookie','page'],function( exports ){
                         tr.addClass('treegrid-' + nowParentIndex);
                         tr.addClass('treegrid-parent-' + parentIndex);
                         $.each(columns, function (index, column) {
-                            var td = $('<td></td>');
-                            //add formatter
-                            if(column['width']){
-                                var noww = column['width']+'';
-                                var cw = noww.indexOf('px')>-1 ? noww : ( noww.indexOf('%')>-1 ? noww : noww+'px');
-                                td.css('width',cw);
-                            }
-                            if(column['align']){
-                                td.css('text-align',column['align']);
-                            }
-                            if(column['style']){
-                                td.attr('style',style);
-                            }
-                            var showTxt = item[column.field] == null || item[column.field] == undefined || item[column.field] == 'null' ? '-' : item[column.field];
-                            if(column['formatter']){
-                                showTxt = column['formatter'](showTxt,item,i);
-                            }
-                            if(index == treeColumn){
-                                if(checkOrRadio !== false){
-                                    td.append(''+( checkOrRadio == 'check' ? '<span class="list-check-span"><input type="checkbox" byy-skin="primary" title=" " name="'+checkName+'" '+(hasDefaultCheck ? 'checked' : '')+' value="'+(item[idColumn])+'" class="byy-form-checkbox"/></span>'+showTxt : '<span class="list-check-span"><input type="radio" name="'+checkName+'" value="'+(item[idColumn])+'" class="byy-form-radio" title=" " /></span> '+showTxt)+'');
-                                }else{
-                                    td.html(showTxt);        
-                                }
-                            }else{
-                                td.html(showTxt);        
-                            }
+                            var td = $this.treegrid('getTdByItem',item,column,index,treeColumn,checkOrRadio,checkName,checkColumn,idColumn,disableCheckColumn);
                             tr.append(td);
                         });
+                        if(hasDefaultCheck){
+                            tr.addClass('selected');
+                        }
                         tbody.append(tr);
                         $this.treegrid('renderListDataTr', data, item, nowParentIndex, columns, idColumn, parentColumn, sortColumn, tbody,checkOrRadio,treeColumn);
                     });
@@ -879,6 +840,7 @@ byy.define(['jquery','cookie','page'],function( exports ){
                     return $(this).treegrid('getSetting', 'getNodeById').apply(this, [$(this).treegrid('getParentNodeId'), $(this).treegrid('getTreeContainer')]);
                 }
             },
+            //根据tr获得所有的父级节点
             getAllParentNodes : function(){
                 var parentNodes = [];
                 var $this = $(this);
@@ -899,6 +861,7 @@ byy.define(['jquery','cookie','page'],function( exports ){
             getChildNodes: function() {
                 return $(this).treegrid('getSetting', 'getChildNodes').apply(this, [$(this).treegrid('getNodeId'), $(this).treegrid('getTreeContainer')]);
             },
+            //根据tr获得所有的子节点
             getAllChildNodes : function(){
                 var childs = [];
                 var cnodes = $(this).treegrid('getSetting', 'getChildNodes').apply(this, [$(this).treegrid('getNodeId'), $(this).treegrid('getTreeContainer')]);
@@ -1207,10 +1170,10 @@ byy.define(['jquery','cookie','page'],function( exports ){
             //added
             idColumn : 'id',                                                //主键名称，默认ID
             rootValue : "",                                                 //rootId value
-            treedData: false,                                               //是否树化的数据
+            isTreedData: false,                                             //是否树化的数据
             childColumn : 'child',                                          //子级节点名称
             parentColumn : 'parentId',                                      //父级ID
-            checkedColumn :'checked',                                       //复选框使用，是否选中，默认checked属性，值为false,true
+            checkColumn :'checked',                                         //复选框使用，是否选中，默认checked属性，值为false,true
             sortColumn : null,                                              //排序字段
             ajaxParams : {},                                                //异步请求数据时候的参数
             url : null,                                                     //异步请求的路径
@@ -1228,6 +1191,7 @@ byy.define(['jquery','cookie','page'],function( exports ){
             isBody : false,                                                 //是否只渲染body
             cascadeCheck : false,                                           //级联选中，false不级联，up 向上级联，down,向下级联，all全部级联
             cascadeCancel : false,                                          //级联取消，false不级联，up 向上级联，down,向下级联，all全部级联
+            disableCheckColumn : 'chkDisabled',                             //禁用单选、复选字段，默认chkDisabled
 
             getExpander: function() {
                 return $(this).find('.treegrid-expander');

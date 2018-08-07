@@ -16,23 +16,11 @@ byy.define('jquery',function( exports){
 			var width = $title.parent().width();
 			var top = parseInt( $title.attr('top') ? $title.attr('top') : $title.attr('top',$title.offset().top) && $title.offset().top  , 10);
 			var height = $title.height();
-			//获得父页面frame的，此处特殊处理，只适合数校
-			var $pbody = $(parent.window.document.body);
-			var $nav = $pbody.find('.index-nav');
-			var appcode = $nav.find('.index-nav-item.selected').attr('appcode');
-			//获得frame
-			var $frame = $pbody.find('.index-frame-item[appcode="'+appcode+'"]');
-			//获得menu
-			var $nav2 = $frame.find('.byy-nav');
 			$title.css('width',width);
 			if(now > top){
 				$title.addClass('fixed');
-				$nav2.hide();
-				$('body').css('padding-top',height);
 			}else{
 				$title.removeClass('fixed');
-				$('body').css('padding-top','0px').css('width','auto');
-				$nav2.show();
 			}
 		}
 	};

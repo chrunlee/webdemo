@@ -80,6 +80,8 @@ app.use('/log',require('./routes/logs'));
 //微信
 app.use('/wx',require('./routes/weixin'));
 
+//音乐
+app.use('/music',require('./routes/music'));
 //首页
 var index = require('./routes/index');
 

@@ -5,6 +5,8 @@
  * 3. 增加参数 tipsAuto 用于在tips层展示的时候取消自动判断位置的操作。
  * 4. 修复右下角的位置，左移20px
  * 5. 更新layer 3.0
+ * 6. 增加photos 参数 insideOrOut ： 'inside' 'outside',图片两侧的按钮
+ * 7. 增加eleOnly 参数，用于tips 在tipsMore=true的情况下，对校验的element只存在一个tips
 ***/
 ;!(function(factory){
   byy.require(['lang','jquery'],function(){
@@ -212,14 +214,13 @@ Class.pt.vessel = function(conType, callback){
   var titleHTML = (config.title ? '<div class="byy-byywin-title" style="'+ (titype ? config.title[1] : '') +'">' 
     + (titype ? config.title[0] : config.title) 
   + '</div>' : '');
-  
   config.zIndex = zIndex;
   callback([
     //遮罩
     config.shade ? ('<div class="byy-byywin-shade" id="byy-byywin-shade'+ times +'" times="'+ times +'" style="'+ ('z-index:'+ (zIndex-1) +'; background-color:'+ (config.shade[1]||'#000') +'; opacity:'+ (config.shade[0]||config.shade) +'; filter:alpha(opacity='+ (config.shade[0]*100||config.shade*100) +');') +'"></div>') : '',
     
     //主体
-    '<div class="'+ doms[0] + (' byy-byywin-'+ready.type[config.type]) + (((config.type == 0 || config.type == 2) && !config.shade) ? ' byy-byywin-border' : '') + ' ' + (config.skin||'') +'" id="'+ doms[0] + times +'" type="'+ ready.type[config.type] +'" times="'+ times +'" showtime="'+ config.time +'" conType="'+ (conType ? 'object' : 'string') +'" style="z-index: '+ zIndex +'; width:'+ config.area[0] + ';height:' + config.area[1] + (config.fixed ? '' : ';position:absolute;') +'">'
+    '<div class="'+ doms[0] + (' byy-byywin-'+ready.type[config.type]) + (((config.type == 0 || config.type == 2) && !config.shade) ? ' byy-byywin-border' : '') + ' ' + (config.skin||'') +'" id="'+ doms[0] + times +'" type="'+ ready.type[config.type] +'" times="'+ times +'" elename="'+(config.elename)+'" showtime="'+ config.time +'" conType="'+ (conType ? 'object' : 'string') +'" style="z-index: '+ zIndex +'; width:'+ config.area[0] + ';height:' + config.area[1] + (config.fixed ? '' : ';position:absolute;') +'">'
       + (conType && config.type != 2 ? '' : titleHTML)
       + '<div id="'+ (config.id||'') +'" class="byy-byywin-content'+ ((config.type == 0 && config.icon !== -1) ? ' byy-byywin-padding' :'') + (config.type == 3 ? ' byy-byywin-loading'+config.icon : '') +'">'
         + (config.type == 0 && config.icon !== -1 ? '<i class="byy-byywin-ico byy-byywin-ico'+ config.icon +'"></i>' : '')
@@ -289,7 +290,19 @@ Class.pt.creat = function(){
       config.content = config.content[0] + '<i class="byy-byywin-TipsG"></i>';
       delete config.title;
       config.tips = typeof config.tips === 'object' ? config.tips : [config.tips, true];
-      config.tipsMore || byywin.closeAll('tips');
+      //可以配置在同一个element上只有一个tips的配置，eleOnly=true
+      if(config.tipsMore){//允许多个
+        if(config.eleOnly){
+          var eleName2 = $(config.follow).get(0).name || ($(config.follow).find('[name]').get(0) && $(config.follow).find('[name]').get(0).name) || ($(config.follow).parent().find('[name]').get(0) && $(config.follow).parent().find('[name]').get(0).name);
+          config.elename = $(config.follow).get(0).tagName +'-'+eleName2;
+          byywin.closeTips(config.follow);
+        }
+      }else{
+        byy.win.closeAll('tips');
+      }
+      // config.tipsMore ? (config.eleOnly ? config.elename = ) : byy.win.closeAll('tips');
+      // config.tipsMore || byywin.closeAll('tips');
+      // console.log(config.follow);
     break;
   }
   
@@ -863,6 +876,10 @@ byywin.min = function(index, options){
     ready.minIndex++;
   }
   byywino.attr('minLeft', left);
+  //增加在调用min后调用回调函数
+  if(options.min){
+    options.min(byywino);
+  }
 };
 
 //还原
@@ -965,6 +982,18 @@ byywin.closeAll = function(type){
   $.each($('.'+doms[0]), function(){
     var othis = $(this);
     var is = type ? (othis.attr('type') === type) : 1;
+    is && byywin.close(othis.attr('times'));
+    is = null;
+  });
+};
+
+//关闭同一个input/name上的tips层，只保留一个，主要是在校验的时候出现多个会覆盖
+byywin.closeTips = function( ele ){
+  //1.查找相同ele的tips，关闭
+  var elename = $(ele).get(0).tagName + '-'+$(ele).get(0).name;
+  $.each($('.'+doms[0]), function(){
+    var othis = $(this);
+    var is = (othis.attr('type') === 'tips') && othis.attr('elename') === elename;
     is && byywin.close(othis.attr('times'));
     is = null;
   });
@@ -1084,7 +1113,7 @@ byywin.photos = function(options, loop, key){
   var photos = type ? options.photos : {}, data = photos.data || [];
   var start = photos.start || 0;
   dict.imgIndex = (start|0) + 1;
-  
+  var insideOrOut = options.indicator || 'inside';//outside , inside ,默认inside
   options.img = options.img || 'img';
 
   var success = options.success;
@@ -1246,14 +1275,15 @@ byywin.photos = function(options, loop, key){
       move: '.byy-byywin-phimg img',
       moveType: 1,
       scrollbar: false,
-      moveOut: true,
+      moveOut: false,
       // anim: Math.random()*5|0,
+      // anim : null,
       isOutAnim : false,
       skin: 'byy-byywin-photos' + skin('photos'),
       content: '<div class="byy-byywin-phimg">'
         +'<img src="'+ data[start].src +'" alt="'+ (data[start].alt||'') +'" byywin-pid="'+ data[start].pid +'">'
         +'<div class="byy-byywin-imgsee">'
-          +(data.length > 1 ? '<span class="byy-byywin-imguide"><a href="javascript:;" class="byy-byywin-iconext byy-byywin-imgprev"></a><a href="javascript:;" class="byy-byywin-iconext byy-byywin-imgnext"></a></span>' : '')
+          +(data.length > 1 ? '<span class="byy-byywin-imguide '+(insideOrOut == 'inside' ? 'inside' : 'outside')+'"><a href="javascript:;" class="byy-byywin-iconext byy-byywin-imgprev"></a><a href="javascript:;" class="byy-byywin-iconext byy-byywin-imgnext"></a></span>' : '')
           +'<div class="byy-byywin-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="byy-byywin-imgtit"><a href="javascript:;">'+ (data[start].alt||'') +'</a><em>'+ dict.imgIndex +'/'+ data.length +'</em></span></div>'
         +'</div>'
       +'</div>',

@@ -72,6 +72,15 @@ var languageMap = {
 	list : {
 		hsearch : 'More Search',
 		more : 'More'
+	},
+	tab : {
+		refresh : 'Refresh',
+		close : 'Close',
+		others : 'Close Other tabs',
+		all : 'Close All Tabs'
+	},
+	table : {
+		nodata : 'Not getting the data'
 	}
 };
 byy.define(function( exports ){

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>音乐随便点</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+</head>
+<body>
+	<div class="video"></div>
+</body>
+</html>
+<script src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+	function getNext(cb){
+		$.ajax({
+			url : '/music/random',
+			method : 'get',
+			data : {},
+			success : function(res){
+				cb(byy.json(res));
+			}
+		});
+	}
+	byy.require('audio',function(){
+		getNext(function(music){
+			console.log(music);
+			byy('.video').audio({
+				music : [
+				{
+					author : music.artist,
+					title : music.title,
+					url :music.url,
+					post : music.picture
+				}
+				],
+				debug : true,
+				autoplay : true,
+				mode : 0,
+				onEnded : function(){
+					console.log('next');
+					// byy('.video').audio('pause');
+					getNext(function(obj){
+						var musicobj = {
+							author : obj.artist,
+							title : obj.title,
+							url : obj.url,
+							post : obj.picture
+						};
+						console.log(musicobj);
+						byy('.video').audio('addMusic',musicobj)
+						byy('.video').audio('next');
+					});
+				}
+			})
+		});
+
+		
+	})
+</script>
