@@ -82,6 +82,10 @@ app.use('/wx',require('./routes/weixin'));
 
 //音乐
 app.use('/music',require('./routes/music'));
+
+//美图
+app.use('/picture',require('./routes/picture'));
+
 //首页
 var index = require('./routes/index');
 
