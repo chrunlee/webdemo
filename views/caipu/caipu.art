@@ -1,0 +1,4 @@
+
+	{{each list value n}}
+	<span class="name" id="{{value.id}}">{{value.name}}</span>
+	{{ /each}}

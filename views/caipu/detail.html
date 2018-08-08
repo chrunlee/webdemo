@@ -14,6 +14,7 @@
 <body>
 	{{ if caipu }}
 	<div style="display:none;"><img src="{{caipu.albums}}" width="300px" height="300px" alt="" /></div>
+	<input type="hidden" name="id" value="{{caipu.id}}">
 	<div class="album">
 		<img src="{{caipu.albums}}" alt="">
 		<img src="/scan.jpg" class="scan" alt="">
@@ -66,7 +67,13 @@
 	</div>
 	<div class="share">
 		<img src="/icons/heart.png" alt="">
-		温馨提示:如果您想找到更多的菜谱，可以关注"公众号"，点击"菜谱学习"后，进入文章，点击"阅读原文"来查看。那里有更多的菜谱等你来看，足有上万道呢！
+		喜欢这道菜的话，就给他个小心心吧!
+		<img src="/icons/heart.png" alt="">
+		<div class="likeopt">
+			喜欢 <span id="numshow">{{caipu.likenum}}</span>
+			<img src="/icons/nozan.png" class="zan"/>
+			<img src="/icons/zan.png" class="yizan hide"/>
+		</div>
 	</div>
 	<div class="content">
 		<div class="title">—— 相关菜谱 ——</div>
@@ -87,6 +94,74 @@
 		</div>
 	</div>
 	{{ /if}}
+	<footer class="footer">
+		<a href="/caipu/home"><span><img src="/icons/category.png" />分类</span></a>
+		<a href="/caipu/search"><span><img src="/icons/hot.png" />热门</span></a>
+	</footer>
 </body>
 </html>
+
+<script type="text/javascript" src="/plugins/jquery/jquery.js"></script>
+<script type="text/javascript">
+$(function(){
+	var hasdo = false;
+	var id = $('input[name="id"]').val();
+	function checkZan (id){
+		if(window.localStorage){
+			var str = localStorage.getItem('zan') || '{}';
+			var resobj = $.parseJSON(str);
+			if(resobj[id]){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
+	function updateZan(id){
+		if(window.localStorage){
+			var str = localStorage.getItem('zan') || '{}';
+			var resobj = JSON.parse(str);
+			resobj[id] = true;
+			var newstr = JSON.stringify(resobj);
+			localStorage.setItem('zan',newstr);
+		}
+	}
+	$('.zan').on('click',function(){
+		//本地cookie记录是否已赞
+		if(hasdo){
+			return;
+		}
+		hasdo = true;
+		//查询当前是否已赞
+		var hasZan = checkZan(id);
+		if(!hasZan){
+			//向后台请求+1
+			$.ajax({
+				url : '/caipu/zan',
+				type : 'post',
+				data : {id : id},
+				success : function(res){
+					if(res == 'true'){
+						updateZan(id);
+						//更新页面数据
+						$('.zan').addClass('hide');
+						$('.yizan').removeClass('hide');
+						$('#numshow').html(parseInt($('#numshow').text(),10)+1);
+					}else{
+						hasdo = false;
+					}
+				},
+				error : function(){
+					hasdo = false;
+				}
+			});
+		}
+	});
+	if(checkZan(id)){
+		$('.zan').addClass('hide');
+		$('.yizan').removeClass('hide');
+	}
+});
+</script>
 <script type="text/javascript" src="/plugins/tongji.js"></script>

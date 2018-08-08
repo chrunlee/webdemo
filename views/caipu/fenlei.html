@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{fenlei.name}} - 食神秘籍 - 练就一身高级厨艺</title>
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+	<meta property="og:type" content="website" />
+	<link rel="stylesheet" href="/caipu/home.css">
+	<link rel="stylesheet" href="/caipu/detail.css">
+</head>
+<body>
+	<input type="hidden" name="id" value="{{fenlei.id}}">
+	<header class="header">
+		· {{ fenlei.name}} - {{fenlei.category}}
+	</header>
+	<div class="content">
+		<div class="title">—— 相关菜谱 ——</div>
+		<div class="link">
+			{{each list value i}}
+			<a href="/caipu/show/{{value.id}}">
+				<div class="link-item">
+					<div class="left-pic">
+						<img src="{{value.albums}}" alt="">
+					</div>
+					<div class="right-content">
+						<div class="top-title">{{value.title}} &nbsp;&nbsp;&nbsp;&nbsp;<img src="/icons/heart.png" /><span class="likenum">{{value.likenum}}</span></div>
+						<div class="bottom-des">{{value.intro}}</div>
+					</div>
+				</div>
+			</a>
+			{{ /each }}
+		</div>
+		<div class="end">
+			<span class="more show">
+				点击加载更多
+			</span>
+			<div class="empty hide">
+				--- 我们是有底线的 ---	
+			</div>
+		</div>
+	</div>
+	<footer class="footer">
+		<a href="/caipu/home"><span class="active"><img src="/icons/category.png" />分类</span></a>
+		<a href="/caipu/search"><span><img src="/icons/hot.png" />热门</span></a>
+	</footer>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/jquery/jquery.js"></script>
+<script type="text/javascript">
+	var page = 1;
+	$(function(){
+		var hasLoad = false;
+		$('.more').on('click',function(){
+			if(hasLoad){
+				return;
+			}
+			hasLoad = true;
+			$('.more').html('正在加载中....');
+			page ++;
+			$.ajax({
+				url : '/caipu/fenlei',
+				type : 'post',
+				data : {
+					id : $('[name="id"]').val(),
+					page : page
+				},
+				success : function(res){
+					var resobj = $.parseJSON(res);
+					if(resobj.length < 10 ){
+						$('.more').removeClass('show').addClass('hide');
+						$('.empty').removeClass('hide').addClass('show');
+					}else{
+						$('.more').html('点击加载更多')
+					}
+					hasLoad = false;
+					var result = '';
+					resobj.forEach(function(item){
+						var id = item.id,albums = item.albums,name = item.title,likenum = item.likenum,intro = item.intro;
+						result += '<a href="/caipu/show/'+id+'"><div class="link-item"><div class="left-pic"><img src="'+albums+'" alt=""></div><div class="right-content"><div class="top-title">'+name+' &nbsp;&nbsp;&nbsp;&nbsp;<img src="/icons/heart.png" /><span class="likenum">'+likenum+'</span></div><div class="bottom-des">'+intro+'</div></div></div></a>';
+					});
+					$('.link').append(result);
+				},
+				error : function(){
+					$('.more').removeClass('show').addClass('hide');
+					$('.empty').removeClass('hide').addClass('show');
+					$('.empty').html('对不起,服务器中暑了...');
+				}
+			});
+		})
+	});
+</script>
+<script type="text/javascript" src="/plugins/tongji.js"></script>
