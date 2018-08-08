@@ -212,7 +212,7 @@ router.all('/get',function(req,res,next){
 /**菜谱相关的页面处理**/
 router.get('/home',function(req,res,next){
 	query({
-		sql : 'select * from (select f.name,f.category,f.id,count(1) as num,f.icons from caipu_item t left join caipu_fenlei f on f.id=t.cid group by f.name,f.category ) z where z.num > 20 order by id asc',
+		sql : 'select * from (select f.name,f.category,f.id,count(1) as num,f.icons from caipu_item t left join caipu_fenlei f on f.id=t.cid group by f.name,f.category,f.id,f.icons ) z where z.num > 20 order by id asc',
 		params : []
 	}).then(function(rs){
 		var rst = rs[0];
