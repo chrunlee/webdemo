@@ -98,7 +98,7 @@ router.post('/path',function(req,res,next){
 		min = 1440 * 30;
 	}
 	query({
-		sql : 'select url,count(1) as num from logs t where t.ctime>DATE_ADD(NOW(), INTERVAL -'+min+' MINUTE) group by url',
+		sql : 'select url,count(1) as num from logs t where t.ctime>DATE_ADD(NOW(), INTERVAL -'+min+' MINUTE) group by url order by num desc limit 0,10',
 		params : []
 	}).then(function(rs){
 		var rst = rs[0];
