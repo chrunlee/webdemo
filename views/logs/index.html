@@ -284,12 +284,19 @@ class main {
 		var beforeday = moment(new Date()).subtract(1,'days').format('YYYY-MM-DD HH:mm');
 		//开始加法计算
 		var current;
-		var x = [],y = [];
+		var x = [],y = [];//十分钟一节
+		var start =0,,count = 0;
 		for(var i=0;i<1440;i++){
+			start ++;
 			current = moment(beforeday).add(i,'m').format('YYYY-MM-DD HH:mm');
 			var currentNum = map[current] || 0;
-			x.push(current);
-			y.push(currentNum);
+			count += currentNum;
+			if(start == 10){
+				x.push(current);
+				y.push(count);
+				start = 0;
+				count =0;
+			}
 		}
 		var option = {
 			color : that.getColors(1),
