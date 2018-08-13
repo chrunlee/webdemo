@@ -43,8 +43,8 @@ router.post('/',function(req,res,next){
 			query({sql : 'insert into wx_msg (openid,content,ctime) values (?,?,?)' ,params : [fromUser,content,new Date()]})
 			//此处处理文本
 			var caipuReg = new RegExp('菜谱+([.]*)');
-			if(/^[菜谱|菜][\+|\＋]?([\s\S]*)$/.test(content.trim())){
-				var rst = /^[菜谱|菜][\+\＋]?([\s\S]*)$/.exec(content.trim());
+			if(/^菜谱?[\+\＋]{1}([\s\S]*)$/.test(content.trim())){
+				var rst = /^菜谱?[\+\＋]{1}([\s\S]*)$/.exec(content.trim());
 				var keyword = rst[1];
 				if(keyword == ''){
 					//回复消息
@@ -53,9 +53,6 @@ router.post('/',function(req,res,next){
 					res.end(xml);
 				}else{
 					//根据关键词查询数据库，并将数据展示给用户。然后添加一个链接即可。
-					keyword = keyword.replace('+','');
-					keyword = keyword.replace('＋','');
-					console.log(keyword);
 					query({
 						sql : 'select * from caipu_item where title like ? or ingredients like ? order by rand() limit 0,1',
 						params : ['%'+keyword+'%','%'+keyword+'%']
