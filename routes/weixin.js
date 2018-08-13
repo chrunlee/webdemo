@@ -55,10 +55,12 @@ router.post('/',function(req,res,next){
 					//根据关键词查询数据库，并将数据展示给用户。然后添加一个链接即可。
 					keyword = keyword.replace('+','');
 					keyword = keyword.replace('＋','');
+					console.log(keyword);
 					query({
 						sql : 'select * from caipu_item where title like ? or ingredients like ? order by rand() limit 0,1',
 						params : ['%'+keyword+'%','%'+keyword+'%']
 					}).then( rs => {
+						console.log(rs);
 						var rst = rs[0];
 						var xml = '';
 						if(rst.length > 0){
