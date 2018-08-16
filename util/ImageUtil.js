@@ -1,7 +1,7 @@
 //对文件进行保存，压缩处理
 var fs = require('fs');
 var path = require('path');
-var Jimp = require('Jimp');
+var Jimp = require('jimp');
 
 function getNewPath(userId,extname){
 	return '/upload/'+userId+'/'+(+new Date())+'-'+(Math.floor(Math.random()*100))+extname;
