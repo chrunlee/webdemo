@@ -10,17 +10,17 @@ var query = require('simple-mysql-query');
 
 //测试
 router.use(function(req,res,next){
-	req.session.user = { 
-		id: 1,
-	     username: '迅哥哥',
-	     avatar: null,
-	     useraccount: 'chrunlee',
-	     userpwd: '0b8d3104f46ce1ce884d3c494fac1b64',
-	     mobile: '',
-	     email: null,
-	     intro: null,
-	     role: '1' 
- 	};
+	// req.session.user = { 
+	// 	id: 1,
+	//      username: '迅哥哥',
+	//      avatar: null,
+	//      useraccount: 'chrunlee',
+	//      userpwd: '0b8d3104f46ce1ce884d3c494fac1b64',
+	//      mobile: '',
+	//      email: null,
+	//      intro: null,
+	//      role: '1' 
+ // 	};
  	console.log('in center')
 	if(req.session.user){
 

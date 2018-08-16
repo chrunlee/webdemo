@@ -50,7 +50,7 @@ module.exports = function( app ){
 
 	//个人中心
 	app.use('/center',require('../routes/center/center'))
-	app.use('/center/record',require('../routes/center/record'))
+	app.use('/record',require('../routes/center/record'))
 	app.use('/center/upload',require('../routes/center/upload'));
 
 	//文章列表
