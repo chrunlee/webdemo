@@ -1,7 +1,7 @@
 /*图片相关处理*/
 var express = require('express');
 var router = express.Router();
-var key = require('../wx').pickey;
+var key = require('../../json/wx').pickey;
 var api = 'https://pixabay.com/api/?key='+key+'&lang=zh&image_type=photo&pretty=true';
 var superagent = require('superagent');
 router.get('/',(req,res,next)=>{

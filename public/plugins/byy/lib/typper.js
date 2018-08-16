@@ -1,32 +1,7 @@
-/****
- * 模拟打字效果
-****/
-byy.define('jquery',function( exports ){
-	var typper = function( selector, timemin ){
-		timemin = timemin || 75;
-		var $ele = $(selector),str = $ele.html(),progress = 0;
-		$ele.html('');
-		var typertimer = setInterval(function() {
-            var current = str.substr(progress, 1);
-            if (current == '<') {
-                progress = str.indexOf('>', progress) + 1;
-            } else {
-                progress++;
-            }
-            $ele.html(str.substring(0, progress) + (progress & 1 ? '_' : ''));
-            if (progress >= str.length) {
-            	if($ele.html().endWith('_')){
-            		$ele.html($ele.html().substring(0,$ele.html().length -1));
-            	}
-                clearInterval(typertimer);
-            }
-        }, timemin);
-	};
-	byy.fn.extend({
-		typper : function(min){
-			var $ele = this.$ele;
-			typper($ele,min);
-		}
-	});
-	exports('typper',typper);
-});
+/*
+	@company 博育云
+	@site : www.boyuyun.cn
+	@author boyuyun
+*/
+
+byy.define("jquery",function(a){var b=function(a,b){b=b||75;var c=$(a),d=c.html(),e=0;c.html("");var f=setInterval(function(){"<"==d.substr(e,1)?e=d.indexOf(">",e)+1:e++,c.html(d.substring(0,e)+(1&e?"_":"")),e>=d.length&&(c.html().endWith("_")&&c.html(c.html().substring(0,c.html().length-1)),clearInterval(f))},b)};byy.fn.extend({typper:function(a){var c=this.$ele;b(c,a)}}),a("typper",b)});

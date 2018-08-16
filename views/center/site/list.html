@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>站点属性</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<link rel="stylesheet" href="/center/css/home.css">
+</head>
+<body class="grey-bg frame-body">
+	<!-- 顶部工具栏 -->
+	<div class="byy-panel list-panel">
+		<div class="byy-panel-title">
+			<span class="byy-breadcrumb">
+                <a href="/center/home" target="_parent">首页</a>
+                <a><cite>站点属性设置</cite></a>
+            </span>
+		</div>
+		<div class="byy-panel-content byy-clear">
+			<form action="" class="byy-form">
+				<div class="byy-form-item">
+					<label for="" class="byy-label">站点名称</label>
+					<div class="byy-block" style="width:60%">
+						<input type="text" name="sitename" value="{{site.sitename}}">
+					</div>
+				</div>
+				<div class="byy-form-item">
+					<label for="" class="byy-label">站点描述</label>
+					<div class="byy-block" style="width:60%">
+						<textarea name="sitedes" >{{site.sitedes}}</textarea>
+					</div>
+				</div>
+				<div class="byy-form-item">
+					<label for="" class="byy-label">站点拥有人</label>
+					<div class="byy-block" style="width:60%">
+						<input type="text" name="authorname" value="{{site.authorname}}">
+					</div>
+				</div>
+				<div class="byy-form-item">
+					<label for="" class="byy-label">超管email</label>
+					<div class="byy-block" style="width:60%">
+						<input type="text" name="email" value="{{site.emal}}">
+					</div>
+				</div>
+				<div class="byy-form-item">
+					<label for="" class="byy-label">免责声明地址</label>
+					<div class="byy-block" style="width:60%">
+						<input type="text" name="publichref" value="{{site.publichref}}">
+					</div>
+				</div>
+				<div class="byy-form-item">
+					<label for="" class="byy-label">站点ICON</label>
+					<div class="byy-block" style="width:60%">
+						<input type="hidden" name="faviconhref" value="{{site.faviconhref}}">
+						<img src="{{site.faviconhref}}" style="width:35px;height:35px;" />
+						<span class="byy-btn small" id="uploadIcon">上传ICON</span>
+					</div>
+				</div>
+				<div class="byy-form-item">
+					<label for="" class="byy-label">二维码</label>
+					<div class="byy-block" style="width:60%">
+						<input type="hidden" name="sitescan" value="{{site.sitescan}}">
+						<img src="{{site.sitescan}}" style="width:35px;height:35px;" />
+						<span class="byy-btn small" id="uploadScan">上传ICON</span>
+					</div>
+				</div>
+				<div class="text-center" style="width:60%;">
+					<span class="byy-btn danger" filter="update" style="width:200px;">更新</span>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
+{{ include '../../tpl/commonjs.art'}}
+<script type="text/javascript">
+	//由于是个人后台此处无校验。
+	byy.require(['jquery','uploader','win'],function(){
+
+		//初始化上传
+		byy.uploader().simpleImage({
+			server : '/center/upload',
+			selector : '#uploadIcon',
+			onSuccess : function(file,res){
+				var href = res.result.filePath;
+				$('[name="faviconhref"]').val(href);
+			}
+		});
+		byy.uploader().simpleImage({
+			server : '/center/upload',
+			selector : '#uploadScan',
+			onSuccess : function(file,res){
+				var href = res.result.filePath;
+				$('[name="sitescan"]').val(href);
+			}
+		});
+		//事件绑定
+		byy.bindEvents({
+			update : function(){
+				var values = byy('.byy-form').getValues();
+				top.byy.win.confirm('请谨慎更新数据,是否确认',function(index){
+					top.byy.win.closeAll();
+					$.ajax({
+						url : '/center/site/update',
+						type : 'post',
+						data : values,
+						success : function(res){
+							if(res.success){
+								top.byy.win.msg('更新成功')
+							}else{
+								top.byy.win.msg('更新失败')
+							}
+						}
+					});
+				})
+			}
+		});
+	});
+</script>

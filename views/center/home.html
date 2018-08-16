@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>个人中心</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<link rel="stylesheet" href="/center/css/home.css">
+</head>
+<body>
+	<div class="byy-side">
+		<div class="byy-side-scroll">
+			<ul class="byy-nav byy-nav-side dark byy-nav-tree">
+				<li class="text-center">迅哥博客-管理后台</li>
+				<li class="byy-nav-item" >
+					<a data-href="/center/site" href="javascript:;" filter="openMenu">站点属性</a>
+				</li>
+				<li class="byy-nav-item" >
+					<a data-href="/center/banner" href="javascript:;" filter="openMenu">Banner设置</a>
+				</li>
+				<li class="byy-nav-item" >
+					<a data-href="/center/category" href="javascript:;" filter="openMenu">文章类别</a>
+				</li>
+				<li class="byy-nav-item" >
+					<a data-href="/center/article" href="javascript:;" filter="openMenu">文章信息</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="byy-body">
+		
+
+	</div>
+</body>
+</html>
+{{ include '../tpl/commonjs.art'}}
+<script type="text/javascript">
+
+	byy.require(['jquery','win'],function(){
+		byy('.byy-body').tab({
+			notitle : true,
+			async : true,
+			menu : false,
+			contents : []
+		});
+		byy.bindEvents({
+			openMenu : function(data,ev){
+				var href = data.href;
+				console.log(href);
+				byy('.byy-body').deleteTab(0);
+				byy('.byy-body').addTab({
+					url : href
+				});
+			}
+		});
+	});
+</script>

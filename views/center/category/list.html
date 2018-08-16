@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>category 文章类别</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<link rel="stylesheet" href="/center/css/home.css">
+</head>
+<body class="grey-bg frame-body">
+	<h3>文章类别</h3>
+	<div class="byy-form-info">
+		类别请慎重添加，添加后尽量不要删除，因为还有关联的文章，所以这里不提供删除的接口，只有增加。
+	</div>
+	<div>
+		<form action="" class="byy-form">
+			<div class="byy-form-item">
+				<label for="" class="byy-label">类别</label>
+				<div class="byy-block">
+					<input type="text" class="fw" name="name" autocomplete="off">
+					<span class="byy-btn danger" filter="save">添加</span>
+				</div>
+			</div>
+			<div class="byy-form-item">
+				<label for="" class="byy-label">现有类别</label>
+				<div class="byy-block">
+					{{each rows value i}}
+					<span class="byy-btn">{{value.name}}</span>
+					{{/each}}
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>
+{{ include '../../tpl/commonjs.art'}}
+<script type="text/javascript">
+	byy.require(['jquery'],function(){
+		byy.bindEvents({
+			save : function(){
+				var name = $('[name="name"]').val();
+				if(!$.trim(name)){
+					byy.win.msg('不要填写无意义数据')
+					return;
+				}
+				$.ajax({
+					url : '/center/category/save',
+					type : 'post',data : {name : name},
+					success : function(){
+						window.location.reload();
+					}
+				});
+			}
+		});
+	})
+</script>

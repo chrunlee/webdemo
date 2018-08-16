@@ -3,8 +3,8 @@ var router = express.Router();
 var fs = require('fs');
 
 //读取到内存中
-var data = require('../ym');
-var knowledge = require('../ymzs');
+var data = require('../../json/ym');
+var knowledge = require('../../json/ymzs');
 var pihaoArr = [];
 //循环做一个map
 var map = {};

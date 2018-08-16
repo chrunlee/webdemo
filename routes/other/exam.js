@@ -1,23 +1,28 @@
-var express = require('express');
+/***
+ * 小程序
+ * 劳务员知识点考核相关服务
+ * @author chrunlee
+ ****/
+ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
-var query = require('../lib/sql');
+var query = require('simple-mysql-query');
 /* GET home page. */
 var ItemMap = {};
 router.get('/get', function(req, res, next) {
 	//查询出来保存到服务器，提交后清空
 	var sql = [
 	{
-		sql : 'select * from tigan where ttype=0 order by rand() limit 40',
+		sql : 'select * from wx_tigan where ttype=0 order by rand() limit 40',
 		params : []
 	},{
-		sql : 'select * from tigan where ttype=1 order by rand() limit 40',
+		sql : 'select * from wx_tigan where ttype=1 order by rand() limit 40',
 		params : []
 	},{
-		sql : 'select * from tigan where ttype=2 order by rand() limit 10',
+		sql : 'select * from wx_tigan where ttype=2 order by rand() limit 10',
 		params : []
 	},{
-		sql : 'select * from jiexi order by rand() limit 10'
+		sql : 'select * from wx_jiexi order by rand() limit 10'
 	}
 	];
 	query(sql).then(function(list){
@@ -46,7 +51,7 @@ router.post('/get',function(req,res,next){
 		ttype = parseInt(req.body.ttype,10);
 	//根据不同的题目类型查找数据，主要是选项
 	var sql = {
-		sql : 'select * from tiganitem where tiganid=? order by seq',
+		sql : 'select * from wx_tiganitem where tiganid=? order by seq',
 		params : [id]
 	};
 	if(ttype < 3){//0 1 2(判断题目)
@@ -57,10 +62,10 @@ router.post('/get',function(req,res,next){
 	}else if(ttype == 3){
 		//解析题目
 		var sql = [{
-			sql : 'select * from tigan where jiexiid=? order by id asc',
+			sql : 'select * from wx_tigan where jiexiid=? order by id asc',
 			params : [id]
 		},{
-			sql : 'select * from tiganitem where tiganid in (select id from tigan where jiexiid=? ) order by seq asc',
+			sql : 'select * from wx_tiganitem where tiganid in (select id from tigan where jiexiid=? ) order by seq asc',
 			params : [id]
 		}];
 		query(sql).then(function(list){
@@ -89,7 +94,7 @@ router.post('/getAll',function(req,res,next){
 	var type = req.body.type;
 	//根据类型获取该类型所有的数据，按照顺序
 	var sql = {
-		sql : type == 3 ? 'select * from jiexi order by id asc' : 'select * from tigan where ttype=? order by id asc',
+		sql : type == 3 ? 'select * from wx_jiexi order by id asc' : 'select * from tigan where ttype=? order by id asc',
 		params : type == 3 ? [] :[type]
 	};
 	query(sql).then(function(list){

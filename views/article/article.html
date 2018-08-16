@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>技术系列 - {{site.sitename}}</title>
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<link rel="stylesheet" href="/article/index.css">
+</head>
+<body>
+	{{ include '../tpl/header'}}
+
+	<div class="byy-body">
+		<!-- banner -->
+		<div class="byy-carousel" id="banner">
+			<div carousel-item="">
+				<div class="banner-item white" style="background-image: url(/upload/banner/2.jpg);background-size:100% 600px;">
+					<div class="banner-title">迅哥博客</div>
+					<div class="banner-des">加强自己的专业技能，提升自己的能力，才是立足的根本!</div>
+				</div>
+			</div>
+		</div>
+		<!--文章区域-->
+		<section class="grey-bg">
+			<div class="category">
+				<span class="category-item byy-btn small danger">linux</span>
+				<span class="category-item byy-btn small danger">javascript</span>
+				<span class="category-item byy-btn small danger">css</span>
+				<span class="category-item byy-btn small danger">jquery</span>
+
+			</div>
+			<div class="section-content byy-clear">
+				<article>
+					<a href="/" target="_blank">
+						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
+					</a>
+					<div class="article-title">
+						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
+					</div>
+					<div class="article-info">
+						2017年2月11号 阅读(222) 评论(222) 
+						<span class="zan">
+							<i class="byyicon icon-zan"></i>(2)
+						</span>
+					</div>
+				</article>
+				<article>
+					<a href="/" target="_blank">
+						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
+					</a>
+					<div class="article-title">
+						<a href="/" target="_blank">github 如何开通自己的个人</a>
+					</div>
+					<div class="article-info">
+						2017年2月11号 阅读(222) 评论(222) 
+						<span class="zan">
+							<i class="byyicon icon-zan"></i>(2)
+						</span>
+					</div>
+				</article>
+				<article>
+					<a href="/" target="_blank">
+						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
+					</a>
+					<div class="article-title">
+						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
+					</div>
+					<div class="article-info">
+						2017年2月11号 阅读(222) 评论(222) 
+						<span class="zan">
+							<i class="byyicon icon-zan"></i>(2)
+						</span>
+					</div>
+				</article>
+				<article>
+					<a href="/" target="_blank">
+						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
+					</a>
+					<div class="article-title">
+						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
+					</div>
+					<div class="article-info">
+						2017年2月11号 阅读(222) 评论(222) 
+						<span class="zan">
+							<i class="byyicon icon-zan"></i>(2)
+						</span>
+					</div>
+				</article>
+				<article>
+					<a href="/" target="_blank">
+						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
+					</a>
+					<div class="article-title">
+						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
+					</div>
+					<div class="article-info">
+						2017年2月11号 阅读(222) 评论(222) 
+						<span class="zan">
+							<i class="byyicon icon-zan"></i>(2)
+						</span>
+					</div>
+				</article>
+			</div>
+			<!--分页-->
+			<div class="page text-center">
+				
+			</div>
+		</section>
+		{{ include '../tpl/footer'}}
+	</div>
+</body>
+</html>
+{{ include '../tpl/commonjs.art'}}
+<script type="text/javascript">
+	byy.require(['jquery','slider','page'],function(){
+		byy.slider.render({
+			elem : '#banner',
+			height : '200px',
+			width : '100%',
+			indicator : 'none',
+			interval : 5000
+		});
+
+		byy.page({
+			selector : '.page',
+			total : 100,
+			pagesize : 20,
+			curr : 1,
+			callback : function(p){
+				console.log(p);
+			}
+		});
+	})
+</script>

@@ -1,0 +1,15 @@
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<!--<script type="text/javascript" src="/plugins/tongji.js"></script>-->
+<script type="text/javascript">
+	//顶部选中
+	byy.require('jquery',function(){
+		var href = location.href;
+		if(href.indexOf('article') > -1){
+			$('#topHeader').find('.byy-this').removeClass('byy-this');	
+			$('#article').addClass('byy-this')
+		}else if(href.indexOf('demo') > -1){
+			$('#topHeader').find('.byy-this').removeClass('byy-this');	
+			$('#demo').addClass('byy-this')
+		}
+	});
+</script>

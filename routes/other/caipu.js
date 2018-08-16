@@ -185,7 +185,7 @@ router.all('/get',function(req,res,next){
 				var itemId = item.id;
 				var arr = map[itemId] || [];
 				arr.sort(function(a,b){
-					return a.step - b.step;
+					return parseInt((a.step||0),10) - parseInt((b.step||0),10);
 				})
 				item.steps = arr;
 			});

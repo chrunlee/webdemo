@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>发布文章</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<link rel="stylesheet" href="/center/css/home.css">
+</head>
+<body class="grey-bg frame-body">
+	<div class="base-info byy-form">
+		<div class="byy-form-item">
+			<label for="" class="byy-label">标题:</label>
+			<div class="byy-block fw">
+				<input type="text" name="title" class="byy-form-ipt" autocomplete="off">
+			</div>
+		</div>
+		<div class="byy-form-item">
+			<label for="" class="byy-label">属性:</label>
+			<div class="byy-block fw">
+				<span>
+					<input type="checkbox" class="byy-form-checkbox" byy-skin="switch" checked byy-before="是原创" byy-after="非原创">	
+				</span>
+				<span>
+					<input type="checkbox" class="byy-form-checkbox" byy-skin="switch" checked byy-before="可以评论" byy-after="不能评论">	
+				</span>
+			</div>
+		</div>
+		<div class="byy-form-item">
+			<label for="" class="byy-label">类别:</label>
+			<div class="byy-block fw">
+				<select name="" id="" class="byy-form-select">
+					<option value="linux">linux</option>
+					<option value="javascript">javascript</option>
+				</select>
+			</div>
+		</div>
+		<div class="byy-form-item">
+			<label for="" class="byy-label">英文路径:</label>
+			<div class="byy-block fw">
+				<input type="text" name="enname" autocomplete="off" >
+			</div>
+		</div>
+		<div class="byy-form-item">
+			<label for="" class="byy-label">标签:</label>
+			<div class="byy-block fw">
+				<input type="text" name="tags" autocomplete="off"  style="width:100px;">
+			</div>
+		</div>
+		<div class="byy-form-item">
+			<label for="" class="byy-label">封面:</label>
+			<div class="byy-block fw">
+				<span class="byy-btn small danger">上传封面</span>
+				<div class="banner-show">
+					<img src="" alt="">
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 可隐藏收缩-->
+	<div class="line text-center">
+		<span class="byy-btn mini">全屏书写</span>
+	</div>
+	<!--编辑器-->
+	<div class="editor byy-clear">
+		<!--左侧编辑器-->
+		<div class="left-editor">
+			<div class="tool-list">
+				
+			</div>
+			<div class="editor-content">
+				<textarea name="content">1</textarea>
+			</div>
+		</div>
+		<!--右侧文章预览区域-->
+		<div class="right-preview">
+			
+		</div>
+	</div>
+</body>
+</html>
+{{ include '../../tpl/commonjs.art'}}
+<script type="text/javascript">
+	
+</script>

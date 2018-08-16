@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>文章列表</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<link rel="stylesheet" href="/center/css/home.css">
+</head>
+<body class="grey-bg frame-body">
+	<div class="byy-panel list-panel">
+		<div class="byy-panel-title">
+			<span class="byy-breadcrumb">
+                <a href="/center/home" target="_parent">首页</a>
+                <a><cite>文章信息</cite></a>
+            </span>
+            <span class="byy-btn-group pull-right">
+            	<span class="byy-btn small danger" filter="openAdd"><i class="byyicon icon-plus"></i>去添加文章</span>
+            </span>
+		</div>
+		<div class="byy-panel-content byy-clear">
+			<table class="byy-table">
+				
+			</table>
+			<div class="page">
+				<div class="pagination pull-right"></div>	
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+{{ include '../../tpl/commonjs.art'}}
+<script type="text/javascript">
+	byy.require(['jquery','win','table'],function(){
+
+		byy.bindEvents({
+			openAdd : function(){
+				location.href = '/center/article/add';
+			}
+		});
+		//渲染数据
+		byy.table.render({
+			elem : '.byy-table',
+			method : 'post',
+			url : '/center/article/list',
+			page : true,
+			cols : [[
+				{field : 'id',title : 'ID',width : 50},
+				{field : 'title',title : '标题'},
+				{field : 'ismy',title : '原创'},
+				{field : 'enname',title : '英文路径'},
+				{field : 'readnum',title : '阅读'},
+				{field : 'type',title : '类型'},
+				{field : 'category',title : '目录'},
+				{field : 'tool',tool : true,template : function(){
+					return '';
+				}}
+			]]
+
+		});
+	})
+
+</script>

@@ -1,0 +1,12 @@
+<header class="index-header">
+	<ul class="byy-nav black-bg" id="topHeader">
+		<span class="pull-left logo"><a href="/"><img src="{{site.faviconhref}}" />{{site.sitename}}</a></span>
+		<li id="home" class="byy-nav-item byy-this"><a href="/">首页</a></li>
+		<li id="article" class="byy-nav-item"><a href="/article">技术系列 &nbsp;<span class="byy-badge-dot"></span></a></li>
+		<li id="demo" class="byy-nav-item"><a href="/demo">Demos </a></li>
+		<li class=" pull-right">
+			<input type="text" class="index-search" name="search" autocomplete="off">
+			<i class="byyicon icon-search"></i>
+		</li>
+	</ul>
+</header>

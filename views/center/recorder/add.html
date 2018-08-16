@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>记录美好时光</title>
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<link rel="stylesheet" href="/center/css/home.css">
+</head>
+<body>
+	<div class="add-moment">
+		<div id="upload">添加照片</div>
+		<div class="byy-form">
+			<input type="hidden" name="filePath">
+			<div class="byy-form-item">
+				<label for="" class="byy-label">主题</label>
+				<div class="byy-block">
+					<input type="text" name="title">
+				</div>
+			</div>
+			<div class="byy-form-item">
+				<label for="" class="byy-label">年月日</label>
+				<div class="byy-block">
+					<input type="text" name="year" style="width:100px;">
+					<input type="text" name="month" style="width:100px;">
+					<input type="text" name="day" style="width:100px;">
+				</div>
+			</div>
+			<div class="byy-form-item">
+				<label for="" class="byy-label">描述</label>
+				<div class="byy-block">
+					<textarea name="des" placeholder="填写美好瞬间描述"></textarea>
+				</div>
+			</div>
+			<div class="byy-form-item text-center" id="imageContainer" style="height:200px;">
+				<img src="" alt="" id="showImage" style="max-height:100%;max-width:100%;">
+				<div class="modal">
+					<div class="byy-btn small" style="margin-top:50px;" filter="deleteFile">删除</div>
+				</div>
+			</div>
+			<div class="byy-form-item text-center">
+				<span class="byy-btn" filter="save">保存</span>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript" src="/center/js/recorder/add.js"></script>

@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var sql = require('../lib/sql');
+var sql = require('simple-mysql-query');
 var moment = require('moment');
 /* GET home page. */
 router.post('/name', function(req, res, next) {
@@ -8,7 +8,7 @@ router.post('/name', function(req, res, next) {
 	//检查是否有重名，如果没有则保存
 	var name = req.body.name;
 	var list = {
-		sql : 'select * from speed where name=?',
+		sql : 'select * from demo_speed where name=?',
 		params : [name]
 	};
 	var rs = {success : false,msg : 'sorry ，服务器抽风了..请谅解'};
@@ -23,7 +23,7 @@ router.post('/name', function(req, res, next) {
 		}else{
 			//保存
 			var list2 = {
-				sql : 'insert into speed (name,usetime,createtime) values (?,-1,?)',
+				sql : 'insert into demo_speed (name,usetime,createtime) values (?,-1,?)',
 				params : [name,new Date()]
 			};
 
@@ -46,7 +46,7 @@ router.post('/score',function(req,res,next){
 	var name = req.body.user;
 	var diff = req.body.time;//保存
 	var list = {
-		sql : 'insert into speed (name,usetime,createtime) values (?,?,?)',
+		sql : 'insert into demo_speed (name,usetime,createtime) values (?,?,?)',
 		params : [name,diff,new Date()]
 	};
 	var rs = {
@@ -58,10 +58,10 @@ router.post('/score',function(req,res,next){
 		console.log(rst);
 		var id = rst[0].insertId;
 		var list2 = [{
-			sql : 'select rank from (select id,name,usetime,(@ranknum:=@ranknum+1) as rank from speed,(select (@ranknum :=0) ) b  order by usetime asc) z where z.id = ?',
+			sql : 'select rank from (select id,name,usetime,(@ranknum:=@ranknum+1) as rank from demo_speed,(select (@ranknum :=0) ) b  order by usetime asc) z where z.id = ?',
 			params :[id]
 		},{
-			sql : 'select count(1) as total from speed '
+			sql : 'select count(1) as total from demo_speed '
 			,params : []
 		}
 		];
@@ -87,7 +87,7 @@ router.post('/score',function(req,res,next){
 
 router.get('/rank',function(req,res,next){
 	var list = {
-		sql : 'select id,name,usetime,(@ranknum:=@ranknum+1) as rank,createtime from speed,(select (@ranknum :=0) ) b where usetime > 0 order by usetime asc',
+		sql : 'select id,name,usetime,(@ranknum:=@ranknum+1) as rank,createtime from demo_speed,(select (@ranknum :=0) ) b where usetime > 0 order by usetime asc',
 		params : []
 	};
 	sql(list).then(function(rs){

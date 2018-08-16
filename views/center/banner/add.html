@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>新增 banner </title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<link rel="stylesheet" href="/center/css/home.css">
+</head>
+<body class="grey-bg">
+	<div class="container-fluid">
+		<form action="" class="byy-form">
+			<input type="hidden" name="id" value="{{id}}">
+			<div class="byy-form-item">
+				<label for="" class="byy-label">Banner标题</label>
+				<div class="byy-block fw" >
+					<input type="text" name="title" value="{{title}}" autocomplete="off" placeholder="banner内的标题信息">
+				</div>
+			</div>
+			<div class="byy-form-item">
+				<label for="" class="byy-label">描述</label>
+				<div class="byy-block fw">
+					<textarea name="bannerdes" placeholder="标题下的内容，建议一句话">{{bannerdes}}</textarea>
+				</div>
+			</div>
+			<div class="byy-form-item">
+				<label for="" class="byy-label">风格(黑白)</label>
+				<div class="byy-block fw" >
+					<select name="bannerstyle" id="" class="byy-form-select">
+						<option value="black" {{bannerstyle == 'black' ? 'selected' : ''}}>Black</option>
+						<option value="white" {{bannerstyle == 'white' ? 'selected' : ''}}>White</option>
+					</select>
+				</div>
+			</div>
+			<div class="byy-form-item">
+				<label for="" class="byy-label">banner高度</label>
+				<div class="byy-block fw" >
+					<input type="text" name="bannerheight" value="{{bannerheight}}" placeholder="请输入高度,最好是像素，否则默认300px">
+				</div>
+			</div>
+			<div class="byy-form-item">
+				<label for="" class="byy-label">位置</label>
+				<div class="byy-block fw" >
+					<select name="type" id="" class="byy-form-select">
+						<option value="1" {{type == '1' ? 'selected' : ''}}>首页</option>
+						<option value="2" {{type == '2' ? 'selected' : ''}}>文章页面</option>
+						<option value="3" {{type == '3' ? 'selected' : ''}}>Demo页面</option>
+					</select>
+				</div>
+			</div>
+			<div class="byy-form-item">
+				<label for="" class="byy-label">是否启用</label>
+				<div class="byy-block fw" >
+					<input type="checkbox" {{isenable == '1' ? 'checked' : ''}} name="isenable" class="byy-form-checkbox" byy-skin="switch" byy-before="启用" byy-after="未启用">
+				</div>
+			</div>
+			<div class="byy-form-item">
+				<label for="" class="byy-label">banner图片</label>
+				<div class="byy-block fw" >
+					<div>
+						<span class="byy-btn small danger" id="uploadBanner">上传新的Banner图片</span>
+						<div class="byy-form-info">请尽量确保图片大小尽可能的小的同时还要高清...哈哈</div>
+					</div>
+					<div class="banner-show">
+						<input type="hidden" name="bannerpath" value="{{bannerpath}}">
+						<img src="{{bannerpath}}" alt="">
+					</div>
+				</div>
+			</div>
+			<div class="byy-form-item">
+				<div class="byy-block fw">
+					<span class="byy-btn small" filter="save" style="width:200px;">保存Banner</span>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>
+{{ include '../../tpl/commonjs.art'}}
+<script type="text/javascript">
+	byy.require(['jquery','uploader','win'],function(){
+
+		//初始化uploader
+		byy.uploader().simpleImage({
+			server : '/center/upload',
+			selector : '#uploadBanner',
+			onSuccess : function(file,res){
+				var filePath = res.result.filePath;
+				$('.banner-show img').attr('src',filePath);
+				$('[name="bannerpath"]').val(filePath);
+			}
+		});
+
+		//保存
+		byy.bindEvents({
+			save : function(){
+				var data = byy('.byy-form').getValues();
+				if(!data.title || !data.bannerpath ){
+					byy.win.msg('最好把信息一次补全..不然会忘记的')
+					return;
+				}
+				data.bannerheight = data.bannerheight || '300px';
+				data.isenable = data.isenable === 'on' ? 1 : 0;
+				var ldx = byy.win.load(1);
+				$.ajax({
+					url : '/center/banner/save',
+					type : 'post',
+					data : data,
+					success : function(res){
+						if(res.success){
+							byy.win.msg('保存成功',{shift:'-1'},function(){
+								parent.location.reload();
+							})
+						}else{
+							byy.win.msg('保存失败');
+						}
+					}
+				});
+			}
+		});
+	});
+</script>

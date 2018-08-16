@@ -4,9 +4,9 @@ var express = require('express');
 
 var router = express.Router();
 
-var weixin = require('../lib/weixin');
+var weixin = require('../../lib/weixin');
 
-var domain = require('../wx').domain;
+var domain = require('../../json/wx').domain;
 
 var wx = new weixin();
 

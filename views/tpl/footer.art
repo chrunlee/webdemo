@@ -1,0 +1,25 @@
+<!--底部信息-->
+<section class="black-bg byy-clear footer">
+	<div class="footer-info">
+		<div class="footer-info-title">
+			<img src="{{site.faviconhref}}" alt="">{{site.sitename}}
+		</div>
+		<div class="footer-info-des">
+			{{site.sitedes}}
+		</div>
+	</div>
+	<div class="footer-scan">
+		<img src="{{site.sitescan}}" alt="">
+		<p>扫描二维码关注我们</p>
+	</div>
+	<div class="footer-tool">
+		<span><a href="/article/public.html">免责声明</a></span>
+	</div>
+</section>
+<!--底部信息-->
+<section class="byy-clear cyan-bg text-center footer-public">
+	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37099202000150">
+			<img src="/icons/beian.png" />鲁公网安备 37099202000150号
+		</a>
+		Copyright &copy; 2018 Theme by chrunlee
+</section>

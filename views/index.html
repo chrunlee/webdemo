@@ -2,286 +2,133 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Lab - 前端实验室</title>
-	<meta name="keywords" content="chrunlee,前端,实验室,demo展示,javascript demo,css demo,前端实验室,工具集合">
-	<meta name="content" content="把工作、生活中自己学习、感兴趣的小页面或工具集中在一起，以后再有类型的需求可以直接进行参考，也欢迎大家发邮件把自己想要实现的一些页面或小工具发给我，我会尽力实现的。@mailto:chrunlee@foxmail.com">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+	<title>web技术 - {{site.sitename}}</title>
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
 	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
-	<style>
-		.trs{
-			-webkit-transition: all .3s ease;
-			-o-transition: all .3s ease;
-			transition: all .3s ease;
-		}
-		.block-wrap{
-		}
-		.demo-block{
-			width:20%;
-			margin:2%;
-			min-width:300px;
-			float:left;
-			box-sizing:border-box;border:none;background-color:white;border:1px dashed #ccc;border-radius:10px;
-		}
-		.demo-block:hover{box-shadow:0px 0px 10px 3px rgba(0,0,0,0.3);}
-		.demo-block img{max-width:100%;max-height:200px;display:inline-block;margin:0px auto;}
-		.demo-block p{width:100%;padding:0px 10px;}
-		.demo-block a{cursor:pointer;}
-		.demo-block p.demo-title{font-size:18px;font-weight:bold;color:#555;height:30px;line-height:30px;}
-		.demo-block p.demo-des{font-size:12px;font-weight:normal;color:#999;}
-		.container-fluid{padding:20px;}
-		.demo-block .img-wrap{display:inline-block;width:100%;height:200px;line-height:200px;text-align:center;}
-		.info{font-size:12px;color:#999;}
-		#search{margin-top:10px;width:350px;}
-		/*小屏*/
-		@media screen and (max-width:768px){
-			.demo-block{
-				width:90%;
-				margin:4%;
-			}
-			#search{width:150px;}
-			.info{display:none;}
-
-		}
-	</style>
+	<link rel="stylesheet" href="/article/index.css">
 </head>
-<body class="grey-bg">
-	<header>
-		<ul class="byy-nav byy-nav-nobar black-bg">
-			<li class="byy-nav-item byy-this">
-				<a href="/">Lab —— 我的实验室</a>
-			</li>
-			<span class="pull-right">
-				<input type="text" class="byy-form-input" id="search" placeholder="内容检索,请回车" autofocus>
-				<span class="info">powered by chrunlee / 2017</span>
-			</span>
-		</ul>
-	</header>
-	<div class="search green-c" style="text-align:center;">
-		
-	</div>
-	<div class="container-fluid">
-		<div class="block-wrap byy-clear">
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/js-numbers-change/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/js-numbers-change/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="数字增长">数字增长</p>
-					<p class="demo-des byy-elip" title="让数字在规定的时间内增长">
-						让数字在规定的时间内增长
-					</p>
-				</a>
+<body>
+	{{ include './tpl/header'}}
+	<!--内容区域-->
+	<div class="byy-body">
+		<!-- banner -->
+		<div class="byy-carousel" id="banner">
+			<div carousel-item="">
+				<div class="banner-item white" style="background-image: url(/upload/banner/2.jpg);background-size:100% 600px;">
+					<div class="banner-title">迅哥博客</div>
+					<div class="banner-des">加强自己的专业技能，提升自己的能力，才是立足的根本!</div>
+				</div>
 			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/speed/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/speed/post.jpg" alt=""></span>
-					<p class="demo-title byy-elip" title="来测试下你的手速有多块">测手速</p>
-					<p class="demo-des byy-elip" title="来测试下你的手速有多块">
-						来测试下你的手速有多块
-					</p>
-				</a>
+		</div>
+		<!--文章区域-->
+		<section class="grey-bg">
+			<div class="title">博主推荐</div>
+			<div class="section-content byy-clear">
+				<article>
+					<a href="/" target="_blank">
+						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
+					</a>
+					<div class="article-title">
+						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
+					</div>
+					<div class="article-info">
+						2017年2月11号 阅读(222) 评论(222) 
+						<span class="zan">
+							<i class="byyicon icon-zan"></i>(2)
+						</span>
+					</div>
+				</article>
+				<article>
+					<a href="/" target="_blank">
+						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
+					</a>
+					<div class="article-title">
+						<a href="/" target="_blank">github 如何开通自己的个人</a>
+					</div>
+					<div class="article-info">
+						2017年2月11号 阅读(222) 评论(222) 
+						<span class="zan">
+							<i class="byyicon icon-zan"></i>(2)
+						</span>
+					</div>
+				</article>
+				<article>
+					<a href="/" target="_blank">
+						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
+					</a>
+					<div class="article-title">
+						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
+					</div>
+					<div class="article-info">
+						2017年2月11号 阅读(222) 评论(222) 
+						<span class="zan">
+							<i class="byyicon icon-zan"></i>(2)
+						</span>
+					</div>
+				</article>
+				<article>
+					<a href="/" target="_blank">
+						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
+					</a>
+					<div class="article-title">
+						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
+					</div>
+					<div class="article-info">
+						2017年2月11号 阅读(222) 评论(222) 
+						<span class="zan">
+							<i class="byyicon icon-zan"></i>(2)
+						</span>
+					</div>
+				</article>
+				<article>
+					<a href="/" target="_blank">
+						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
+					</a>
+					<div class="article-title">
+						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
+					</div>
+					<div class="article-info">
+						2017年2月11号 阅读(222) 评论(222) 
+						<span class="zan">
+							<i class="byyicon icon-zan"></i>(2)
+						</span>
+					</div>
+				</article>
 			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/js-caculator/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/js-caculator/post.jpg" alt=""></span>
-					<p class="demo-title byy-elip" title="小工具-模拟实现计算器">小工具-模拟实现计算器</p>
-					<p class="demo-des byy-elip" title="实现一个简单的计算器...简单的">
-						实现一个简单的计算器...简单的
-					</p>
-				</a>
+		</section>
+		<!--demo-->
+		<section class="green-bg2 dark">
+			<div class="title">最新Demo</div>
+			<div class="section-content byy-clear">
+				<article>
+					<a href="/" target="_blank">
+						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
+					</a>
+					<div class="article-title">
+						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
+					</div>
+					<div class="article-info">
+						2017年2月11号 阅读(222) 评论(222) 
+						<span class="zan">
+							<i class="byyicon icon-zan"></i>(2)
+						</span>
+					</div>
+				</article>
 			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/css-notice/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/css-notice/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="css右侧消息展示">css右侧消息展示</p>
-					<p class="demo-des byy-elip" title="css右侧消息展示">
-						css右侧消息展示
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/js-treegrid/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/js-treegrid/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="jquery treegrid扩展">jquery treegrid扩展</p>
-					<p class="demo-des byy-elip" title="以jquery treegrid进行扩展，增加远程数据加载、选中、级联等。">
-						以jquery treegrid进行扩展，增加远程数据加载、选中、级联等。
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/js-scroll/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/js-scroll/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="js实现向下滚动返回顶部">js实现向下滚动返回顶部</p>
-					<p class="demo-des byy-elip" title="js实现页面向下滚动后出现返回顶部按钮，然后点击返回顶部。">
-						js实现页面向下滚动后出现返回顶部按钮，然后点击返回顶部。
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/css-button/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/css-button/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="css实现的漂亮按钮">css实现的漂亮按钮</p>
-					<p class="demo-des byy-elip" title="css实现的漂亮按钮，有不同的背景、尺寸和图标。">
-						css实现的漂亮按钮，有不同的背景、尺寸和图标。
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/css-tab/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/css-tab/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="js实现tab小控件">js实现tab小控件</p>
-					<p class="demo-des byy-elip" title="js实现tab小控件">
-						js实现tab小控件
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/css-arrow/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/css-arrow/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="css3实现下拉箭头">css3实现下拉箭头</p>
-					<p class="demo-des byy-elip" title="css3实现下拉箭头">
-						css3实现下拉箭头效果
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/canvas-2/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/canvas-2/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="canvas 学习，实现时钟效果">canvas 学习，实现时钟效果</p>
-					<p class="demo-des byy-elip" title="canvas 实现时钟效果-学习">
-						canvas 实现时钟效果-学习
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/js-typper/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/js-typper/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="JS 模拟打字效果">JS 模拟打字效果</p>
-					<p class="demo-des byy-elip" title="专业打字员">
-						专业打字员
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/edu-1/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/edu-1/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="博育云-新版数校首页">博育云-新版数校首页</p>
-					<p class="demo-des byy-elip" title="博育云新版数校首页">
-						博育云新版数校首页
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/form-designer/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/form-designer/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="form designer">form designer</p>
-					<p class="demo-des byy-elip" title="仿照钉钉的表单设计器，模仿实现的">
-						仿照钉钉的表单设计器，模仿实现的
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/css3-taiji/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/css3-taiji/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="css3 太极">css3 太极</p>
-					<p class="demo-des byy-elip" title="通过CSS来实现的太极图形">
-						通过CSS来实现的太极图形
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/js-cangku-filter/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/js-cangku-filter/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="物品分类过滤插件">物品分类过滤插件</p>
-					<p class="demo-des byy-elip" title="类似京东对商品的属性进行过滤分类展示">
-						类似京东对商品的属性进行过滤分类展示
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/js-brain/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/js-brain/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="物品分类过滤插件">jquery 脑图实现</p>
-					<p class="demo-des byy-elip" title="类似京东对商品的属性进行过滤分类展示">
-						类似京东对商品的属性进行过滤分类展示
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/css-menu/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/css-menu/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="css 动画菜单">css 动画菜单</p>
-					<p class="demo-des byy-elip" title="css 动画菜单">
-						css 实现的动画菜单
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/js-dropdown/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/js-dropdown/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="js 下拉菜单">js 下拉菜单</p>
-					<p class="demo-des byy-elip" title="简单实现的一个下拉菜单（手风琴）">
-						简单实现的一个下拉菜单（手风琴）
-					</p>
-				</a>
-			</div>
-			<div class="demo-block trs">
-				<a class="demo-link byy-clear" href="/demos/canvas-snow/index.html" target="_blank">
-					<span class="img-wrap"><img src="/demos/canvas-snow/post.png" alt=""></span>
-					<p class="demo-title byy-elip" title="雪花效果">雪花效果</p>
-					<p class="demo-des byy-elip" title="雪花效果插件（可替换为其他的例如红包..）">
-						雪花效果插件（可替换为其他的例如红包..）
-					</p>
-				</a>
-			</div>
-			
-
-		</div>	
+		</section>
+		{{ include './tpl/footer'}}
 	</div>
 </body>
 </html>
-<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+{{ include './tpl/commonjs.art'}}
 <script type="text/javascript">
-	byy.require(['jquery','win'],function(){
-		$('#search').on('keyup',function(ev){
-			if(ev.keyCode === 13){
-				var v = $('#search').val();
-				$('#search').val('');
-				$('#search').focus();
-				if($.trim(v) == ''){
-					showAll();
-					return;
-				}
-				v= v.split(' ');
-				hideSome(v);			
-			}
+	byy.require(['jquery','slider'],function(){
+		byy.slider.render({
+			elem : '#banner',
+			height : '200px',
+			width : '100%',
+			indicator : 'none',
+			interval : 5000
 		});
-		function showAll (){
-			$('.search').html('');
-			$('.trs').removeClass('hide');
-		}
-		function hideSome(arr){
-			$('.search').html('检索关键字:'+arr.join(','));
-			$('.trs').each(function(){
-				var $trs = $(this);
-				var str = $trs.find('.demo-title').attr('title') + $trs.find('.demo-des').attr('title');
-				var hasContent = false;
-				arr.forEach(function( item ){
-					item = $.trim(item);
-					if(item != '' && str.indexOf(item) > -1){
-						hasContent = true;
-					}
-				});
-				if(hasContent){
-					$trs.removeClass('hide');
-				}else{
-					$trs.addClass('hide');
-				}
-				
-			});
-			//如果最后都没有，给一个提示
-			if($('.trs:not(.hide)').length == 0){
-				byy.win.msg('没有检索到任何内容');
-			}
-		}
-	});
+	})
 </script>
-<script type="text/javascript" src="/plugins/tongji.js"></script>
