@@ -2,118 +2,48 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>web技术 - {{site.sitename}}</title>
+	<title>{{site.sitename}}</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta http-equiv="Cache-Control" content="no-siteapp">
 	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
 	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
 	<link rel="stylesheet" href="/article/index.css">
 </head>
 <body>
-	{{ include './tpl/header'}}
+	{{ include './tpl/header.art'}}
 	<!--内容区域-->
 	<div class="byy-body">
 		<!-- banner -->
 		<div class="byy-carousel" id="banner">
 			<div carousel-item="">
-				<div class="banner-item white" style="background-image: url(/upload/banner/2.jpg);background-size:100% 600px;">
-					<div class="banner-title">迅哥博客</div>
-					<div class="banner-des">加强自己的专业技能，提升自己的能力，才是立足的根本!</div>
+				{{each banners value i}}
+				<div class="banner-item {{value.bannerstyle}}" style="background-image: url({{value.bannerpath}});background-size:100% {{value.bannerheight}};">
+					<div class="banner-title">{{value.title}}</div>
+					<div class="banner-des">{{value.bannerdes}}</div>
 				</div>
+				{{ /each }}
 			</div>
 		</div>
 		<!--文章区域-->
 		<section class="grey-bg">
 			<div class="title">博主推荐</div>
 			<div class="section-content byy-clear">
+				{{each articles value i}}
 				<article>
-					<a href="/" target="_blank">
-						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
+					<a href="{{value.link}}" target="_self">
+						<div class="post" style="background-image: url({{value.postpath}})"></div>
 					</a>
 					<div class="article-title">
-						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
+						<a href="{{value.link}}" target="_self">{{value.title}}</a>
 					</div>
 					<div class="article-info">
-						2017年2月11号 阅读(222) 评论(222) 
-						<span class="zan">
-							<i class="byyicon icon-zan"></i>(2)
+						{{value.ctime}} 阅读({{value.readnum}})
+						<span class="zan pull-right" filter="addZan" data-id="{{value.id}}">
+							<i class="byyicon icon-star-on"></i>({{value.likenum}})
 						</span>
 					</div>
 				</article>
-				<article>
-					<a href="/" target="_blank">
-						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
-					</a>
-					<div class="article-title">
-						<a href="/" target="_blank">github 如何开通自己的个人</a>
-					</div>
-					<div class="article-info">
-						2017年2月11号 阅读(222) 评论(222) 
-						<span class="zan">
-							<i class="byyicon icon-zan"></i>(2)
-						</span>
-					</div>
-				</article>
-				<article>
-					<a href="/" target="_blank">
-						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
-					</a>
-					<div class="article-title">
-						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
-					</div>
-					<div class="article-info">
-						2017年2月11号 阅读(222) 评论(222) 
-						<span class="zan">
-							<i class="byyicon icon-zan"></i>(2)
-						</span>
-					</div>
-				</article>
-				<article>
-					<a href="/" target="_blank">
-						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
-					</a>
-					<div class="article-title">
-						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
-					</div>
-					<div class="article-info">
-						2017年2月11号 阅读(222) 评论(222) 
-						<span class="zan">
-							<i class="byyicon icon-zan"></i>(2)
-						</span>
-					</div>
-				</article>
-				<article>
-					<a href="/" target="_blank">
-						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
-					</a>
-					<div class="article-title">
-						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
-					</div>
-					<div class="article-info">
-						2017年2月11号 阅读(222) 评论(222) 
-						<span class="zan">
-							<i class="byyicon icon-zan"></i>(2)
-						</span>
-					</div>
-				</article>
-			</div>
-		</section>
-		<!--demo-->
-		<section class="green-bg2 dark">
-			<div class="title">最新Demo</div>
-			<div class="section-content byy-clear">
-				<article>
-					<a href="/" target="_blank">
-						<div class="post" style="background-image: url(/upload/banner/2.jpg)"></div>
-					</a>
-					<div class="article-title">
-						<a href="/" target="_blank">github 如何开通自己的个人博客github 如何开通自己的个人博客</a>
-					</div>
-					<div class="article-info">
-						2017年2月11号 阅读(222) 评论(222) 
-						<span class="zan">
-							<i class="byyicon icon-zan"></i>(2)
-						</span>
-					</div>
-				</article>
+				{{ /each }}
 			</div>
 		</section>
 		{{ include './tpl/footer'}}
@@ -122,7 +52,7 @@
 </html>
 {{ include './tpl/commonjs.art'}}
 <script type="text/javascript">
-	byy.require(['jquery','slider'],function(){
+	byy.require(['jquery','slider','win'],function(){
 		byy.slider.render({
 			elem : '#banner',
 			height : '200px',
@@ -130,5 +60,51 @@
 			indicator : 'none',
 			interval : 5000
 		});
+
+		byy.bindEvents({
+			addZan : function(data){
+				var id = data.id;
+				var $zan = $(this);
+				if($zan.hasClass('has')){
+					return;
+				}
+				$.ajax({
+					url : '/article/zan',
+					type : 'post',
+					data : {id : id},
+					success : function(res){
+						if(res.success){
+							byy.win.msg('您的点赞是我最大的动力.感谢~~');
+							$zan.addClass('has');
+							//更新数据
+							var arr = storage('zan').result || {};
+							arr[id] = true;
+							storage('zan',arr);
+						}else{
+							$zan.addClass('has');//假赞
+						}
+					}
+				});
+			}
+		});
+		//检查是否已经点赞
+		function checkZan (){
+			var zan = storage('zan'),
+				arr = zan.result;
+			$('.zan').each(function(){
+				var id = $(this).data('id');
+				var has = false;
+				for(var item in arr){
+					if(item == id){
+						has = true;
+					}
+				}
+				if(has){
+					$(this).addClass('has');
+				}
+			})
+		}
+
+		checkZan();//初始化检查
 	})
 </script>

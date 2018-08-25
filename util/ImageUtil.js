@@ -24,6 +24,7 @@ var ImageUtil = function(userId,file){
 		      		reject('文件不是图片');
 	      		}
 			}).catch(function(err){
+				console.log(err);
 				reject('文件有损坏');
 			})
 		}else{

@@ -56,7 +56,19 @@ module.exports = function( app ){
 	//文章列表
 	app.use('/article',require('../routes/article/list'));
 	
+	//demo 系列
+	app.use('/demo',function(req,res,next){
+		res.render('demos/index',{
+			site : this.mysite
+		});
+	})
 
+	//关于
+	app.use('/about',function(req,res,next){
+		res.render('about',{
+			site : this.mysite
+		});
+	})
 	//首页
 	app.use('/',require('../routes/home/home'));
 

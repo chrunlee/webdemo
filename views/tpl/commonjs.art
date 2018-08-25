@@ -10,6 +10,24 @@
 		}else if(href.indexOf('demo') > -1){
 			$('#topHeader').find('.byy-this').removeClass('byy-this');	
 			$('#demo').addClass('byy-this')
+		}else if(href.indexOf('about')>-1){
+			$('#topHeader').find('.byy-this').removeClass('byy-this');	
+			$('#about').addClass('byy-this')
 		}
 	});
+
+	function storage(name,data){
+		if(window.localStorage){
+			if(data){
+				var str = byy.stringfy(data);
+				window.localStorage.setItem(name,str);
+			}else{
+				var str = window.localStorage.getItem(name);
+				var obj = byy.json(str);
+				return {result : obj};
+			}
+		}
+		return null;
+	}
+
 </script>

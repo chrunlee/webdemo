@@ -1,5 +1,5 @@
 /**首页样式*/
-
+@font:"微软雅黑";
 html,body{
 	margin:0px;
 	padding: 0px;
@@ -7,6 +7,9 @@ html,body{
 .index-header{
 	.byy-nav{
 		/* box-shadow:0px 0px 12px 5px rgba(0,0,0,0.6); */
+	}
+	.byy-nav-item>a{
+		padding:0px 40px;
 	}
 	.logo{
 		img{
@@ -17,6 +20,7 @@ html,body{
 		a{
 			color:inherit;
 		}
+		letter-spacing:5px;
 	}
 	.index-search{
 		height:35px;
@@ -51,14 +55,14 @@ html,body{
 		color:#f2f2f2;
 	}
 	.banner-title{
-		font-size:2em;
+		font-size:1.6em;
 		text-align:center;
 		margin-top:50px;
 		color:inherit;
 	}
 	.banner-des{
 		margin-top:20px;
-		font-size:1.5em;
+		font-size:1.2em;
 		text-align:center;
 		color:inherit;
 	}
@@ -69,8 +73,7 @@ html,body{
 }
 section{
 	position:relative;
-	top:-2px;
-	margin:-2px;
+	top:0px;
 	box-sizing:border-box;
 	a{color:inherit;}
 	a:hover{
@@ -103,6 +106,7 @@ section{
 				background-position: center center;
 				border-radius:10px;
 				box-shadow:0px 0px 10px 1px rgba(0,0,0,0.3);
+				background-repeat:no-repeat;
 			}
 			.article-title{
 				a{color:inherit;}
@@ -119,6 +123,18 @@ section{
 				font-size:0.8em;
 				margin-top:1em;
 				bottom:10px;
+				width:90%;
+				.zan{
+					cursor:pointer;
+					&:hover{
+						color:#999;
+					}
+					color:#aaa;
+					i{font-size:14px;}
+				}
+				.zan.has{
+					color:#25ca92;
+				}
 			}
 		}
 	}
@@ -143,8 +159,14 @@ section.dark{
 	}
 }
 /**底部信息**/
+.byy-body.fixed .footer{
+	position:fixed;
+	top:auto;
+	bottom:0px;
+	width:100%;
+}
 .footer{
-	height:180px;
+	height:250px;
 }
 .footer-info{
 	width:20%;
@@ -158,6 +180,8 @@ section.dark{
 	}
 	.footer-info-des{
 		color:#888484;
+		padding-right:5em;
+		margin-top:2em;
 		font-size:0.5em;
 	}
 }
@@ -165,7 +189,8 @@ section.dark{
 	width:20%;
 	float:left;
 	text-align:center;
-	border-left:1px solid #888484;
+	height:200px;
+	/* border-left:1px solid #888484; */
 	img{
 		width:100px;
 		height:100px;
@@ -177,6 +202,12 @@ section.dark{
 	}
 }
 .footer-tool{
+	width:20%;
+	float:left;
+	padding:1em;
+	height:200px;
+	/* border-right:1px solid #888484; */
+	box-sizing:border-box;
 	>span{
 		margin-right:30px;
 		color:#ccc;
@@ -192,12 +223,27 @@ section.dark{
 		margin-right:30px;
 	}
 }
+.footer-copy{
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	width:100%;
+	display:block;
+	font-size:12px;
+	text-align:center;
+	height:40px;
+	line-height:40px;
+	color:#999;
+}
 
 
 
 /**文章列表页面*/
 .category{
 	padding:0px 2%;
+	.category-item.selected{
+		background-color:#25ca92;
+	}
 }
 
 

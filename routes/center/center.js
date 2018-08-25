@@ -8,22 +8,14 @@ var router = express.Router();
 
 var query = require('simple-mysql-query');
 
+var ImageUtil = require('../../util/ImageUtil');
+
+var moment = require('moment');
+
+var fs = require('fs');
 //测试
 router.use(function(req,res,next){
-	// req.session.user = { 
-	// 	id: 1,
-	//      username: '迅哥哥',
-	//      avatar: null,
-	//      useraccount: 'chrunlee',
-	//      userpwd: '0b8d3104f46ce1ce884d3c494fac1b64',
-	//      mobile: '',
-	//      email: null,
-	//      intro: null,
-	//      role: '1' 
- // 	};
- 	console.log('in center')
 	if(req.session.user){
-
 		next();
 	}else{
 		res.redirect('/');
@@ -80,7 +72,6 @@ router.get('/banner/add',function(req,res,next){
 			sql : 'select * from user_banner where id=?',params : [id]
 		}).then(function(rs){
 			obj = rs[0][0] || {};
-			console.log(obj);
 			res.render('center/banner/add',obj);
 		}).catch(function(){
 			res.render('center/banner/add',obj);
@@ -171,6 +162,17 @@ router.post('/category/save',function(req,res,next){
 	}
 })
 
+//post 获得目录信息
+router.post('/category/list',function(req,res,next){
+	query({
+		sql : 'select * from user_category',params : []
+	}).then(function(rs){
+		var category = rs[0];
+		res.json(category);
+	}).catch(function(){
+		res.json([])
+	});
+})
 
 
 /***
@@ -187,13 +189,161 @@ router.get('/article',function(req,res,next){
 })
 //文章列表post数据
 router.post('/article/list',function(req,res,next){
-	res.json({
+	var data = req.body;
+	var page = parseInt(data.page,10);
+	var rows = parseInt(data.rows,10);
+	query({
+		sql : 'select * from user_article order by ctime desc limit ?,?',params : [rows * (page-1),rows]
+	}).then(function(rs){
+		res.json({
+			success : true,
+			rows : rs[0]
+		});
+	}).catch(function(){
+		res.json({
 		success : true,
 		rows : []
 	});
+	})
+
+	
 })
 //跳转到文章发布页面
 router.get('/article/add',function(req,res,next){
-	res.render('center/article/add');
+	//获得category
+	var id = req.query.id;
+	if(id){
+		query([
+			{sql : 'select * from user_article where id=?',params : [id]},
+			{sql : 'select * from user_category',params : []}
+		]).then(function(rs){
+			var article = rs[0][0],
+				category = rs[1];
+			article.tags = (article.tags || '').split(',');
+			article.tags = article.tags.filter(function(v){
+				return v != '';
+			});
+			res.render('center/article/add',{
+				article : article,
+				category : category
+			});	
+		}).catch(function(){
+			res.render('center/article/add',{
+				category : [],article : {}
+			});
+		})
+	}else{
+		query({
+			sql : 'select * from user_category',params : []
+		}).then(function(rs){
+			var rst = rs[0];
+			res.render('center/article/add',{
+				category : rst,
+				article : {}
+			});	
+		}).catch(function(){
+			res.render('center/article/add');
+		})
+	}
+	
+})
+//保存文章基本信息
+router.post('/article/save',function(req,res,next){
+	var data = req.body;
+	var sql = data.id ? {
+		sql : 'update user_article set title=?,ismy=?,enname=?,postpath=?,zhaiyao=?,cancomment=?,type=?,category=?,ispublish=?,tags=?,link=? where id=?',
+		params : [data.title,data.ismy,data.enname,data.postpath,data.zhaiyao,data.cancomment,data.type,data.category,data.ispublish,data.tags,data.link,data.id]
+	} : {
+		sql : 'insert into user_article (title,ismy,enname,postpath,zhaiyao,cancomment,type,category,ispublish,tags,link) values (?,?,?,?,?,?,?,?,?,?,?)',
+		params : [data.title,data.ismy,data.enname,data.postpath,data.zhaiyao,data.cancomment,data.type,data.category,data.ispublish,data.tags,data.link]
+	};
+	query(sql)
+	.then(function(rs){
+		var rst = rs[0];
+		res.json({
+			id : data.id || rst.insertId,
+			success : true
+		});
+	}).catch(function(){
+		res.json({success : false});
+	})
+})
+//保存更新文章的主体信息
+router.post('/article/update',function(req,res,next){
+	var data = req.body;
+	if(data.id){
+		query({
+			sql : 'update user_article set content=? where id=? ',params : [data.content,data.id]
+		}).then(function(rs){
+			var rst = rs[0];
+			res.json({success : true})
+		})
+	}else{
+		res.json({success : false})
+	}
+})
+//粘贴图片上传
+router.post('/article/paste',function(req,res,next){
+	var imgData = req.body.imgData;
+	var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
+    var dataBuffer = new Buffer(base64Data, 'base64');
+    fs.writeFile(__dirname+'/../../public/upload/tmp/temp.png',dataBuffer,function(ee){
+    	ImageUtil(req.session.user.id,{
+	    	filePath : '/public/upload/tmp/temp.png',
+	    	name : 'temp.png'
+	    }).then(function(rs){
+	    	res.end(rs);
+	    }).catch(function(err){
+	    	res.end('');
+	    })
+    })
+})
+
+//发布文章
+router.post('/article/publish',function(req,res,next){
+	var id = req.body.id;
+	if(id){
+		query({
+			sql : 'update user_article set ispublish=1,ctime=? where id=?',params : [moment(new Date()).format('YYYY-MM-DD HH:mm'),id]
+		}).then(function(rs){
+			res.json({success : true})
+		}).catch(function(){
+			res.json({success : false})
+		})
+	}else{
+		res.json({success : false})
+	}
+})
+
+//取消发布文章
+router.post('/article/cancel',function(req,res,next){
+	var id = req.body.id;
+	if(id){
+		query({
+			sql : 'update user_article set ispublish=0 where id=?',params : [id]
+		}).then(function(rs){
+			res.json({success : true})
+		}).catch(function(){
+			res.json({success : false})
+		})
+	}else{
+		res.json({success : false})
+	}
+})
+
+//删除文章
+router.post('/article/delete',function(req,res,next){
+	var id = req.body.id;
+	if(id){
+		query({
+			sql : 'delete from user_article where id=?',params : [id]
+		}).then(function(rs){
+			res.json({success : true})
+		}).catch(function(){
+			res.json({success : false})
+		})
+	}else{
+		res.json({success : false})
+	}
 })
 module.exports = router;

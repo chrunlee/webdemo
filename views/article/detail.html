@@ -2,12 +2,117 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>文章详情 - {{site.sitename}}</title>
+	<title>{{article.title}} | {{site.sitename}}</title>
 	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta http-equiv="Cache-Control" content="no-siteapp">
+	<meta http-equiv="Cache-Control" content="no-transform">
+	<meta name="applicable-device" content="pc,mobile">
+	<meta name="MobileOptimized" content="width">
+	<meta name="HandheldFriendly" content="true">
+	<meta name="description" content="{{article.zhaiyao}}">
 	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
 	<link rel="stylesheet" href="/article/index.css">
+	<link rel="stylesheet" href="/article/article.css">
+	<link rel="stylesheet" href="/article/detail.css">
 </head>
-<body>
-	文章详情
+<body class="grey-bg fixed">
+	{{ include '../tpl/header.art'}}
+	<div class="detail-wrap">
+		<input type="hidden" name="id" value="{{article.id}}">
+		<!-- 文章标题 -->
+		<h1>{{article.title}}</h1>
+		<!--文章作者信息及阅读数量等-->
+		<div class="author">
+			<img src="{{site.avatar}}" alt="">
+			<p class="name">{{article.ismy == 0 ? '来自网络' : site.authorname}}</p>
+			<p class="info">{{article.ctime}}  阅读 {{article.readnum}}   喜欢 {{article.likenum}}</p>
+		</div>
+		<!-- 文章内容-->
+		<div class="article-detail">
+			{{@article.html}}
+		</div>
+		<hr>
+		<!--赞赏-->
+		<div class="shang">
+			<p>您的赞赏是我的动力圆圈</p>
+			<div class="byy-btn" filter="shang">赞赏支持</div>
+			<div class="like" filter="addZan" data-id="{{article.id}}">
+				<div class="btn like-group">
+					<div class="btn-like">
+						<a>喜欢</a>
+					</div>
+					<div class="modal-wrap">
+						<a>{{article.likenum}}</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--分享-->
+
+		<!--评论控制-->
+		<div class="comment">
+			<textarea name="comment" placeholder="写下你的评论.."></textarea>
+			<div class="comment-control byy-clear hide">
+				<div class="pull-left">
+					<div class="byy-form-info">*您的email只用来给您发提醒消息，不会做其他用途!</div>
+				</div>
+				<div class="pull-right">
+					<span>
+						<span class="pull-left red-star">*</span><input type="text" class="byy-form-input" name="name" placeholder="您的名字">
+					</span>
+					<span>
+						<input type="text" class="byy-form-input" name="email" placeholder="您的email">
+					</span>
+					<span class="byy-btn pull-right" filter="saveComment">提交评论</span>
+				</div>
+			</div>
+		</div>
+		<!--评论展示-->
+		<div class="comment-show">
+			<h6>评论信息<span class="byy-form-info">(请文明评论)</span></h6>
+			<div class="comment-wrap">
+				<!-- 有点复杂-->
+				<div class="empty-comment">
+					暂无评论，快来快来写想法...
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="cyan-bg">
+		<!--推荐阅读-->	
+		<div class="detail-wrap recommand">
+			<div class="title">
+				<h6>推荐</h6>	
+			</div>
+			<div class="recommand-list">
+				{{if links.length ==0}}
+				<div class="empty-comment">
+					暂无推荐....
+				</div>
+				{{/if}}
+				{{each links value i}}
+				<div class="command-article">
+					<a href="{{value.link}}" style="background-image:url({{value.postpath}});"></a>
+					<div class="title">
+						<a href="{{value.link}}">{{value.title}}</a>
+					</div>
+					<div class="des">
+						{{value.zhaiyao}}
+					</div>
+				</div>
+				{{ /each }}
+			</div>
+		</div>
+	</div>
+	<!--赞赏-->
+	<div class="zanshang-pic" style="display:none;padding-left:7px;">
+		<img src="/weixin.jpg" alt="全靠各位土豪的打赏了.." style="width:200px;height:200px;margin-right:20px;">
+		<img src="/zhifubao.jpg" alt="全靠各位土豪的打赏了.." style="width:200px;height:200px;">
+	</div>
+	{{ include '../tpl/footer'}}
 </body>
 </html>
+{{ include '../tpl/commonjs.art'}}
+<script type="text/javascript" src="/plugins/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/article/detail.js"></script>
