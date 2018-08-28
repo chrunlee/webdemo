@@ -54,7 +54,7 @@
 			</div>
 		</div>
 		<!--分享-->
-
+		{{if article.cancomment == 1}}
 		<!--评论控制-->
 		<div class="comment">
 			<textarea name="comment" placeholder="写下你的评论.."></textarea>
@@ -83,6 +83,7 @@
 				</div>
 			</div>
 		</div>
+		{{ /if }}
 	</div>
 	<div class="cyan-bg">
 		<!--推荐阅读-->	
