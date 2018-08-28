@@ -1,8 +1,9 @@
 /*统计*/
+
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?b407b82d758b8bb0dc052d7412c97c4e";
+  hm.src = "https://hm.baidu.com/hm.js?6989c14fa2c7041996bde7f67269e2c0";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
