@@ -46,7 +46,7 @@ app.use(function(req, res, next) {
   console.log(req.path);
   var err = new Error('Not Found');
   err.status = 404;
-  res.redirect('error/404');
+  res.redirect('/error/404');
 });
 
 module.exports = app;
