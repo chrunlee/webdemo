@@ -192,12 +192,15 @@ router.post('/article/list',function(req,res,next){
 	var data = req.body;
 	var page = parseInt(data.page,10);
 	var rows = parseInt(data.rows,10);
-	query({
-		sql : 'select * from user_article order by ctime desc limit ?,?',params : [rows * (page-1),rows]
-	}).then(function(rs){
+	query([
+		{sql : 'select * from user_article order by ctime desc limit ?,?',params : [rows * (page-1),rows]},
+		{sql : 'select count(1) as total from user_article',params : []}
+	]).then(function(rs){
+		var rst1 = rs[0],rst2 = rs[1];
 		res.json({
 			success : true,
-			rows : rs[0]
+			rows : rst1,
+			total : rst2[0].total
 		});
 	}).catch(function(){
 		res.json({
