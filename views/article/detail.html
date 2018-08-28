@@ -26,7 +26,12 @@
 		<div class="author">
 			<img src="{{site.avatar}}" alt="">
 			<p class="name">{{article.ismy == 0 ? '来自网络' : site.authorname}}</p>
-			<p class="info">{{article.ctime}}  阅读 {{article.readnum}}   喜欢 {{article.likenum}}</p>
+			<p class="info">{{article.ctime}}  阅读 {{article.readnum}}   喜欢 {{article.likenum}}
+				{{each article.tags value i}}
+				<span class="tags">{{value}}</span>
+				{{/each}}
+			</p>
+
 		</div>
 		<!-- 文章内容-->
 		<div class="article-detail">

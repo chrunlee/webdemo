@@ -346,4 +346,8 @@ router.post('/article/delete',function(req,res,next){
 		res.json({success : false})
 	}
 })
+
+router.get('*',function(req,res,next){
+	res.redirect('/error/404');
+})
 module.exports = router;

@@ -11,7 +11,6 @@ var isFormdata = function(req){
 
 
 var upload = function(fileName,folderPath){
-	console.log(fileName);
 	//创建目录
 	var newfolderpath = path.join(__dirname,'../'+folderPath);
 	mkdirsp(newfolderpath);

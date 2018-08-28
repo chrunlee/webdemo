@@ -68,14 +68,14 @@ router.get('/',function(req,res,next){
 			site : this.mysite
 		});
 	}).catch(function(err){
-		res.render('500');
+		res.redirect('/error/500');
 	})
 	
 })
 
 //文章详情页面
 router.get('/:id.html',function(req,res,next){
-	console.log(req.params.id);
+	console.log('进入文章请求');
 	var enname = req.params.id;
 	//查询文章本身的信息，作者的信息，关联的文章，评论
 	query([{
@@ -91,18 +91,17 @@ router.get('/:id.html',function(req,res,next){
 			//后台渲染markdown内容
 			var content = article.content;
 			article.html = marked(content);
+			article.tags = article.tags ? article.tags.split(',') : [];
 			res.render('article/detail',{
 				article : article,
 				site : this.mysite,
 				links : rst2 || []
 			});
 		}else{
-			res.render('404');
+			res.redirect('/error/404');
 		}
 	}).catch(function(){
-		res.render('404',{
-			site : this.mysite
-		});
+		res.redirect('/error/404');
 	})
 })
 
@@ -174,5 +173,8 @@ router.post('/read',function(req,res,next){
 		res.json({success:true});
 	}
 })
-
+//404
+router.get('*',function(req,res,next){
+	res.redirect('/error/404');
+})
 module.exports = router;

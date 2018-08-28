@@ -72,6 +72,7 @@ module.exports = function( app ){
 	//首页
 	app.use('/',require('../routes/home/home'));
 
-
+	//错误
+	app.use('/error',require('../routes/home/error'));
 
 }

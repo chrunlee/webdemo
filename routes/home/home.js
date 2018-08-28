@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
 			site : this.mysite
 		});
 	}).catch(function(){
-		res.render('error/500')
+		res.redirect('error/500')
 	})
 });
 
