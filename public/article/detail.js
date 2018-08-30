@@ -120,8 +120,8 @@ var Article = {
 				$block.find('.comment-child').append($sub);
 			}
 			//更新
-			$block.find('[name="name"]').val(Article.user.result.name);
-			$block.find('[name="email"]').val(Article.user.result.email);
+			$block.find('[name="name"]').val(Article.user.name);
+			$block.find('[name="email"]').val(Article.user.email);
 			//更新@ 数据
 			$block.find('[filter="saveComment"]').data('toid',id);
 			$block.find('[filter="saveComment"]').data('toname',name);
@@ -244,8 +244,8 @@ var Article = {
 	bindEvents : function(){
 		//事件绑定
 		$('[name="comment"]').on('focus',function(){
-			$(this).parent().find('[name="name"]').val(Article.user.result.name||'');
-			$(this).parent().find('[name="email"]').val(Article.user.result.email||'');
+			$(this).parent().find('[name="name"]').val(Article.user.name||'');
+			$(this).parent().find('[name="email"]').val(Article.user.email||'');
 			$(this).next().removeClass('hide');
 		});
 	},
@@ -258,7 +258,7 @@ var Article = {
 		Article.tool.checkImg();
 		Article.tool.checkZan();
 		//获取浏览器用户信息
-		Article.user  = storage('user');
+		Article.user  = storage('user').result || {};
 		//加载评论
 		Article.loadComment();
 		Article.addRead();
