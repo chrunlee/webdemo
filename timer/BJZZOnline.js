@@ -14,6 +14,8 @@ function retry (flag){
 	},flag ? 10 * 60 * 1000 : 5 * 1000);
 }
 function sms(){
+	console.log('短信发送');
+	return ;
 	superagent.post('localhost:2500/sms')
 	.send({
 		phone :pne.join(''),
@@ -29,6 +31,7 @@ function sms(){
 	})
 }
 function checkOnline(){
+	console.log('开始检查是否在线')
 	count++;//累积次数
 	if(count >= 4){
 		//短信发送
