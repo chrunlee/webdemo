@@ -38,18 +38,22 @@ function checkOnline(){
 	}
 	superagent.get(host).end(function(err,res){
 		if(err){
+			console.log(err);
 			retry(false);
 		}else{
 			if(res.text){
 				var $ = cheerio.load(res.text);
 				var title = $('title').text();
 				if(title == '北京市正泽学校'){
+					console.log('正常在线')
 					count = 0;//清空
 					retry(true)
 				}else{
+					console.log(title);
 					retry(false);
 				}
 			}else{
+				console.log('没有内容')
 				retry(false);
 			}
 		}
