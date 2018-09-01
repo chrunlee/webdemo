@@ -87,7 +87,6 @@ var Article = {
 				return ;
 			}
 			//继续点击喜欢
-
 			$.ajax({
 				url : '/article/zan',
 				type : 'post',
@@ -96,6 +95,8 @@ var Article = {
 					if(res.success){
 						byy.win.msg('您的点赞是我最大的动力.感谢~~');
 						$zan.addClass('addzan');
+						var $num = $zan.find('.modal-wrap>a');
+						$num.html(parseInt($num.text(),10)+1);
 						//更新数据
 						var arr = storage('zan').result || {};
 						arr[Article.id] = true;
@@ -244,8 +245,14 @@ var Article = {
 	bindEvents : function(){
 		//事件绑定
 		$('[name="comment"]').on('focus',function(){
-			$(this).parent().find('[name="name"]').val(Article.user.name||'');
-			$(this).parent().find('[name="email"]').val(Article.user.email||'');
+			var $name = $(this).parent().find('[name="name"]'),
+				$email = $(this).parent().find('[name="email"]');
+			if($name.val().trim() == ''){
+				$name.val(Article.user.name || '');
+			}
+			if($email.val().trim() == ''){
+				$email.val(Article.user.email || '');
+			}
 			$(this).next().removeClass('hide');
 		});
 	},

@@ -1,27 +1,33 @@
 <!--底部信息-->
 <section class="black-bg byy-clear footer">
-	<div class="footer-info">
-		<div class="footer-info-title">
-			<img src="{{site.faviconhref}}" alt="">{{site.sitename}}
+	<div class="footer-block">
+		<div class="footer-block-title">
+			<img src="{{site.faviconhref}}" alt=""> &nbsp; {{site.sitename}}
 		</div>
-		<div class="footer-info-des">
+		<div class="footer-block-content">
 			{{site.sitedes}}
 		</div>
 	</div>
-	<div class="footer-scan">
-		<img src="{{site.sitescan}}" alt="">
-		<p>扫描二维码关注我们</p>
+	<div class="footer-block">
+		<div class="footer-block-title">
+			联系我
+		</div>
+		<div class="footer-block-content">
+			<p>QQ : 735394843</p>
+			<p>Email : chrunlee@foxmail.com</p>
+			<p>Github : <a href="https://github.com/chrunlee" target="_blank">https://github.com/chrunlee</a></p>
+		</div>
 	</div>
-	<div class="footer-tool">
+	<div class="footer-block">
+		<div class="footer-block-title">
+			友情链接
+		</div>
+		<div class="footer-block-content">
+			<span class="link-block"><a href="http://www.byyui.com" target="_blank">BYYUI框架</a></span>
+		</div>
+	</div>
+	<p class="footer-copy">Copyright &copy; 2018 Theme by chrunlee
 		<span><a href="/article/public.html">免责声明</a></span>
 		<span><a href="/about">关于</a></span>
-	</div>
-	<p class="footer-copy">Copyright &copy; 2018 Theme by chrunlee</p>
+	</p>
 </section>
-<!--底部信息
-<section class="byy-clear cyan-bg text-center footer-public">
-	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=37099202000150">
-			<img src="/icons/beian.png" />鲁公网安备 37099202000150号
-		</a>
-		Copyright &copy; 2018 Theme by chrunlee
-</section>-->

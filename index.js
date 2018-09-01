@@ -34,8 +34,7 @@ app.use(session({
 }));
 
 app.use(compression());//gzip压缩
-var clear = require('./util/ClearUpload');//附件清理
-clear.start();
+require('./timer/main')();//定时任务
 
 //全局路由控制
 var routes = require('./routes/route');
