@@ -8,5 +8,5 @@ module.exports = function(){
 
 
 	//每10分钟检查正泽产品是否在线
-	require('./BJZZOnline')();
+	// require('./BJZZOnline')();
 }
