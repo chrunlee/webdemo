@@ -19,6 +19,7 @@
 	<link rel="stylesheet" href="/article/detail.css">
 </head>
 <body class="grey-bg fixed">
+	<div style="width:0px;height:0px;overflow:hidden;line-height:0px;font-size:0px;"><img alt="{{article.title}}" src="{{article.postpath}}" style="width:484px;height:300px;"/></div>
 	{{ include '../tpl/header.art'}}
 	<div class="detail-wrap">
 		<input type="hidden" name="id" value="{{article.id}}">
@@ -33,7 +34,6 @@
 			</p>
 
 		</div>
-		<div style="width:0px;height:0px;overflow:hidden;line-height:0px;font-size:0px;"><img alt="{{article.title}}" src="{{article.postpath}}" style="width:484px;height:300px;"/></div>
 		<div class="article-detail">
 			{{@article.html}}
 		</div>
