@@ -17,6 +17,8 @@
 	<link rel="stylesheet" href="/article/detail.css">
 </head>
 <body class="grey-bg fixed">
+	<!--微信分享-->
+	<div style="display:none"><img src="{{article.postpath}}" style="width:300px;height:300px;"/></div>
 	{{ include '../tpl/header.art'}}
 	<div class="detail-wrap">
 		<input type="hidden" name="id" value="{{article.id}}">
