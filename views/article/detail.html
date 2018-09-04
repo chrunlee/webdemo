@@ -10,21 +10,19 @@
 	<meta name="applicable-device" content="pc,mobile">
 	<meta name="MobileOptimized" content="width">
 	<meta name="HandheldFriendly" content="true">
+	<meta name="keywords" content="{{article.tags.join(',')}}">
 	<meta name="description" content="{{article.zhaiyao}}">
+	<meta name="author" content="{{site.sitename}}">
 	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
 	<link rel="stylesheet" href="/article/index.css">
 	<link rel="stylesheet" href="/article/article.css">
 	<link rel="stylesheet" href="/article/detail.css">
 </head>
 <body class="grey-bg fixed">
-	<!--微信分享-->
-	<div style="display:none"><img src="{{article.postpath}}" style="width:300px;height:300px;"/></div>
 	{{ include '../tpl/header.art'}}
 	<div class="detail-wrap">
 		<input type="hidden" name="id" value="{{article.id}}">
-		<!-- 文章标题 -->
 		<h1>{{article.title}}</h1>
-		<!--文章作者信息及阅读数量等-->
 		<div class="author">
 			<img src="{{site.avatar}}" alt="">
 			<p class="name">{{article.ismy == 0 ? '来自网络' : site.authorname}}</p>
@@ -35,12 +33,11 @@
 			</p>
 
 		</div>
-		<!-- 文章内容-->
+		<div style="width:0px;height:0px;overflow:hidden;line-height:0px;font-size:0px;"><img alt="{{article.title}}" src="{{article.postpath}}" style="width:484px;height:300px;"/></div>
 		<div class="article-detail">
 			{{@article.html}}
 		</div>
 		<hr>
-		<!--赞赏-->
 		<div class="shang">
 			<p>您的赞赏是我的动力圆圈</p>
 			<div class="byy-btn" filter="shang">赞赏支持</div>
@@ -55,9 +52,7 @@
 				</div>
 			</div>
 		</div>
-		<!--分享-->
 		{{if article.cancomment == 1}}
-		<!--评论控制-->
 		<div class="comment">
 			<textarea name="comment" placeholder="写下你的评论.."></textarea>
 			<div class="comment-control byy-clear hide">
@@ -75,11 +70,9 @@
 				</div>
 			</div>
 		</div>
-		<!--评论展示-->
 		<div class="comment-show">
 			<h6>评论信息<span class="byy-form-info">(请文明评论)</span></h6>
 			<div class="comment-wrap">
-				<!-- 有点复杂-->
 				<div class="empty-comment">
 					暂无评论，快来快来写想法...
 				</div>
@@ -88,7 +81,6 @@
 		{{ /if }}
 	</div>
 	<div class="cyan-bg">
-		<!--推荐阅读-->	
 		<div class="detail-wrap recommand">
 			<div class="title">
 				<h6>推荐</h6>	
@@ -113,7 +105,6 @@
 			</div>
 		</div>
 	</div>
-	<!--赞赏-->
 	<div class="zanshang-pic" style="display:none;padding-left:7px;">
 		<img src="/weixin.jpg" alt="全靠各位土豪的打赏了.." style="width:200px;height:200px;margin-right:20px;">
 		<img src="/zhifubao.jpg" alt="全靠各位土豪的打赏了.." style="width:200px;height:200px;">
