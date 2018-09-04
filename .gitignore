@@ -10,6 +10,7 @@ wx.json
 wx-dev.json
 ym.json
 ymzs.json
+config.json
 pids
 results
 public/cookbook
