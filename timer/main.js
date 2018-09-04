@@ -12,4 +12,7 @@ module.exports = function(){
 
 	//每天一次数据库备份
 	require('./DBBack')();
+
+	//每天早7点发送天气预报
+	require('./WeatherGold')();
 }
