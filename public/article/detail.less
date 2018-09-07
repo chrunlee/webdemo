@@ -354,6 +354,7 @@ body{
 
 /**小屏看文章**/
 @media screen and (max-width:768px){
+	html{overflow-x:hidden;}
 	body{
 		padding-top:0px!important;
 	}
@@ -362,6 +363,10 @@ body{
 	}
 	.detail-wrap{
 		padding:10px!important;
+	}
+	.article-detail{
+		box-sizing:border-box;
+		padding:0px 10px;
 	}
 	.shang{
 		height:70px;

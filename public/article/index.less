@@ -216,6 +216,13 @@ section.dark{
 	}
 }
 
+/**关于**/
+.about-content{
+	width:500px;
+	margin:0px auto;
+	text-align:left;
+	padding-top:50px;
+}
 
 /**自适应适配**/
 @media screen and (max-width:1920px){
@@ -238,5 +245,44 @@ section.dark{
 	}
 	section{
 		padding:20px 100px;
+	}
+}
+
+@media screen and (max-width:768px){
+	.logo{display:none;}
+	.index-header{
+		.byy-nav-item>a{padding:0px 15px;}
+	}
+	section{
+		padding:20px 20px;
+		.section-content{
+			article{
+				width:95%;	
+			}
+		}
+	}
+	.footer{
+		min-height:200px;
+		height:auto!important;
+		.footer-block{
+			width:100%;
+			min-height:auto!important;
+			float:none;
+			margin-top:1em;
+			.footer-block-content{
+				margin-top:0.3em;
+			}
+			.link-block{
+				text-align:left;
+			}
+		}
+		.footer-copy{
+			display:none;
+		}
+	}
+	.about-content{
+		width:100%;
+		padding:50px;
+		box-sizing:border-box;
 	}
 }
