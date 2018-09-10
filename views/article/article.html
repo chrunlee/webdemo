@@ -14,10 +14,12 @@
 		<!-- banner -->
 		<div class="byy-carousel" id="banner">
 			<div carousel-item="">
-				<div class="banner-item white" style="background-image: url(/upload/banner/2.jpg);background-size:100% 600px;">
-					<div class="banner-title">迅哥博客</div>
-					<div class="banner-des">加强自己的专业技能，提升自己的能力，才是立足的根本!</div>
+				{{each banner value i}}
+				<div class="banner-item {{value.bannerstyle}}" style="background-image: url({{value.bannerpath}});background-size:100% {{value.bannerheight}};">
+					<div class="banner-title">{{value.title}}</div>
+					<div class="banner-des">{{value.bannerdes}}</div>
 				</div>
+				{{ /each }}
 			</div>
 		</div>
 		<!--文章区域-->
