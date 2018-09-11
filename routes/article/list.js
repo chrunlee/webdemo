@@ -34,7 +34,7 @@ marked.setOptions({
 router.get('/',function(req,res,next){
 	//最新文章信息，每页20条，后分页
 	//获得文章分类
-	var p = req.query.q || 1;
+	var p = req.query.p || 1;
 	var c = req.query.c||'';//分类
 	try{
 		p = parseInt(p,10);	

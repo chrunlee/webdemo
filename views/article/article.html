@@ -81,12 +81,13 @@
 			curr : page,
 			callback : function(p){
 				//处理
+				console.log(p);
 				var c = byy.getSearch('c');
 				var str = '';
 				if(c){
 					str = '&c='+c;
 				}
-				location.href = '/article/?p='+p.page+str;
+				location.href = '/article/?p='+p.curr+str;
 			}
 		});
 		byy.bindEvents({
