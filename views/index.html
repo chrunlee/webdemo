@@ -35,11 +35,11 @@
 			<div class="section-content byy-clear">
 				{{each articles value i}}
 				<article>
-					<a href="{{value.link}}" target="_self">
+					<a href="{{value.link}}" target="_self" title="{{value.tags}}">
 						<div class="post" style="background-image: url({{value.postpath}})"></div>
 					</a>
 					<div class="article-title">
-						<a href="{{value.link}}" target="_self">{{value.title}}</a>
+						<a href="{{value.link}}" title="{{value.zhaiyao}}" target="_self">{{value.title}}</a>
 					</div>
 					<div class="article-info">
 						{{value.ctime}} 阅读({{value.readnum}})
