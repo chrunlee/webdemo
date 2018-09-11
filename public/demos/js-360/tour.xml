@@ -1,0 +1,299 @@
+﻿<krpano version="1.19" title="Virtual Tour">
+
+	<!-- <include url="skin/vtourskin.xml" /> -->
+	<include url="showtext.xml" />
+
+	<!-- customize skin settings: maps, gyro, webvr, thumbnails, tooltips, layout, design, ... -->
+	<skin_settings maps="false"
+	               maps_type="google"
+	               maps_bing_api_key=""
+	               maps_google_api_key=""
+	               maps_zoombuttons="false"
+	               gyro="true"
+	               webvr="true"
+	               webvr_gyro_keeplookingdirection="false"
+	               webvr_prev_next_hotspots="true"
+	               littleplanetintro="false"
+	               title="true"
+	               thumbs="true"
+	               thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
+	               thumbs_opened="false"
+	               thumbs_text="false"
+	               thumbs_dragging="true"
+	               thumbs_onhoverscrolling="false"
+	               thumbs_scrollbuttons="false"
+	               thumbs_scrollindicator="false"
+	               thumbs_loop="false"
+	               tooltips_buttons="false"
+	               tooltips_thumbs="false"
+	               tooltips_hotspots="false"
+	               tooltips_mapspots="false"
+	               deeplinking="false"
+	               loadscene_flags="MERGE"
+	               loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
+	               loadscene_blend_prev="SLIDEBLEND(0.5, 180, 0.75, linear)"
+	               loadscene_blend_next="SLIDEBLEND(0.5,   0, 0.75, linear)"
+	               loadingtext="loading..."
+	               layout_width="100%"
+	               layout_maxwidth="814"
+	               controlbar_width="-24"
+	               controlbar_height="40"
+	               controlbar_offset="20"
+	               controlbar_offset_closed="-40"
+	               controlbar_overlap.no-fractionalscaling="10"
+	               controlbar_overlap.fractionalscaling="0"
+	               design_skin_images="vtourskin.png"
+	               design_bgcolor="0x2D3E50"
+	               design_bgalpha="0.8"
+	               design_bgborder="0"
+	               design_bgroundedge="1"
+	               design_bgshadow="0 4 10 0x000000 0.3"
+	               design_thumbborder_bgborder="3 0xFFFFFF 1.0"
+	               design_thumbborder_padding="2"
+	               design_thumbborder_bgroundedge="0"
+	               design_text_css="color:#FFFFFF; font-family:Arial;"
+	               design_text_shadow="1"
+	               />
+
+	<!-- skin_hotspotstyle - style for the hotspots -->
+	<style name="skin_hotspotstyle" url="skin/vtourskin_hotspot.png" scale="0.5" edge="top" distorted="true"
+	       tooltip=""
+	       linkedscene=""
+	       linkedscene_lookat=""
+	       onclick="skin_hotspotstyle_click();"
+	       onover="tween(scale,0.55);"
+	       onout="tween(scale,0.5);"
+	       onloaded="if(linkedscene AND skin_settings.tooltips_hotspots, copy(tooltip,scene[get(linkedscene)].title); loadstyle(skin_tooltips); );"
+	       />
+	<!-- skin events -->
+	<events name="skin_events" keep="true"
+	        onxmlcomplete="set(events[skin_events].onxmlcomplete,null); skin_startup();"
+	        onnewpano="skin_showloading(true); skin_update_scene_infos(); skin_deeplinking_update_url();"
+	        onremovepano="skin_showloading(true);"
+	        onloadcomplete="skin_showloading(false);"
+	        onidle="skin_deeplinking_update_url();"
+	        onresize="skin_onresize();"
+	        onenterfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '64|576|64|64');"
+	        onexitfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '0|576|64|64');"
+	        onkeydown="skin_keydown_event();"
+	        />
+
+	
+	<action name="skin_hotspotstyle_click">
+		if(linkedscene,
+			if(linkedscene_lookat,
+				txtsplit(linkedscene_lookat, ',', hs_lookat_h, hs_lookat_v, hs_lookat_fov);
+			  );
+			set(enabled, false);
+			skin_hidetooltips();
+			tween(depth|alpha|oy|rx, 4000|0.0|-50|-60, 0.5, default,
+				skin_loadscene(get(linkedscene), get(skin_settings.loadscene_blend));
+				if(hs_lookat_h !== null,
+					skin_lookat(get(hs_lookat_h), get(hs_lookat_v), get(hs_lookat_fov));
+					delete(hs_lookat_h, hs_lookat_v, hs_lookat_fov);
+				  );
+				skin_updatescroll();
+			  );
+		  );
+	</action>
+	<action name="skin_updatescroll">
+		if(layer[skin_thumbs].loaded,
+			set(cursceneindex, 0);
+			if(xml.scene, copy(cursceneindex, scene[get(xml.scene)].index));
+			layer[skin_thumbs].setcenter(get(scene[get(cursceneindex)].thumbx), get(scene[get(cursceneindex)].thumby));
+		  );
+	</action>
+	<action name="skin_hidetooltips">
+		set(layer[skin_tooltip].alpha,0.0);
+		set(layer[skin_tooltip].visible,false);
+	</action>
+	<action name="skin_nextscene_loop">
+		add(newsceneindex, scene[get(xml.scene)].index, %1);
+		sub(lastsceneindex, scene.count, 1);
+		if(newsceneindex LT 0, copy(newsceneindex,lastsceneindex));
+		if(newsceneindex GT lastsceneindex, set(newsceneindex,0));
+		skin_loadscene(get(newsceneindex), calc(%1 LT 0 ? skin_settings.loadscene_blend_prev : skin_settings.loadscene_blend_next));
+	</action>
+	<!-- skin_loadscene(scenenameorindex, blendmode) -->
+	<action name="skin_loadscene">
+		if(webvr.isenabled AND scene.count GT 1,
+			set(hotspot[webvr_prev_scene].visible, false);
+			set(hotspot[webvr_next_scene].visible, false);
+		  );
+
+		txtadd(layer[skin_thumbborder].parent, 'skin_thumb_', get(scene[%1].index));
+		layer[skin_thumbs].scrolltocenter(get(scene[%1].thumbx), get(scene[%1].thumby));
+		loadscene(get(scene[%1].name), null, get(skin_settings.loadscene_flags), %2);
+	</action>
+
+	<layer name="skin_loadingtext" url="plugins/textfield.swf" align="center" x="5" y="-5" html="get:skin_settings.loadingtext" visible="false" autoheight="true" background="false" border="false" enabled="false" css="calc:skin_settings.design_text_css + ' text-align:center; font-style:italic; font-size:22px;'" textshadow="get:skin_settings.design_text_shadow" />
+	<action name="skin_showloading">
+		if(display.stereo == true,
+			set(layer[skin_loadingtext].visible, false);
+		  ,
+			set(layer[skin_loadingtext].visible, %1);
+		  );
+	</action>
+
+
+	<action name="skin_hidetooltips">
+		set(layer[skin_tooltip].alpha,0.0);
+		set(layer[skin_tooltip].visible,false);
+	</action>
+
+	
+
+	<!--
+	    For an alternative skin design either change the <skin_settings> values 
+	    from above or optionally include one of the predefined designs from below.
+	-->
+	<!-- <include url="skin/vtourskin_design_flat_light.xml"  /> -->
+	<!-- <include url="skin/vtourskin_design_glass.xml"       /> -->
+	<!-- <include url="skin/vtourskin_design_ultra_light.xml" /> -->
+	<!-- <include url="skin/vtourskin_design_117.xml"         /> -->
+	<!-- <include url="skin/vtourskin_design_117round.xml"    /> -->
+	<!-- <include url="skin/vtourskin_design_black.xml"       /> -->
+	<textstyle name="hotspottextstyle" font="Arial" fontsize="12" bold="false" italic="false" textcolor="16775151" background="false" backgroundcolor="16777215" border="false" bordercolor="0" alpha="1" blendmode="layer" effect="glow(0x000000,0.5,4,3);dropshadow(4,45,0x000000,4,0.66);" origin="cursor" edge="bottom" textalign="center" xoffset="0" yoffset="-15" noclip="true" showtime="0.1" fadetime="0.25" fadeintime="0.1"/>
+	<style name="pichotspot"  onclick="js(showpic(get(url)));"/>
+	<style name="pichotspot2"  onclick="js(showpic2(get(url)));"/>
+	<!-- startup action - load the first scene -->
+	<action name="startup" autorun="onstart">
+		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
+		loadscene(get(startscene), null, MERGE);
+		if(startactions !== null, startactions() );
+	</action>
+	
+
+	<scene name="scene_a" title="第一展厅" onstart="" thumburl="panos/a.tiles/a_thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat='0' vlookat='0' fovtype='MFOV' fov='120' fovmin='40' fovmax='120' limitview='lookat'  vlookatmin='15' vlookatmax='-15' />
+
+		<preview url='panos/a.tiles/a_preview.jpg' />
+
+		<image type="CUBE" multires="true" tilesize="512" if="!webvr.isenabled">
+			<cube url="panos/a.tiles/a_%s.jpg" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-37.753" atv="0" scale="0.3" zoom="1" linkedscene="scene_b" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="37.753" atv="0" scale="0.3" zoom="1" linkedscene="scene_c"/>
+
+		<hotspot name="node_10020111_t" url="media/img/2.png"  onhover="showtext(去往第二展厅,hotspottextstyle)" ath="-37.753" atv="-2" alpha="1" scale="0.5" zoom="1"  />
+		<hotspot name="node_10020113_t" url="media/img/3.png"  onhover="showtext(去往第三展厅,hotspottextstyle)" ath="37.753" atv="-2" alpha="1" scale="0.5" zoom="1"  />
+
+		<!-- <hotspot name='dyn_text2' url="img/banner1.jpg" enabled="false" preload="true" edge="center" handcursor="false"
+			 ath="0" atv="-6.4" zoom="true" distorted="true" rx="0" ry="-6.4" rz="0" width="800" height="160" scale="0.46"
+			/> -->
+
+		<hotspot name="dyn_img1" style="pichotspot" url="img/1.jpg" ath="45.939" atv="-6.966" zoom="1" distorted="1" edge="center" rx="-6.97" ry="44.06" rz="-0.0" width="125.90" height="127.26" capture="0" scale="0.828" />
+		<hotspot name="dyn_img2" style="pichotspot" url="img/2.jpg" ath="57.063" atv="-8.202" zoom="1" distorted="1" edge="center" rx="-8.20" ry="32.94" rz="-0.0" width="186.95" height="188.97" capture="0" scale="0.640" />
+		<hotspot name="dyn_img3" style="pichotspot" url="img/3.jpg" ath="71.593" atv="-9.142" zoom="1" distorted="1" edge="center" rx="-9.14" ry="18.41" rz="-0.0" width="186.95" height="188.97" capture="0" scale="0.715" />
+		<hotspot name="dyn_img4" style="pichotspot" url="img/4.jpg" ath="88.909" atv="-9.728" zoom="1" distorted="1" edge="center" rx="-9.73" ry="1.09" rz="-0.0" width="188.24" height="190.27" capture="0" scale="0.752" />
+		<hotspot name="dyn_img5" style="pichotspot" url="img/5.jpg" ath="106.894" atv="-9.146" zoom="1" distorted="1" edge="center" rx="-9.15" ry="-16.89" rz="-0.0" width="188.24" height="190.27" capture="0" scale="0.723" />
+		<hotspot name="dyn_img6" style="pichotspot" url="img/6.jpg" ath="121.796" atv="-8.113" zoom="1" distorted="1" edge="center" rx="-8.11" ry="-31.80" rz="-0.0" width="189.95" height="192.00" capture="0" scale="0.642" />
+		<hotspot name="dyn_img7" style="pichotspot" url="img/7.jpg" ath="133.199" atv="-6.940" zoom="1" distorted="1" edge="center" rx="-6.94" ry="-43.20" rz="-0.0" width="171.56" height="173.41" capture="0" scale="0.609" />
+		<hotspot name="dyn_img8" style="pichotspot" url="img/8.jpg" ath="149.674" atv="-6.406" zoom="1" distorted="1" edge="center" rx="-6.41" ry="30.33" rz="-0.0" width="155.39" height="157.07" capture="0" scale="0.721" />
+		<hotspot name="dyn_img9" style="pichotspot" url="img/9.jpg" ath="163.444" atv="-7.265" zoom="1" distorted="1" edge="center" rx="-7.27" ry="16.56" rz="-0.0" width="171.56" height="173.41" capture="0" scale="0.713" />
+		<hotspot name="dyn_img10" style="pichotspot" url="img/10.jpg" ath="179.224" atv="-7.481" zoom="1" distorted="1" edge="center" rx="-7.48" ry="0.78" rz="-0.0" width="135.31" height="136.77" capture="0" scale="0.937" />
+		<hotspot name="dyn_img11" style="pichotspot" url="img/11.jpg" ath="-164.657" atv="-7.335" zoom="1" distorted="1" edge="center" rx="-7.33" ry="344.66" rz="-0.0" width="129.87" height="131.27" capture="0" scale="0.918" />
+		<hotspot name="dyn_img12" style="pichotspot" url="img/12.jpg" ath="-150.785" atv="-6.624" zoom="1" distorted="1" edge="center" rx="-6.62" ry="330.78" rz="-0.0" width="123.77" height="125.11" capture="0" scale="0.882" />
+		<hotspot name="dyn_img13" style="pichotspot" url="img/13.jpg" ath="-133.729" atv="-7.561" zoom="1" distorted="1" edge="center" rx="-7.56" ry="43.73" rz="-0.0" width="129.03" height="130.42" capture="0" scale="0.839" />
+		<hotspot name="dyn_img14" style="pichotspot" url="img/14.jpg" ath="-122.690" atv="-8.850" zoom="1" distorted="1" edge="center" rx="-8.85" ry="32.69" rz="-0.0" width="164.65" height="166.43" capture="0" scale="0.752" />
+		<hotspot name="dyn_img15" style="pichotspot" url="img/15.jpg" ath="-107.440" atv="-10.078" zoom="1" distorted="1" edge="center" rx="-10.08" ry="17.44" rz="-0.0" width="182.06" height="184.03" capture="0" scale="0.772" />
+		<hotspot name="dyn_img16" style="pichotspot" url="img/16.jpg" ath="-89.643" atv="-10.477" zoom="1" distorted="1" edge="center" rx="-10.48" ry="-0.36" rz="-0.0" width="174.21" height="176.09" capture="0" scale="0.819" />
+		<hotspot name="dyn_img17" style="pichotspot" url="img/17.jpg" ath="-72.311" atv="-10.050" zoom="1" distorted="1" edge="center" rx="-10.05" ry="-17.69" rz="-0.0" width="175.39" height="177.29" capture="0" scale="0.792" />
+		<hotspot name="dyn_img18" style="pichotspot" url="img/18.jpg" ath="-57.853" atv="-8.862" zoom="1" distorted="1" edge="center" rx="-8.86" ry="-32.15" rz="-0.0" width="171.46" height="173.31" capture="0" scale="0.745" />
+		<hotspot name="dyn_img19" style="pichotspot" url="img/19.jpg" ath="-46.381" atv="-7.546" zoom="1" distorted="1" edge="center" rx="-7.55" ry="-43.62" rz="-0.0" width="171.46" height="173.31" capture="0" scale="0.613" />
+	</scene>
+
+	<scene name="scene_b" title="第二展厅" onstart="" thumburl="panos/b.tiles/a_thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat='0' vlookat='0' fovtype='MFOV' fov='120' fovmin='40' fovmax='120' limitview='lookat'  vlookatmin='15' vlookatmax='-15' />
+
+		<preview url='panos/b.titles/a_preview.jpg' />
+
+		<image type="CUBE" multires="true" tilesize="512" if="!webvr.isenabled">
+			<cube url="panos/b.tiles/a_%s.jpg" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-37.753" atv="0" scale="0.3" zoom="1" linkedscene="scene_a" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="37.753" atv="0" scale="0.3" zoom="1" linkedscene="scene_c"/>
+
+		<hotspot name="node_10020111_t" url="media/img/1.png"  onhover="showtext(去往第一展厅,hotspottextstyle)" ath="-37.753" atv="-2" alpha="1" scale="0.5" zoom="1"  />
+		<hotspot name="node_10020113_t" url="media/img/3.png"  onhover="showtext(去往第三展厅,hotspottextstyle)" ath="37.753" atv="-2" alpha="1" scale="0.5" zoom="1"  />
+
+
+		<hotspot name="dyn_img1" style="pichotspot" url="img/b1.jpg" ath="53.643" atv="-3.716" zoom="1" distorted="1" edge="center" rx="-3.72" ry="36.36" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.283" />
+		<hotspot name="dyn_img2" style="pichotspot" url="img/b2.jpg" ath="61.347" atv="-4.208" zoom="1" distorted="1" edge="center" rx="-4.21" ry="28.65" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.268" />
+		<hotspot name="dyn_img3" style="pichotspot" url="img/b3.jpg" ath="70.221" atv="-4.195" zoom="1" distorted="1" edge="center" rx="-4.19" ry="19.78" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.321" />
+		<hotspot name="dyn_img4" style="pichotspot" url="img/b4.jpg" ath="80.385" atv="-4.640" zoom="1" distorted="1" edge="center" rx="-4.64" ry="9.61" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.316" />
+		<hotspot name="dyn_img5" style="pichotspot" url="img/b5.jpg" ath="91.971" atv="-4.893" zoom="1" distorted="1" edge="center" rx="-4.89" ry="-1.97" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.322" />
+		<hotspot name="dyn_img6" style="pichotspot" url="img/b6.jpg" ath="102.419" atv="-4.781" zoom="1" distorted="1" edge="center" rx="-4.78" ry="-12.42" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.310" />
+		<hotspot name="dyn_img7" style="pichotspot" url="img/b7.jpg" ath="111.916" atv="-4.567" zoom="1" distorted="1" edge="center" rx="-4.57" ry="-21.92" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.306" />
+		<hotspot name="dyn_img8" style="pichotspot" url="img/b8.jpg" ath="120.732" atv="-4.378" zoom="1" distorted="1" edge="center" rx="-4.38" ry="-30.73" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.286" />
+		<hotspot name="dyn_img9" style="pichotspot" url="img/b9.jpg" ath="142.377" atv="-4.217" zoom="1" distorted="1" edge="center" rx="-4.22" ry="37.62" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.281" />
+		<hotspot name="dyn_img10" style="pichotspot" url="img/b10.jpg" ath="151.369" atv="-4.840" zoom="1" distorted="1" edge="center" rx="-4.84" ry="28.63" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.295" />
+		<hotspot name="dyn_img11" style="pichotspot" url="img/b11.jpg" ath="161.706" atv="-5.504" zoom="1" distorted="1" edge="center" rx="-5.50" ry="18.29" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.283" />
+		<hotspot name="dyn_img12" style="pichotspot" url="img/b12.jpg" ath="172.794" atv="-5.948" zoom="1" distorted="1" edge="center" rx="-5.95" ry="7.21" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.339" />
+		<hotspot name="dyn_img13" style="pichotspot" url="img/b13.jpg" ath="-174.190" atv="-5.681" zoom="1" distorted="1" edge="center" rx="-5.68" ry="354.19" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.316" />
+		<hotspot name="dyn_img14" style="pichotspot" url="img/b14.jpg" ath="-162.067" atv="-5.461" zoom="1" distorted="1" edge="center" rx="-5.46" ry="342.07" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.313" />
+		<hotspot name="dyn_img15" style="pichotspot" url="img/b15.jpg" ath="-152.070" atv="-5.295" zoom="1" distorted="1" edge="center" rx="-5.30" ry="332.07" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.327" />
+		<hotspot name="dyn_img16" style="pichotspot" url="img/b16.jpg" ath="-142.791" atv="-4.885" zoom="1" distorted="1" edge="center" rx="-4.88" ry="322.79" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.234" />
+		<hotspot name="dyn_img17" style="pichotspot" url="img/b17.jpg" ath="-120.373" atv="-4.229" zoom="1" distorted="1" edge="center" rx="-4.23" ry="30.37" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.262" />
+		<hotspot name="dyn_img18" style="pichotspot" url="img/b18.jpg" ath="-111.434" atv="-4.731" zoom="1" distorted="1" edge="center" rx="-4.73" ry="21.43" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.277" />
+		<hotspot name="dyn_img19" style="pichotspot" url="img/b19.jpg" ath="-102.491" atv="-4.557" zoom="1" distorted="1" edge="center" rx="-4.56" ry="12.49" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.305" />
+		<hotspot name="dyn_img20" style="pichotspot" url="img/b20.jpg" ath="-91.598" atv="-4.713" zoom="1" distorted="1" edge="center" rx="-4.71" ry="1.60" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.268" />
+		<hotspot name="dyn_img21" style="pichotspot" url="img/b21.jpg" ath="-80.297" atv="-4.277" zoom="1" distorted="1" edge="center" rx="-4.28" ry="-9.70" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.275" />
+		<hotspot name="dyn_img22" style="pichotspot" url="img/b22.jpg" ath="-70.286" atv="-4.366" zoom="1" distorted="1" edge="center" rx="-4.37" ry="-19.71" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.308" />
+		<hotspot name="dyn_img23" style="pichotspot" url="img/b23.jpg" ath="-61.002" atv="-3.952" zoom="1" distorted="1" edge="center" rx="-3.95" ry="-29.00" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.259" />
+		<hotspot name="dyn_img24" style="pichotspot" url="img/b24.jpg" ath="-54.096" atv="-3.912" zoom="1" distorted="1" edge="center" rx="-3.91" ry="-35.90" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.247" />
+	</scene>
+
+	<scene name="scene_c" title="第三展厅" onstart="" thumburl="panos/c.tiles/a_thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat='0' vlookat='0' fovtype='MFOV' fov='120' fovmin='40' fovmax='120' limitview='lookat'  vlookatmin='15' vlookatmax='-15' />
+
+		<preview url='panos/c.titles/a_preview.jpg' />
+
+		<image type="CUBE" multires="true" tilesize="512" if="!webvr.isenabled">
+			<cube url="panos/c.tiles/a_%s.jpg" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-37.753" atv="0" scale="0.3" zoom="1" linkedscene="scene_a" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="37.753" atv="0" scale="0.3" zoom="1" linkedscene="scene_b"/>
+
+		<hotspot name="node_10020111_t" url="media/img/1.png"  onhover="showtext(去往第一展厅,hotspottextstyle)" ath="-37.753" atv="-2" alpha="1" scale="0.5" zoom="1"  />
+		<hotspot name="node_10020113_t" url="media/img/2.png"  onhover="showtext(去往第二展厅,hotspottextstyle)" ath="37.753" atv="-2" alpha="1" scale="0.5" zoom="1"  />
+
+
+		<hotspot name="dyn_img1" style="pichotspot2" url="img/c1.png" ath="52.407" atv="-4.698" zoom="1" distorted="1" edge="center" rx="-4.70" ry="37.59" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.201" />
+		<hotspot name="dyn_img2" style="pichotspot2" url="img/c2.png" ath="62.426" atv="-5.247" zoom="1" distorted="1" edge="center" rx="-5.25" ry="27.57" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.243" />
+		<hotspot name="dyn_img3" style="pichotspot2" url="img/c3.png" ath="73.892" atv="-5.569" zoom="1" distorted="1" edge="center" rx="-5.57" ry="16.11" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.261" />
+		<hotspot name="dyn_img4" style="pichotspot2" url="img/c4.png" ath="87.916" atv="-5.850" zoom="1" distorted="1" edge="center" rx="-5.85" ry="2.08" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.274" />
+		<hotspot name="dyn_img5" style="pichotspot2" url="img/c5.png" ath="101.811" atv="-5.422" zoom="1" distorted="1" edge="center" rx="-5.42" ry="-11.81" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.277" />
+		<hotspot name="dyn_img6" style="pichotspot2" url="img/c6.png" ath="113.888" atv="-5.361" zoom="1" distorted="1" edge="center" rx="-5.36" ry="-23.89" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.265" />
+		<hotspot name="dyn_img7" style="pichotspot2" url="img/c7.png" ath="123.824" atv="-4.729" zoom="1" distorted="1" edge="center" rx="-4.73" ry="-33.82" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.217" />
+		<hotspot name="dyn_img8" style="pichotspot2" url="img/c8.png" ath="143.015" atv="-4.278" zoom="1" distorted="1" edge="center" rx="-4.28" ry="36.98" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.239" />
+		<hotspot name="dyn_img9" style="pichotspot2" url="img/c9.png" ath="153.062" atv="-4.586" zoom="1" distorted="1" edge="center" rx="-4.59" ry="26.94" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.248" />
+		<hotspot name="dyn_img10" style="pichotspot2" url="img/c10.png" ath="165.347" atv="-5.355" zoom="1" distorted="1" edge="center" rx="-5.35" ry="14.65" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.277" />
+		<hotspot name="dyn_img11" style="pichotspot2" url="img/c11.png" ath="179.079" atv="-5.393" zoom="1" distorted="1" edge="center" rx="-5.39" ry="0.92" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.283" />
+		<hotspot name="dyn_img12" style="pichotspot2" url="img/c12.png" ath="-167.085" atv="-5.143" zoom="1" distorted="1" edge="center" rx="-5.14" ry="347.09" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.270" />
+		<hotspot name="dyn_img13" style="pichotspot2" url="img/c13.png" ath="-154.587" atv="-4.779" zoom="1" distorted="1" edge="center" rx="-4.78" ry="334.59" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.231" />
+		<hotspot name="dyn_img14" style="pichotspot2" url="img/c14.png" ath="-144.212" atv="-4.239" zoom="1" distorted="1" edge="center" rx="-4.24" ry="324.21" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.243" />
+		<hotspot name="dyn_img15" style="pichotspot2" url="img/c15.png" ath="-124.423" atv="-4.024" zoom="1" distorted="1" edge="center" rx="-4.02" ry="34.42" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.221" />
+		<hotspot name="dyn_img16" style="pichotspot2" url="img/c16.png" ath="-113.463" atv="-4.330" zoom="1" distorted="1" edge="center" rx="-4.33" ry="23.46" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.265" />
+		<hotspot name="dyn_img17" style="pichotspot2" url="img/c17.png" ath="-101.016" atv="-4.846" zoom="1" distorted="1" edge="center" rx="-4.85" ry="11.02" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.277" />
+		<hotspot name="dyn_img18" style="pichotspot2" url="img/c18.png" ath="-86.574" atv="-4.921" zoom="1" distorted="1" edge="center" rx="-4.92" ry="-3.43" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.283" />
+		<hotspot name="dyn_img19" style="pichotspot2" url="img/c19.png" ath="-72.724" atv="-4.811" zoom="1" distorted="1" edge="center" rx="-4.81" ry="-17.28" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.275" />
+		<hotspot name="dyn_img20" style="pichotspot2" url="img/c20.png" ath="-61.259" atv="-4.283" zoom="1" distorted="1" edge="center" rx="-4.28" ry="-28.74" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.247" />
+		<hotspot name="dyn_img21" style="pichotspot2" url="img/c21.png" ath="-51.957" atv="-3.797" zoom="1" distorted="1" edge="center" rx="-3.80" ry="-38.04" rz="-0.0" width="240.00" height="240.00" capture="0" scale="0.226" />
+
+	</scene>
+	
+	
+
+
+
+	
+
+
+</krpano>

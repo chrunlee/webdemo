@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>3D 展厅</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta http-equiv="x-ua-compatible" content="IE=edge" />
+	<style>
+		@-ms-viewport { width:device-width; }
+		@media only screen and (min-device-width:800px) { html { overflow:hidden; } }
+		html { height:100%; }
+		body { height:100%; overflow:hidden; margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:16px; color:#FFFFFF; background-color:#000000; }
+	</style>
+</head>
+<body>
+<script type="text/javascript">
+	
+</script>
+
+<script src="tour.js"></script>
+<script type="text/javascript" src="http://www.byyui.com/byy/dist/byy.js"></script>
+
+<div id="pano" style="width:100%;height:100%;">
+	<noscript><table style="width:100%;height:100%;"><tr style="vertical-align:middle;"><td><div style="text-align:center;">ERROR:<br/><br/>Javascript not activated<br/><br/></div></td></tr></table></noscript>
+	<script>
+		embedpano({swf:"tour.swf", xml:"tour.xml", target:"pano", html5:"auto", mobilescale:1.0, passQueryParameters:true});
+	</script>
+</div>
+
+</body>
+</html>
+
+<script type="text/javascript">
+	function showpic(pic){
+		console.log(pic);
+		byy.win.photos({
+		    photos: {
+			  "title": "", //相册标题
+			  "id": 123, //相册id
+			  "start": 0, //初始显示的图片序号，默认0
+			  "data": [   //相册包含的图片，数组格式
+			    {
+			      "alt": "图片名",
+			      "pid": 666, //图片id
+			      "src": pic, //原图地址
+			      "thumb": "" //缩略图地址
+			    }
+			  ]
+			}
+		    ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+		  });
+	}
+	function showpic2(pic){
+		byy.win.photos({
+		    photos: {
+			  "title": "", //相册标题
+			  "id": 123, //相册id
+			  "start": 0, //初始显示的图片序号，默认0
+			  "data": [   //相册包含的图片，数组格式
+			    {
+			      "alt": "图片名",
+			      "pid": 666, //图片id
+			      "src": pic.split('/')[0]+'/r-'+pic.split('/')[1], //原图地址
+			      "thumb": "" //缩略图地址
+			    }
+			  ]
+			}
+		    ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+		  });
+	}
+	byy.require('win',function(){
+		
+	})
+</script>
