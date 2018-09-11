@@ -14,6 +14,13 @@ var router = express.Router();
 
 var marked = require('marked');
 
+//markdown 解析器
+var renderer = new marked.Renderer();
+//重写解析规则
+renderer.link = function(href,title,text){
+	return '<a href="'+href+'" title="'+text+'" target="_blank">'+text+'</a>';
+}
+
 var query = require('simple-mysql-query');
 
 var moment = require('moment');
@@ -90,7 +97,7 @@ router.get('/:id.html',function(req,res,next){
 			var article = rst[0];
 			//后台渲染markdown内容
 			var content = article.content;
-			article.html = marked(content);
+			article.html = marked(content,{renderer : renderer});
 			article.tags = article.tags ? article.tags.split(',') : [];
 			res.render('article/detail',{
 				article : article,
