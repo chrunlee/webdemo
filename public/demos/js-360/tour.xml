@@ -1,6 +1,6 @@
 ﻿<krpano version="1.19" title="Virtual Tour">
 
-	<!-- <include url="skin/vtourskin.xml" /> -->
+	<include url="skin/vtourskin.xml" />
 	<include url="showtext.xml" />
 
 	<!-- customize skin settings: maps, gyro, webvr, thumbnails, tooltips, layout, design, ... -->
@@ -54,94 +54,6 @@
 	               design_text_css="color:#FFFFFF; font-family:Arial;"
 	               design_text_shadow="1"
 	               />
-
-	<!-- skin_hotspotstyle - style for the hotspots -->
-	<style name="skin_hotspotstyle" url="skin/vtourskin_hotspot.png" scale="0.5" edge="top" distorted="true"
-	       tooltip=""
-	       linkedscene=""
-	       linkedscene_lookat=""
-	       onclick="skin_hotspotstyle_click();"
-	       onover="tween(scale,0.55);"
-	       onout="tween(scale,0.5);"
-	       onloaded="if(linkedscene AND skin_settings.tooltips_hotspots, copy(tooltip,scene[get(linkedscene)].title); loadstyle(skin_tooltips); );"
-	       />
-	<!-- skin events -->
-	<events name="skin_events" keep="true"
-	        onxmlcomplete="set(events[skin_events].onxmlcomplete,null); skin_startup();"
-	        onnewpano="skin_showloading(true); skin_update_scene_infos(); skin_deeplinking_update_url();"
-	        onremovepano="skin_showloading(true);"
-	        onloadcomplete="skin_showloading(false);"
-	        onidle="skin_deeplinking_update_url();"
-	        onresize="skin_onresize();"
-	        onenterfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '64|576|64|64');"
-	        onexitfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '0|576|64|64');"
-	        onkeydown="skin_keydown_event();"
-	        />
-
-	
-	<action name="skin_hotspotstyle_click">
-		if(linkedscene,
-			if(linkedscene_lookat,
-				txtsplit(linkedscene_lookat, ',', hs_lookat_h, hs_lookat_v, hs_lookat_fov);
-			  );
-			set(enabled, false);
-			skin_hidetooltips();
-			tween(depth|alpha|oy|rx, 4000|0.0|-50|-60, 0.5, default,
-				skin_loadscene(get(linkedscene), get(skin_settings.loadscene_blend));
-				if(hs_lookat_h !== null,
-					skin_lookat(get(hs_lookat_h), get(hs_lookat_v), get(hs_lookat_fov));
-					delete(hs_lookat_h, hs_lookat_v, hs_lookat_fov);
-				  );
-				skin_updatescroll();
-			  );
-		  );
-	</action>
-	<action name="skin_updatescroll">
-		if(layer[skin_thumbs].loaded,
-			set(cursceneindex, 0);
-			if(xml.scene, copy(cursceneindex, scene[get(xml.scene)].index));
-			layer[skin_thumbs].setcenter(get(scene[get(cursceneindex)].thumbx), get(scene[get(cursceneindex)].thumby));
-		  );
-	</action>
-	<action name="skin_hidetooltips">
-		set(layer[skin_tooltip].alpha,0.0);
-		set(layer[skin_tooltip].visible,false);
-	</action>
-	<action name="skin_nextscene_loop">
-		add(newsceneindex, scene[get(xml.scene)].index, %1);
-		sub(lastsceneindex, scene.count, 1);
-		if(newsceneindex LT 0, copy(newsceneindex,lastsceneindex));
-		if(newsceneindex GT lastsceneindex, set(newsceneindex,0));
-		skin_loadscene(get(newsceneindex), calc(%1 LT 0 ? skin_settings.loadscene_blend_prev : skin_settings.loadscene_blend_next));
-	</action>
-	<!-- skin_loadscene(scenenameorindex, blendmode) -->
-	<action name="skin_loadscene">
-		if(webvr.isenabled AND scene.count GT 1,
-			set(hotspot[webvr_prev_scene].visible, false);
-			set(hotspot[webvr_next_scene].visible, false);
-		  );
-
-		txtadd(layer[skin_thumbborder].parent, 'skin_thumb_', get(scene[%1].index));
-		layer[skin_thumbs].scrolltocenter(get(scene[%1].thumbx), get(scene[%1].thumby));
-		loadscene(get(scene[%1].name), null, get(skin_settings.loadscene_flags), %2);
-	</action>
-
-	<layer name="skin_loadingtext" url="plugins/textfield.swf" align="center" x="5" y="-5" html="get:skin_settings.loadingtext" visible="false" autoheight="true" background="false" border="false" enabled="false" css="calc:skin_settings.design_text_css + ' text-align:center; font-style:italic; font-size:22px;'" textshadow="get:skin_settings.design_text_shadow" />
-	<action name="skin_showloading">
-		if(display.stereo == true,
-			set(layer[skin_loadingtext].visible, false);
-		  ,
-			set(layer[skin_loadingtext].visible, %1);
-		  );
-	</action>
-
-
-	<action name="skin_hidetooltips">
-		set(layer[skin_tooltip].alpha,0.0);
-		set(layer[skin_tooltip].visible,false);
-	</action>
-
-	
 
 	<!--
 	    For an alternative skin design either change the <skin_settings> values 
