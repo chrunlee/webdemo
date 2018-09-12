@@ -15,4 +15,7 @@ module.exports = function(){
 
 	//每天早7点发送天气预报
 	require('./WeatherGold')();
+
+	//每天10点或20点，生成sitemap
+	require('./Sitemap')();
 }
