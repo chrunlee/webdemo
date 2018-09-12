@@ -102,17 +102,17 @@
 				url : '/center/article/list',
 				page : true,
 				cols : [[
-					{field : 'id',title : 'ID',width : 50},
+					{field : 'id',title : 'ID',width : 100},
 					{field : 'title',title : '标题'},
-					{field : 'ismy',title : '原创',templet : function(data){
+					{field : 'ismy',title : '原创',width:100,templet : function(data){
 						return data.ismy == 0 ? '<span style="color:#49e;">转载</span>' : '<span style="color:#25ca92;">原创</span>'
 					}},
-					{field : 'enname',title : '英文路径'},
-					{field : 'readnum',title : '阅读'},
-					{field : 'type',title : '类型',templet : function(data){
+					{field : 'enname',title : '英文路径',width:250},
+					{field : 'readnum',title : '阅读',width:100},
+					{field : 'type',title : '类型',width:100,templet : function(data){
 						return data.type == 0 ? '<span style="color:#25ca92;">文章</span>' : '<span style="color:#49e;">DEMO</span>'
 					}},
-					{field : 'category',title : '目录',templet : function(data){
+					{field : 'category',title : '目录',width:100,templet : function(data){
 						var str ='';
 						category.forEach(function(item){
 							if(item.id == data.category){
