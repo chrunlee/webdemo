@@ -46,7 +46,6 @@ function fetch(){
 	query({
 		sql : 'select link,ctime from user_article where ispublish=1 order by ctime desc',params : []
 	}).then(function(rs){
-		console.log(rs);
 		var article = rs[0];//文章链接
 		var demoLink = [];
 		//还有demo链接
@@ -60,7 +59,7 @@ function fetch(){
 				console.log(demoLink);
 			}
 			//构建并生成
-			var xml = '<?xml version="1.0" encoding="utf-8"?>';
+			var xml = '<?xml version="1.0" encoding="utf-8"?><urlset>';
 			links.forEach(function(href){
 				xml+= getUrl(href);
 			})
@@ -70,6 +69,7 @@ function fetch(){
 			demoLink.forEach(function(href){
 				xml+=getUrl(href);
 			})
+			xml+='</urlset>'
 			//生成
 			createXml(xml);
 			setTimeout(function(){
