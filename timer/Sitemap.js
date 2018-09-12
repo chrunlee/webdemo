@@ -13,7 +13,6 @@ var cheerio = require('cheerio');
 query(db);
 
 var sitemapPath = path.join(__dirname,'../public/sitemap.xml');
-console.log(sitemapPath);
 var domain = 'https://chrunlee.cn';
 var links = [
 	'/',
@@ -30,7 +29,6 @@ var links = [
 function start (){
 	var d = new Date();
 	var hour = d.getHours();
-	console.log(hour);
 	if(hour == 20 || hour == 11){
 		//更新
 		fetch();

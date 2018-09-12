@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>友情链接</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<link rel="stylesheet" href="/center/css/home.css">
+</head>
+<body class="grey-bg frame-body">
+	<!-- 顶部工具栏 -->
+	<div class="byy-panel">
+		<div class="byy-panel-title">
+			<span class="byy-breadcrumb">
+                <a href="/center/home" target="_parent">首页</a>
+                <a><cite>友情链接</cite></a>
+            </span>
+		</div>
+		<div class="byy-panel-search byy-clear">
+			<div class="byy-form" id="saveForm">
+				<input type="hidden" name="id" value="">
+				<span class="byy-panel-search-block">
+					<label for="">标题:</label>
+					<div class="byy-inline" style="width:200px;">
+						<input type="text" name="name" placeholder="输入标题">		
+					</div>	
+				</span>
+				<span class="byy-panel-search-block">
+					<label for="">地址:</label>
+					<div class="byy-inline" style="width:200px;">
+						<input type="text" name="href" placeholder="输入地址">		
+					</div>	
+				</span>
+				<span class="byy-btn small" filter="saveLink"><i class="byyicon icon-search"></i>保存</span>
+			</div>
+		</div>
+		<div class="byy-panel-content byy-clear">
+			<table class="byy-table">
+				
+			</table>
+			<div class="page">
+				<div class="pagination pull-right"></div>	
+			</div>
+		</div>
+	</div>
+	<!-- table 内容-->
+	
+	
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+	byy.require(['jquery','win','table'],function(){
+
+		byy.bindEvents({
+			saveLink : function(){
+				console.log('save');
+				//校验
+				var values = byy('#saveForm').getValues();
+				console.log(values)
+				if(!values.name || !values.href){
+					byy.win.msg('填写完整信息');
+					return;
+				}
+				$.ajax({
+					url : '/center/links/save',
+					type : 'post',
+					data : values,
+					success : function(res){
+						byy.win.msg(res.msg,{shift:-1},function(){
+							window.location.reload();
+						})
+					}
+				});
+			},
+			edit : function(data,ev){
+				byy('#saveForm').setValues(data);
+			},
+			delete : function(data,ev){
+				var id= data.id;
+				$.ajax({
+					url : '/center/links/delete',
+					type : 'post',
+					data : {id : id},
+					success : function(res){
+						if(res.success){
+							byy.win.msg('删除成功')
+							window.location.reload();
+						}else{
+							byy.win.msg('删除失败')
+						}
+					}
+				});
+			}
+		});
+
+		//渲染数据
+		byy.table.render({
+			elem : '.byy-table',
+			method : 'post',
+			url : '/center/links/list',
+			page : false,
+			cols : [[
+				{field : 'id',title : 'ID'},
+				{field : 'name',title : '友情链接标题'},
+				{field : 'href',title : '友情链接地址'},
+				{field : 'tool',tool : true,title : '操作',templet : function(data){
+					return '<span class="byy-btn mini" filter="edit" data-id="'+data.id+'" data-name="'+data.name+'" data-href="'+data.href+'">编辑</span><span class="byy-btn mini" filter="delete" data-id="'+data.id+'">删除</span>';
+				}}
+			]]
+
+		});
+	})
+</script>

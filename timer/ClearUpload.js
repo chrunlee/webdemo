@@ -16,7 +16,7 @@ var ClearUpload = function(){
 	this.table = function(fileName){
 		fileName = '%'+fileName+'%';
 		return [
-			{sql : 'select * from site where sitescan like ? or faviconhref like ?' ,params : [fileName,fileName]},
+			{sql : 'select * from site where sitescan like ? or faviconhref like ? or avatar like ?' ,params : [fileName,fileName,fileName]},
 			{sql : 'select * from user_article where content like ? or postpath like ? ',params : [fileName,fileName]},
 			{sql : 'select * from user_banner where bannerpath like ? ',params : [fileName]},
 			{sql : 'select * from user_record where imgpath like ? ' ,params : [fileName]}

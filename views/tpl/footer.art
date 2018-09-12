@@ -23,7 +23,9 @@
 			友情链接
 		</div>
 		<div class="footer-block-content">
-			<span class="link-block"><a href="http://www.byyui.com" target="_blank">BYYUI框架</a></span>
+			{{each site.friendLink value i }}
+			<span class="link-block"><a href="{{value.href}}" target="_blank">{{value.name}}</a></span>
+			{{/each}}
 		</div>
 	</div>
 	<p class="footer-copy">Copyright &copy; 2018 Theme by chrunlee

@@ -46,7 +46,7 @@ router.post('/site/update',function(req,res,next){
 	var newObj = Object.assign(nowObj,body);
 	//更新数据库
 	query({
-		sql : 'update site set sitename=?,faviconhref=?,sitedes=?,sitescan=?,publichref=?,authorname=?,avatar=?,email=?',params : [newObj.sitename,newObj.faviconhref,newObj.sitedes,newObj.sitescan,newObj.publichref,newObj.authorname,newObj.avatar,newObj.email]
+		sql : 'update site set sitename=?,faviconhref=?,sitedes=?,sitescan=?,publichref=?,authorname=?,avatar=?,email=?,zan=?',params : [newObj.sitename,newObj.faviconhref,newObj.sitedes,newObj.sitescan,newObj.publichref,newObj.authorname,newObj.avatar,newObj.email,newObj.zan]
 	}).then(function(rs){
 		this.mysite = newObj;
 		//更新session user
@@ -130,6 +130,79 @@ router.post('/banner/delete',function(req,res,next){
 		res.json({success : false})
 	}
 })
+
+//友情链接
+router.get('/links',function(req,res,next){
+	res.render('center/links/list',{});
+})
+
+//获得所有的友情链接信息
+router.post('/links/list',function(req,res,next){
+	console.log('links')
+	query({
+		sql : 'select * from user_links order by id asc',params : []
+	}).then(function(rs){
+		var rst = rs[0];
+		console.log(rst);
+		res.json({
+			rows : rst,
+			total : rst.length
+		});
+	})
+})
+
+//保存友情链接
+router.post('/links/save',function(req,res,next){
+	var data = req.body;
+	console.log(data);
+	if(data.id){
+		query({
+			sql : 'update user_links set name=?,href=? where id=? ',params : [data.name,data.href,data.id]
+		}).then(function(rs){
+			res.json({
+				success : true,msg : '更新成功'
+			})
+		}).catch(function(){
+			res.json({
+				success : false,msg : '更新失败'
+			})
+		})
+	}else{
+		query({
+			sql : 'insert into user_links (name,href) values (?,?) ',params : [data.name,data.href]
+		}).then(function(){
+			res.json({
+				success : true,msg : '保存成功'
+			})
+		}).catch(function(){
+			res.json({
+				success : false,msg : '保存失败'
+			})
+		})
+	}
+})
+//删除友情链接
+router.post('/links/delete',function(req,res,next){
+	var id = req.body.id;
+	if(id){
+		query({
+			sql : 'delete from user_links where id=? ',params : [id]
+		}).then(function(rs){
+			res.json({
+				success : true,msg : '删除成功'
+			})
+		}).catch(function(){
+			res.json({
+				success : false,msg : '失败'
+			})
+		})
+	}else{
+		res.json({
+			success : false,msg : '失败'
+		})
+	}
+})
+
 
 //category 保存
 router.get('/category',function(req,res,next){
