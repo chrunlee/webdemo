@@ -27,7 +27,7 @@
 				<div>
 					<select name="category" class="byy-form-select" style="width:250px;">
 						{{ each category value i}}
-						<option value="{{value.id}}" {{article.category == value.id ? 'checked' : ''}}>{{value.name}}</option>
+						<option value="{{value.id}}" {{article.category == value.id ? 'selected' : ''}}>{{value.name}}</option>
 						{{ /each }}
 					</select>
 				</div>
