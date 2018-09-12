@@ -37,9 +37,12 @@
 		<div class="article-detail">
 			{{@article.html}}
 		</div>
+		{{if article.ismy == 1}}
+		<p style="color:#346dda;">转载请注明出处: <a href="https://chrunlee.cn{{article.link}}" title="{{article.title}}" target="_blank">https://chrunlee.cn{{article.link}}</a></p>
+		{{/if}}
 		<hr>
 		<div class="shang">
-			<p>您的赞赏是我的动力圆圈</p>
+			<p>大侠,赏口饭吃吧~~</p>
 			<div class="byy-btn" filter="shang">赞赏支持</div>
 			<div class="like" filter="addZan" data-id="{{article.id}}">
 				<div class="btn like-group">
