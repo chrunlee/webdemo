@@ -1,3 +1,2 @@
 User-agent: *
-Disallow:/center/
-Allow:*
+Allow:https://chrunlee.cn/sitemap.xml
