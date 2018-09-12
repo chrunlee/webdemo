@@ -56,7 +56,6 @@ function fetch(){
 				$('.demo-link').each(function(index,item){
 					demoLink.push(item.attribs.href);
 				})
-				console.log(demoLink);
 			}
 			//构建并生成
 			var xml = '<?xml version="1.0" encoding="utf-8"?><urlset>';
@@ -87,6 +86,7 @@ function createXml (str){
 }
 function getUrl(url,time){
 	url = domain+url;
+	time = time ? time.substring(0,10) : '';
 	return '<url><loc>'+url+'</loc>'+(time ? '<lastmod>'+time+'</lastmod>' : '<changefreq>daily</changefreq>')+'</url>';
 }
 
