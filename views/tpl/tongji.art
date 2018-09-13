@@ -1,4 +1,9 @@
-<script src="https://s22.cnzz.com/z_stat.php?id=1274640233&web_id=1274640233" language="JavaScript"></script>
-<script type="text/javascript">
-$(function(){$('[title="站长统计"]').hide();})
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?6989c14fa2c7041996bde7f67269e2c0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
 </script>
