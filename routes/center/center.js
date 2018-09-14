@@ -423,6 +423,47 @@ router.post('/article/delete',function(req,res,next){
 	}
 })
 
+
+//评论信息
+router.get('/comment',function(req,res,next){
+	res.render('center/comment/list',{});
+})
+//获得最新评论
+router.post('/comment/list',function(req,res,next){
+	var data = req.body;
+	var page = parseInt(data.page,10);
+	var rows = parseInt(data.rows,10);
+	query([
+		{sql : 'select t.id,c.link,t.name,t.content,t.ctime,t.email,t.toname,c.title from user_comment t left join user_article c on t.articleid=c.id order by ctime desc limit ?,?',params : [(page -1) * rows,rows]},
+		{sql : 'select count(1) as total from user_comment ',params : []}
+	]).then(function(rs){
+		var rst = rs[0],
+			total = rs[1][0].total;
+		res.json({
+			success : true,
+			total : total,
+			rows : rst
+		});
+	}).catch(function(err){
+		res.json({success : false,rows : [],total : 0})
+	})
+})
+//删除评论
+router.post('/comment/delete',function(req,res,next){
+	var id= req.body.id;
+	if(id){
+		query({
+			sql : 'delete from user_comment where id=? ',params : [id]
+		}).then(function(){
+			res.json({success : true})
+		}).catch(function(){
+			res.json({success : false})
+		})
+	}else{
+		res.json({success : false})
+	}
+})
+
 router.get('*',function(req,res,next){
 	res.redirect('/error/404');
 })

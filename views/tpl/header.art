@@ -8,8 +8,10 @@
 		<li id="tuku" class="byy-nav-item"><a href="/picture">图库</a></li>
 		<li id="caipu" class="byy-nav-item"><a href="/caipu/home">食谱</a></li>
 		<!--<li class=" pull-right">
-			<input type="text" class="index-search" name="search" autocomplete="off">
+			<form>
+			<input type="text" class="index-search" name="search" id="bdMsmain" autocomplete="off">
 			<i class="byyicon icon-search"></i>
+			</form>
 		</li>-->
 	</ul>
 </header>

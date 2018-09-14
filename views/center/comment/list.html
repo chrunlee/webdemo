@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>评论列表</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<link rel="stylesheet" href="/center/css/home.css">
+</head>
+<body class="grey-bg frame-body">
+	<div class="byy-panel list-panel">
+		<div class="byy-panel-title">
+			<span class="byy-breadcrumb">
+                <a href="/center/home" target="_parent">首页</a>
+                <a><cite>评论信息</cite></a>
+            </span>
+		</div>
+		<div class="byy-panel-content byy-clear">
+			<table class="byy-table">
+				
+			</table>
+			<div class="page">
+				<div class="pagination pull-right"></div>	
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+	byy.require(['jquery','win','table'],function(){
+		var category = [];
+		byy.bindEvents({
+			delete : function(data){
+				var id = data.id;
+				$.ajax({
+					url : '/center/comment/delete',
+					type : 'post',
+					data : {id : id},
+					success : function(res){
+						if(res.success){
+							byy.win.msg('删除成功',function(){
+								location.reload();	
+							});
+						}else{
+							byy.win.msg('删除失败,请检查');
+						}
+					}
+				});
+			}
+		});
+		
+
+		var loadData = function(){
+			//渲染数据
+			byy.table.render({
+				elem : '.byy-table',
+				method : 'post',
+				url : '/center/comment/list',
+				page : true,
+				cols : [[
+					{field : 'id',title : 'ID',width : 100},
+					{field : 'title',title : '文章',width:250,templet : function(data){
+						return '<a href="'+data.link+'" target="_blank" style="color:#6464e0">'+data.title+'</a>'
+					}},
+					{field : 'name',title : '评论人',width:100},
+					{field : 'content',title : '评论内容'},
+					{field : 'email',title : 'Email',width:100},
+					{field : 'toname',title : '给谁评论',width:100},
+					{field : 'ctime',title : '评论时间',width:200},
+					{field : 'tool',title:'操作',tool : true,width:80,templet : function( data ){
+						return '<span class="byy-btn mini danger" data-id="'+data.id+'" filter="delete">删除</span>';
+					}}
+				]]
+
+			});
+		}
+		loadData();
+	})
+
+</script>
