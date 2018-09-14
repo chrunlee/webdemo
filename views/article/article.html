@@ -26,7 +26,7 @@
 		<section class="grey-bg">
 			<div class="category">
 				{{each category value i}}
-				<span class="category-item byy-btn small danger {{c == value.id ? 'selected' : ''}}" filter="category" data-id="{{value.id}}">{{value.name}}</span>
+				<span class="category-item byy-btn small danger {{c == value.id ? 'selected' : ''}}"><a href="/article/?c={{value.id}}">{{value.name}}</a></span>
 				{{/each}}
 			</div>
 			<div class="section-content byy-clear">
@@ -114,10 +114,6 @@
 						}
 					}
 				});
-			},
-			category : function(data){
-				var id = data.id;
-				location.href = '/article/?c='+id;
 			}
 		});
 		//检查是否已经点赞
