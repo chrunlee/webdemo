@@ -28,10 +28,11 @@ var moment = require('moment');
 marked.setOptions({
     renderer: new marked.Renderer(),
     gfm: true,
-    tables: false,
+    tables: true,
     breaks: false,
     pedantic: false,
     sanitize: true,
+    silent : true,
     smartLists: true,
     smartypants: false
 
