@@ -59,7 +59,7 @@ router.get('/',function(req,res,next){
 		//文章
 		{sql : 'select * from user_article where ispublish=1 and type=0 '+(c ? ' and category=? ' : '')+' order by ctime desc limit ?,20',params : c ? [c,start] : [start]},
 		//总数
-		{sql : 'select count(*) as total from user_article where ispublish=1 and type=0 '+(c ? ' and category=? ' : '') + ' order by readnum desc',params : c ? [c] : []}
+		{sql : 'select count(*) as total from user_article where ispublish=1 and type=0 '+(c ? ' and category=? ' : '') + ' order by ctime desc',params : c ? [c] : []}
 	]).then(function(rs){
 		var banner = rs[0],
 			category = rs[1],
