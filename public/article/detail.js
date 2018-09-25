@@ -162,6 +162,9 @@ var Article = {
 				$(this).after('<div class=""><div class="img-caption">'+alt+'</div></div>');
 			});
 		},
+		checkTable : function(){
+			$('.article-detail table').each(function(){$(this).addClass('byy-table')})
+		},
 		checkZan : function(){
 			var zan = storage('zan'),
 				arr = zan.result;
@@ -263,6 +266,7 @@ var Article = {
 		Article.id = $('[name="id"]').val();
 		Article.tool.highlight();
 		Article.tool.checkImg();
+		Article.tool.checkTable();
 		Article.tool.checkZan();
 		//获取浏览器用户信息
 		Article.user  = storage('user').result || {};
