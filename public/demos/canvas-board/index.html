@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>画板</title>
+	<style>
+		html,body{
+			margin:0px;
+			padding: 0px;
+			height:100%;
+			width: 100%;
+			overflow: hidden;
+		}
+		canvas{
+			height:100%;
+			width:100%;
+			position:absolute;
+			left:0px;
+			top:0px;
+			z-index:100;
+			background-color: transparent;
+		}
+		#bg{
+			background-color: #49e;
+			z-index:10;
+		}
+		.tool>span{
+			display:inline-block;
+			position:absolute;
+			width:100px;
+			height:30px;
+			border:1px solid #f2f2f2;
+			text-align:center;
+			line-height:30px;
+			color:#f2f2f2;
+			cursor:pointer;
+		}
+		.draw{left:10px;top:10px;}
+		.clear{left:150px;top:10px;}
+		.empty{left:300px;top:10px;}
+		.tianzige{left:450px;top:10px;}
+		.hengxian{left:600px;top:10px;}
+		.screen{left:750px;top:10px;}
+		.tool{
+			position:absolute;
+			left:0px;
+			top:0px;
+			z-index:99999;
+		}
+		.color{
+			position:absolute;
+			right:0px;
+			top:0px;
+			width:110px;
+			z-index:9999;
+			height:100px;
+		}
+		.color>span{
+			display:inline-block;
+			height:20px;
+			margin:2px;
+			width:50px;
+			line-height:20px;
+			text-align:center;
+			float:left;
+			cursor:pointer;
+			font-size:12px;
+		}
+		.c1{background-color:red;color:white;}
+		.c2{background-color:yellow;color:#333;}
+		.c3{background-color:#333;color:white;}
+		.c4{background-color:green;color:white;}
+		.c5{background-color:white;color:#333;}
+		.c6{background-color:purple;color:#f2f2f2;}
+		.linewidth{
+			position:absolute;
+			top:80px;
+			right:0px;
+			width:110px;
+			height:100px;
+			z-index:09999;
+		}
+		.linewidth>span{
+			width:100%;
+			display:inline-block;
+			margin-bottom:5px;
+			cursor:pointer;
+			background-color:white;
+		}
+		.line1{height:5px;}
+		.line2{height:10px;}
+		.line3{height:20px;}
+	</style>
+</head>
+<body>
+	<div class="tool">
+		<span class="draw" onclick="draw()">画笔</span>
+		<span class="clear" onclick="xiangpi()">橡皮</span>
+		<span class="empty" onclick="empty()">清除</span>
+		<span class="tianzige" onclick="tianzige()">田字格</span>
+		<span class="hengxian" onclick="hengxian()">横线</span>
+
+		<span class="screen" onclick="screena()">截屏</span>
+	</div>
+	<div class="color">
+		<span class="c1" onclick="changeColor('red')">红</span>
+		<span class="c2" onclick="changeColor('yellow')">黄</span>
+		<span class="c3" onclick="changeColor('#333')">黑</span>
+		<span class="c4" onclick="changeColor('green')">绿</span>
+		<span class="c5" onclick="changeColor('white')">白</span>
+		<span class="c6" onclick="changeColor('purple')">紫</span>
+	</div>
+	<div class="linewidth">
+		<span class="line1" onclick="changeWidth(5)"></span>
+		<span class="line2" onclick="changeWidth(10)"></span>
+		<span class="line3" onclick="changeWidth(20)"></span>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	//当前状态
+	var status = 'draw';//'draw' 'clear' 
+	var dotWidth = 50;
+	var color = 'white';
+	var lineWidth = 5;
+	function changeColor(c){
+		color = c;
+	}
+	function draw(){
+		console.log('abc');
+		status = 'draw';
+	}
+	function xiangpi(){
+		console.log('aaa');
+		status = 'clear';
+		//带有一个小圆圈
+	}
+	function changeWidth(w){
+		lineWidth = w;
+	}
+	function tianzige(){
+		canvas.get().drawImage('bg.png');
+	}
+	function hengxian(){
+		canvas.get().drawImage('line.png');	
+	}
+	function empty(){
+		var ins = canvas.get();
+		ins.ctx.clearRect(0,0,ins.width,ins.height);
+	}
+	function screena(){
+		//设置保存图片的类型
+		var type = 'jpg';
+	    var imgdata = canvas.get().ele.toDataURL(type);
+	    //将mime-type改为image/octet-stream,强制让浏览器下载
+	    var fixtype = function (type) {
+	        type = type.toLocaleLowerCase().replace(/jpg/i, 'jpeg');
+	        var r = type.match(/png|jpeg|bmp|gif/)[0];
+	        return 'image/' + r;
+	    }
+	    imgdata = imgdata.replace(fixtype(type), 'image/octet-stream')
+	    //将图片保存到本地
+	    var saveFile = function (data, filename) {
+	        var link = document.createElement('a');
+	        link.href = data;
+	        link.download = filename;
+	        var event = document.createEvent('MouseEvents');
+	        event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	        link.dispatchEvent(event);
+	    }
+	    var filename = new Date().toLocaleDateString() + '.' + type;
+	    saveFile(imgdata, filename);
+	}
+	var canvas = {
+		init () {
+			this.ele = document.createElement('canvas');
+			document.body.appendChild(this.ele);
+			this.ctx = this.ele.getContext('2d');
+			//背景图层
+			this.floor = document.createElement('canvas');
+			this.floor.id = 'bg';
+			document.body.appendChild(this.floor);
+			this.floorCtx = this.floor.getContext('2d');
+
+			this.width = this.ele.width = this.floor.width = window.innerWidth;
+			this.height = this.ele.height = this.floor.height = window.innerHeight;
+
+			return this;
+		},
+		get (){
+			return this;
+		},
+		drawImage (imgPath){
+			var that = this;
+			// that.floorCxt.clearRect(0,0,that.width,that.height);
+			var img = new Image();
+			img.src = imgPath;
+			img.onload = function(){
+				that.floorCtx.clearRect(0,0,that.width,that.height);
+				that.floorCtx.drawImage(img,that.width/2 - 500,that.height/2 - 100);
+			}
+
+		},
+		//移动
+		bind(){
+			let ctx = this.ctx;
+			let startDraw = false;
+			this.ele.onmousedown = function(ev){
+				startDraw = true;
+				var x = ev.clientX,y = ev.clientY;
+				ctx.beginPath();
+				if(status == 'clear'){
+					var dot = document.createElement('div');
+					dot.setAttribute('class','dot');
+					dot.style = 'width:'+dotWidth+'px;height:'+dotWidth+'px;border-radius:50%;border:1px solid white;position:absolute;z-index:-1'
+					document.body.appendChild(dot)
+					dot.style.left = (x-dotWidth/2)+'px';
+					dot.style.top = (y-dotWidth/2)+'px';
+				}
+			}
+			this.ele.onmousemove = function(ev){
+				if(startDraw){
+					console.log(status);
+					var x = ev.clientX,y = ev.clientY;
+					if(status == 'draw'){
+						ctx.strokeStyle = color;
+						ctx.lineWidth = lineWidth;
+						ctx.lineTo(x,y);
+						ctx.stroke();
+					}else if(status == 'clear'){
+						//清除
+						ctx.strokeStyle = 'rgba(0,0,0,1)';
+						ctx.clearRect(x - 40,y - 40,80,80);
+					}
+				}
+			}
+			this.ele.onmouseup = function(){
+				ctx.closePath();
+				startDraw = false;
+			}
+		}
+	}
+	canvas.init().bind();
+</script>
