@@ -13,7 +13,6 @@ var Article = {
 		//保存评论
 		saveComment : function(){
 			//校验内容是否填写
-			console.log('comment');
 			var $comment = $(this).parent().parent().parent();//父级容器
 			var $content = $comment.find('textarea'),
 				content = $content.val(),
@@ -178,6 +177,22 @@ var Article = {
 				$('.like').addClass('addzan');
 			}
 		},
+		//绑定图片展示
+		showPic : function(){
+			$('.article-detail').on('click','img',function(){
+				var img = $(this).attr('src'),alt = $(this).attr('alt');
+				byy.win.photos({
+					anim : Math.round(Math.random() * 5),
+					photos : {
+						title : alt || '',
+						data : [{
+							alt : alt || '',
+							src : img
+						}]
+					}
+				});
+			})
+		},
 		//根据一个评论获得html
 		getCommentHtmlByComment : function(comment){
 			var $block = $('<div class="comment-block"></div>');
@@ -266,6 +281,7 @@ var Article = {
 		Article.id = $('[name="id"]').val();
 		Article.tool.highlight();
 		Article.tool.checkImg();
+		Article.tool.showPic();
 		Article.tool.checkTable();
 		Article.tool.checkZan();
 		//获取浏览器用户信息
