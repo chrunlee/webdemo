@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>H5 canvas 调用摄像头进行绘制</title>
+	<style>
+		html,body{
+			width:100%;
+			height:100%;
+			padding: 0px;
+			margin: 0px;
+			overflow: auto;
+		}
+		#canvas{
+			width:500px;
+			height:300px;
+		}
+		#video{
+			width:500px;
+			height:300px;
+		}
+		.btn{
+			display:inline-block;
+			text-align: center;
+			background-color: #333;
+			color:#eee;
+			font-size:14px;
+			padding:5px 15px;
+			border-radius: 5px;
+			cursor:pointer;
+		}
+	</style>
+</head>
+<body>
+	<p style="text-align:center;font-size:12px;color:#555;">本DEMO不会存储任何有关视频图像信息，可以查看源码，都是在本地操作，没有任何服务器上传代码。</p>
+	<video id="video" autoplay="true" style="background-color:#ccc;display:none;"></video>
+	<div style="width:500px;height:300px;margin:30px auto;">
+		<canvas id="canvas" width="500px" height="300px">您的浏览器不支持H5 ,请更换或升级!</canvas>
+		<span class="btn" filter="screenshot">视频截图</span>
+		<span class="btn" filter="close">暂停本地摄像头</span>
+		<span class="btn" filter="open">打开本地摄像头</span>
+	</div>
+	<div style="width:500px;height:300px;margin:40px auto;" id="show"></div>
+</body>
+</html>
+<script>
+	var events = {
+		open : function(){
+			LV.open();
+		},
+		close : function(){
+			console.log(LV.timer);
+			clearInterval(LV.timer);
+			// LV.media && LV.media.stop();
+		},
+		screenshot : function(){
+			//获得当前帧的图像并拿到数据
+			var image = canvas.toDataURL('jpeg');
+			document.getElementById('show').innerHTML = '<img src="'+image+'" style="width:500px;height:300px;" />'
+		}
+	};
+	var LV = {
+		video : document.getElementById('video'),
+		canvas : document.getElementById('canvas'),
+		timer : null,
+		media : null,
+		open :function(){
+			if(!LV.timer){
+				navigator.mediaDevices.getUserMedia({
+					video : {width:500,height:300}
+				}).then(function(stream){
+					LV.media = typeof stream.stop === 'function' ? stream : stream.getTracks()[0];
+					LV.video.src = /*对stream转成url*/(window.URL || window.webkitURL).createObjectURL(stream);
+				}).catch(function(err){
+					alert(err);//弹窗报错
+				})
+			}
+			if(LV.timer){
+				clearInterval(LV.timer);
+			}
+			//将画面绘制到canvas中
+			LV.timer = setInterval(function(){
+				LV.ctx.drawImage(LV.video,0,0,500,300);
+			},15);
+		},
+		init : function(){
+			LV.ctx = LV.canvas.getContext('2d');
+			//绑定事件
+			document.querySelectorAll('[filter]').forEach(function(item){
+				item.onclick = function(ev){
+					var type = this.getAttribute('filter');
+					events[type].call(this,ev);
+				}
+			});
+			return LV;
+		}
+	};
+	LV.init();
+</script>
