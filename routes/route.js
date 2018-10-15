@@ -11,7 +11,6 @@ module.exports = function( app ){
 	app.use(require('../util/logUtil'));
 
 	app.use(require('../util/common'));
-
 	//小程序知识点
 	app.use('/exam',require('../routes/other/exam'));
 

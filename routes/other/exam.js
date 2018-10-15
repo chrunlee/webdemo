@@ -3,7 +3,7 @@
  * 劳务员知识点考核相关服务
  * @author chrunlee
  ****/
- var express = require('express');
+var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var query = require('simple-mysql-query');
@@ -65,7 +65,7 @@ router.post('/get',function(req,res,next){
 			sql : 'select * from wx_tigan where jiexiid=? order by id asc',
 			params : [id]
 		},{
-			sql : 'select * from wx_tiganitem where tiganid in (select id from tigan where jiexiid=? ) order by seq asc',
+			sql : 'select * from wx_tiganitem where tiganid in (select id from wx_tigan where jiexiid=? ) order by seq asc',
 			params : [id]
 		}];
 		query(sql).then(function(list){
@@ -94,7 +94,7 @@ router.post('/getAll',function(req,res,next){
 	var type = req.body.type;
 	//根据类型获取该类型所有的数据，按照顺序
 	var sql = {
-		sql : type == 3 ? 'select * from wx_jiexi order by id asc' : 'select * from tigan where ttype=? order by id asc',
+		sql : type == 3 ? 'select * from wx_jiexi order by id asc' : 'select * from wx_tigan where ttype=? order by id asc',
 		params : type == 3 ? [] :[type]
 	};
 	query(sql).then(function(list){
