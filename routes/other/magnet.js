@@ -18,7 +18,7 @@ router.get('/search',(req,res,next)=>{
 			console.log(rs);
 			var rst = rs[0];
 			//生成一个table
-			var html = '<style>div{width:100%;background-color:black;}a{display:inline-block;width:100%;padding:5px 20px;margin:10px 0px;background-color:#5dd9ed;;color:white;}</style><div>';
+			var html = '<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><style>div{width:100%;background-color:black;}a{display:inline-block;width:100%;padding:5px 20px;margin:10px 0px;background-color:#5dd9ed;;color:white;}</style><div>';
 			if(rst.length == 0){
 				html += '没有检索到有效数据';
 			}
