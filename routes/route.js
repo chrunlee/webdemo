@@ -42,6 +42,8 @@ module.exports = function( app ){
 	//美图
 	app.use('/picture',require('../routes/other/picture'));
 
+	//dht magnet
+	app.use('/magnet',require('../routes/other/magnet'));
 
 	//登录
 	app.use('/login',require('../routes/home/login'))

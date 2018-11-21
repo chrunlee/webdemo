@@ -58,8 +58,6 @@ module.exports = function Weather(){
 	var hour = d.getHours();
 	if(hour == 7){
 		getWeather().then(function(txt){
-			return sms(txt,my);
-		}).then(function(txt){
 			return sms(txt,gf);
 		}).then(function(){
 			setTimeout(function(){
