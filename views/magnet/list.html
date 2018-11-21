@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<title>磁力检索</title>
+	<style>
+		html,body{
+			width:100%;
+			height:100%;
+			margin:0px;
+			padding:0px;
+			background-color:#f2f2f2;
+			font-family:"微软雅黑";
+		}
+		h1{text-align:center;margin-bottom:50px;font-size:40px;}
+		.info{text-align:center;position:relative;top:-20px;color:#ccc;font-size:14px;}
+		.ipt{
+			width:80%;margin:0px auto;
+			position:relative;
+		}
+		.ipt .search{
+			width:100%;
+			height:40px;
+			line-height:40px;
+			font-size:16px;
+			color:#333;
+			border-radius:2px;
+			outline:none;
+			border:1px solid #11b5b5;
+			padding-right:100px;
+			box-sizing:border-box;
+		}
+		.submit{
+			position:absolute;
+			right:0px;
+			top:0px;
+			height:39px;
+			width:100px;
+			outline:none;
+			border-style:hidden;
+			border-left:1px solid #11b5b5;
+			background-color:#11b5b5;
+			color:white;
+		}
+		.empty{
+			text-align:center;
+			margin-top:100px;
+		}
+		.block{
+			width:95%;
+			margin:10px auto;
+			border:1px solid #d7d4d4;
+			border-radius:4px;
+			padding:5px 10px;
+			box-sizing:border-box;
+			background-color:#fff;
+		}
+		.block a,.block a:active,.block a:focus{
+			color:#333;
+			font-size:16px;
+			font-family:"微软雅黑";
+			text-decoration:none;
+			word-break:break-all;
+			white-space:normal;
+		}
+	</style>
+</head>
+<body>
+	<h1>磁力检索</h1>
+	<p class="info">正在积极抓取数据，如果搜不到过几天来试试？</p>
+	<div class="form">
+		<form action="/magnet/search" method="get">
+			<div class="ipt">
+				<input type="text" name="name" class="search" value="{{search}}">
+				<input type="submit" value="检索" class="submit">
+			</div>
+		</form>
+	</div>
+	<div class="content">
+		{{if q && list.length == 0}}
+		<div class="empty">没有检索到关于"{{search}}"的记录</div>
+		{{/if}}
+		{{each list value i}}
+		<div class="block">
+			<a href="/magnet/{{value.infohash}}">{{value.name}}</a>
+		</div>
+		{{/each}}
+	</div>
+</body>
+</html>

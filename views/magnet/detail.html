@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{name}}</title>
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<style>
+		h3,p{
+			word-break:break-all;
+			white-space:normal;
+		}
+		.file p{
+			padding-left:80px;
+			font-size:12px;
+			color:#666;
+			position:relative;
+			border-bottom:1px solid #ccc;
+			padding-bottom:10px;
+		}
+		.obj{
+			position:absolute;
+			left:10px;
+			top:0px;
+			color:#666;
+		}
+		.backwrap{
+			margin-top:50px;
+			text-align:center;
+		}
+		.back{
+			color:#333;
+		}
+		.size{
+			color:#f60;
+			font-size:1.2em;
+		}
+	</style>
+</head>
+<body>
+	<!--列出详细信息-->
+	<h3>{{name}}</h3>
+	<p>总文件大小:<span class="size">{{size}}</span></p>
+	<p>地址: <a href="{{magnet}}">{{magnet}}</a></p>
+	<div class="file">
+		<h5>文件列表</h5>
+		{{each files value i}}
+		<p>{{value.path}} <span class="obj size">{{value.size}}</span></p>
+		{{/each}}
+	</div>
+</body>
+</html>
