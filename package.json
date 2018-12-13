@@ -33,6 +33,7 @@
     "moment": "^2.22.1",
     "morgan": "^1.9.0",
     "mysql": "^2.15.0",
+    "nodemailer": "^4.7.0",
     "qiniu": "^7.2.1",
     "serve-favicon": "^2.4.5",
     "simple-mysql-query": "^1.0.0",

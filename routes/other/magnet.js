@@ -24,7 +24,7 @@ router.get('/search',(req,res,next)=>{
 		res.render('magnet/list',{q : true,list : []});
 	}else{
 		query({
-			sql : 'select name,infohash from demo_magnet where name like ? ',
+			sql : 'select name,infohash from demo_magnet where name like ? order by createTime desc',
 			params : ['%'+name+'%']
 		})
 		.then(rs=>{

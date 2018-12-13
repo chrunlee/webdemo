@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>贪吃蛇？</title>
+	<style>
+		div{
+			border:1px solid red;
+			box-sizing:border-box;
+			width:802px;
+			margin:50px auto;
+		}
+		div:after{
+			content:"";
+			clear:both;
+			*zoom:1;
+			height:0px;
+			font-size:0px;
+			display:block;
+		}
+		div>span{
+			display:inline-block;
+			float:left;
+			width:20px;
+			height:20px;
+			box-sizing:border-box;
+			border:1px solid red;
+			
+		}
+		div>span.c{background-color:#333;}
+		div>span.r{
+			-webkit-transition: all .3s ease;
+			-o-transition: all .3s ease;
+			transition: all .3s ease;
+			animation:jump 1s infinite;
+		}
+		@-webkit-keyframes jump{
+			0%{background-color:#333;}
+			50%{background-color:white;}
+			100%{background-color:#333;}
+		}
+	</style>
+</head>
+<body>
+	<!--
+
+	贪吃蛇：
+	1. 确定范围大小
+	2. 初始长度
+	3. 记录转折点
+	4. 记录长度
+	5. 渲染🐍
+	6. 
+	-->
+	<div class="wrap">
+		
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	
+	class Snake{
+		constructor(){
+			this.length = 3;
+			this.nodes = [{x:5,y:5},{x:5,y:6},{x:5,y:7}];
+			this.direct = 0;//0 下，1 右，2 上，3 左
+			this.move();
+			this.listen();
+		}
+		//监听上下左右
+		listen(){
+			var thiz = this;
+			document.body.onkeydown =  function(ev){
+				var code = ev.keyCode;
+				console.log(code);
+				thiz.direct = {
+					40 : 0,
+					39 : 1,
+					38 : 2,
+					37 : 3
+				}[code];
+			}
+		}
+		move(){
+			//移动后，每隔200ms移动一次
+			var dir = [{x : 0,y : 1},{x:1,y:0},{x:0,y:-1},{x:-1,y:0}];
+			this.nodes.splice(0,1)
+			var first = this.nodes[this.nodes.length-1];
+			this.nodes.push({
+				x : first.x + dir[this.direct].x,
+				y : first.y + dir[this.direct].y
+			});
+			setTimeout(()=>{
+				this.move();
+			},200);
+		}
+
+	}
+	class Table{
+		constructor(snake){
+			this.len = 40;
+			this.render();
+			this.showSnake(snake);
+		}
+		render(){
+			var html = Array.from({length:this.len*this.len}).map((a,i)=>{
+				return `<span id="${i}" x="${i % this.len}" y="${Math.floor(i/this.len)}"></span>`;
+			}).join('');
+			document.querySelector('.wrap').innerHTML= html;
+		}
+		showSnake(snake){
+			//对snake内的节点进行选中，并去掉其他的？ 每隔一段时间进行渲染
+			document.querySelectorAll('span.c').forEach(node=>{
+				node.setAttribute('class','');
+			});
+			snake.nodes.forEach(item=>{
+				var span = document.getElementById(''+(item.x + item.y*this.len));
+				span.setAttribute('class','c');
+			});
+			setTimeout(()=>{
+				this.showSnake(snake);
+			},200);
+		}
+	}
+	var snake = new Snake();
+	new Table(snake);
+
+</script>

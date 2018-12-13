@@ -289,6 +289,27 @@ var Article = {
 		//加载评论
 		Article.loadComment();
 		Article.addRead();
+
+		
+		//1.增加backTop
+		$('body').append('<div class="backTop" title="点击返回顶部"><div></div></div>');
+		$('body').on('click','.backTop',function(){
+			$('html,body').animate({
+				scrollTop : 0
+			},500);
+		});
+		//滚动监听，隐藏顶部
+		var exeHide = function(ev){
+			var now = $(window).scrollTop();
+			if(now > 250){//如果滚动到了200PX以下，则闪出
+				$('.backTop').addClass('showme');
+			}else{
+				$('.backTop').removeClass('showme');
+			}
+		};
+		$(window).on('scroll',exeHide);
+
+
 	}
 };
 //启动

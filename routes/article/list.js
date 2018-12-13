@@ -14,6 +14,10 @@ var router = express.Router();
 
 var marked = require('marked');
 
+var {email} = require('../../json/config');
+
+var mailer = require('../../lib/mailer');
+
 //markdown 解析器
 var renderer = new marked.Renderer();
 //重写解析规则
@@ -132,10 +136,11 @@ router.post('/zan',function(req,res,next){
 //保存评论
 router.post('/saveComment',function(req,res,next){
 	var data = req.body;
-	console.log(data);
 	data.email = data.email || '';
 	data.toname = data.toname || '';
 	if(data.articleId && data.content.length <= 1000 && data.name.length <= 20 && data.email.length <= 50 && data.toname.length <= 50){
+		//评论后，立刻发邮件给我...
+		mailer([email.user],'您有新的评论，请查看',`email : ${data.email} <br /> from : ${data.name} <br /> content : ${data.content} <br /> id : ${data.articleId}`,function(err,info){});
 		//继续保存
 		query({
 			sql : 'insert into user_comment (articleid,name,content,toid,ctime,email,toname,commentid) values (?,?,?,?,?,?,?,?) ',

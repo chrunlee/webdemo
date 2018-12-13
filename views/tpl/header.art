@@ -5,8 +5,8 @@
 		<li id="article" class="byy-nav-item"><a href="/article">博文 &nbsp;<span class="byy-badge-dot"></span></a></li>
 		<li id="demo" class="byy-nav-item"><a href="/demo">Demo </a></li>
 		<li id="about" class="byy-nav-item"><a href="/about">关于</a></li>
-		<li id="tuku" class="byy-nav-item"><a href="/picture">图库</a></li>
-		<li id="caipu" class="byy-nav-item"><a href="/caipu/home">食谱</a></li>
+		<!--<li id="tuku" class="byy-nav-item"><a href="/picture">图库</a></li>
+		<li id="caipu" class="byy-nav-item"><a href="/caipu/home">食谱</a></li>-->
 		<!--<li class=" pull-right">
 			<form>
 			<input type="text" class="index-search" name="search" id="bdMsmain" autocomplete="off">

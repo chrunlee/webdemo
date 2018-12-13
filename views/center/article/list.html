@@ -90,6 +90,22 @@
 						}
 					}
 				});
+			},
+			recommend : function(data){
+				$.ajax({
+					url : '/center/article/recommend',
+					type : 'post',
+					data : {id : data.id},
+					success : function(res){
+						if(res.success){
+							byy.win.msg('置顶成功',function(){
+								location.reload();	
+							});
+						}else{
+							byy.win.msg('删除失败,请检查');
+						}
+					}
+				});
 			}
 		});
 		
@@ -100,15 +116,17 @@
 				elem : '.byy-table',
 				method : 'post',
 				url : '/center/article/list',
-				page : true,
+				page : {
+					pageArray : [50,100]
+				},
 				cols : [[
-					{field : 'id',title : 'ID',width : 100},
+					{field : 'id',title : 'ID',sort : true,width : 100},
 					{field : 'title',title : '标题'},
 					{field : 'ismy',title : '原创',width:100,templet : function(data){
 						return data.ismy == 0 ? '<span style="color:#49e;">转载</span>' : '<span style="color:#25ca92;">原创</span>'
 					}},
 					{field : 'enname',title : '英文路径',width:250},
-					{field : 'readnum',title : '阅读',width:100},
+					{field : 'readnum',title : '阅读',sort : true,width:100},
 					{field : 'type',title : '类型',width:100,templet : function(data){
 						return data.type == 0 ? '<span style="color:#25ca92;">文章</span>' : '<span style="color:#49e;">DEMO</span>'
 					}},
@@ -126,7 +144,10 @@
 								data.ispublish == '0' ? 
 								'<span class="byy-btn mini" data-id="'+data.id+'" filter="publish">发布</span>' : 
 								'<span class="byy-btn mini warm" data-id="'+data.id+'" filter="cancel">取消发布</span>',
-								'<span class="byy-btn mini danger" data-id="'+data.id+'" filter="delete">删除</span>'
+								'<span class="byy-btn mini danger" data-id="'+data.id+'" filter="delete">删除</span>',
+								data.recommend == '1' ? 
+								'<span class="byy-btn mini" data-id="'+data.id+'">已置顶</span>' 
+								: '<span class="byy-btn mini danger" data-id="'+data.id+'" filter="recommend">置顶</span>'
 							].join('');
 					}}
 				]]

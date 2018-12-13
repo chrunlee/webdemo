@@ -422,6 +422,23 @@ router.post('/article/delete',function(req,res,next){
 		res.json({success : false})
 	}
 })
+//置顶文章
+router.post('/article/recommend',function(req,res,next){
+	var id = req.body.id;
+	if(id){
+		query({
+			sql : 'update user_article set recommend=? where id=?',params : ['1',id]
+		}).then(function(rs){
+			res.json({success : true})
+		}).catch(function(){
+			res.json({success : false})
+		})
+	}else{
+		res.json({success : false})
+	}
+})
+
+
 
 
 //评论信息
