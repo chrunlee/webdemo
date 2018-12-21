@@ -1,0 +1,7 @@
+/*
+	@company 博育云
+	@site : www.boyuyun.cn
+	@author boyuyun
+*/
+
+byy.define(function(a){if(!window.localStorage)throw new Error("sorry ,this browser is not support H5 storage");a("store",function(){function a(a,b){return function(c){setTimeout(function(){c=c||window.storageEvent;var d=c.key,e=c.newValue;if(!d){var f=localStorage.getItem(a);null!=f&&(d=a,e=f)}d==a&&e&&(b&&b(e),localStorage.removeItem(a))},0)}}return{clearSession:function(a){try{a?sessionStorage.removeItem(a):sessionStorage.clear()}catch(a){console.log(a)}return this},clearLocal:function(a){try{a?localStorage.removeItem(a):localStorage.clear()}catch(a){console.log(a)}return this},session:function(a,b){if(null!==b&&void 0!==b)return sessionStorage.setItem(a,byy.stringfy(b)),this;var c=sessionStorage.getItem(a);return byy.json(c)},local:function(a,b){if(b)return localStorage.setItem(a,byy.stringfy(b)),this;var c=localStorage.getItem(a);return byy.json(c)},trigger:function(a,b){localStorage.setItem(a,byy.stringfy(b||a));var c=document.createEvent("StorageEvent");return c.initStorageEvent("storage",!1,!1,a,null,b,null,localStorage),window.dispatchEvent(c),this},listen:function(b,c){if(byy.device().ie){var d=a(b,c);setInterval(function(){d({})},500)}else document.attachEvent?document.attachEvent("onstorage",a(b,c)):window.addEventListener("storage",a(b,c),!1);return this}}}())});

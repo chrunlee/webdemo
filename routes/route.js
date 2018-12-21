@@ -11,6 +11,11 @@ module.exports = function( app ){
 	app.use(require('../util/logUtil'));
 
 	app.use(require('../util/common'));
+
+
+	//github 登录
+	app.use('/github',require('../routes/login/login'));
+
 	//小程序知识点
 	app.use('/exam',require('../routes/other/exam'));
 
@@ -45,8 +50,6 @@ module.exports = function( app ){
 	//dht magnet
 	app.use('/magnet',require('../routes/other/magnet'));
 
-	//登录
-	app.use('/login',require('../routes/home/login'))
 
 
 	//个人中心
@@ -55,21 +58,8 @@ module.exports = function( app ){
 	app.use('/center/upload',require('../routes/center/upload'));
 
 	//文章列表
-	app.use('/article',require('../routes/article/list'));
+	app.use('/article',require('../routes/home/article'));
 	
-	//demo 系列
-	app.use('/demo',function(req,res,next){
-		res.render('demos/index',{
-			site : this.mysite
-		});
-	})
-
-	//关于
-	app.use('/about',function(req,res,next){
-		res.render('about',{
-			site : this.mysite
-		});
-	})
 	//首页
 	app.use('/',require('../routes/home/home'));
 

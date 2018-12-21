@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+	<title>文章检索 | {{site.sitename}}</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<link rel="stylesheet" href="/css/index/index.css">
+	<link rel="stylesheet" href="/css/article/article.css">
+	<link rel="stylesheet" href="/css/article/detail.css">
+</head>
+<body class="grey-bg fixed">
+	{{ include '../tpl/header.art'}}
+	<div class="grey-bg">
+		<div class="detail-wrap recommand light" style="min-height:600px;">
+			<div class="title">
+				<h6>检索</h6>	
+			</div>
+			<div class="recommand-list">
+				{{if d.data.length ==0}}
+				<div class="empty-comment">
+					没有检索到关于"{{d.q}}"的相关文章哦.. 要不去<a href="/article">文章</a>列表看看?
+				</div>
+				{{/if}}
+				{{each d.data value i}}
+				<div class="command-article">
+					<a href="{{value.link}}" style="background-image:url({{value.postpath}});"></a>
+					<div class="title">
+						<a href="{{value.link}}">{{value.title}}</a>
+					</div>
+					<div class="des">
+						{{value.zhaiyao}}
+					</div>
+				</div>
+				{{ /each }}
+			</div>
+		</div>
+	</div>
+	<div class="zanshang-pic" style="display:none;padding-left:7px;">
+		<img src="/weixin.jpg" alt="全靠各位土豪的打赏了.." style="width:200px;height:200px;margin-right:20px;">
+		<img src="/zhifubao.jpg" alt="全靠各位土豪的打赏了.." style="width:200px;height:200px;">
+	</div>
+	{{ include '../tpl/footer'}}
+</body>
+</html>
+{{ include '../tpl/commonjs.art'}}
+<script type="text/javascript" src="/plugins/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/js/article/detail.js"></script>
+<script type="text/javascript" src="/js/article/canvas.js"></script>

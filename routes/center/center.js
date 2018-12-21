@@ -46,7 +46,7 @@ router.post('/site/update',function(req,res,next){
 	var newObj = Object.assign(nowObj,body);
 	//更新数据库
 	query({
-		sql : 'update site set sitename=?,faviconhref=?,sitedes=?,sitescan=?,publichref=?,authorname=?,avatar=?,email=?,zan=?',params : [newObj.sitename,newObj.faviconhref,newObj.sitedes,newObj.sitescan,newObj.publichref,newObj.authorname,newObj.avatar,newObj.email,newObj.zan]
+		sql : 'update site set sitename=?,faviconhref=?,sitedes=?,sitescan=?,publichref=?,authorname=?,avatar=?,email=?,zan=?,domain=?',params : [newObj.sitename,newObj.faviconhref,newObj.sitedes,newObj.sitescan,newObj.publichref,newObj.authorname,newObj.avatar,newObj.email,newObj.zan,newObj.domain]
 	}).then(function(rs){
 		this.mysite = newObj;
 		//更新session user

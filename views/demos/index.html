@@ -7,7 +7,7 @@
 	<meta name="content" content="把工作、生活中自己学习、感兴趣的小页面或工具集中在一起，以后再有类型的需求可以直接进行参考，也欢迎大家发邮件把自己想要实现的一些页面或小工具发给我，我会尽力实现的。@mailto:chrunlee@foxmail.com">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
-	<link rel="stylesheet" href="/article/index.css">
+	<link rel="stylesheet" href="/css/index/index.css">
 	<style>
 		.trs{
 			-webkit-transition: all .3s ease;
@@ -256,7 +256,12 @@
 </html>
 {{ include '../tpl/commonjs.art'}}
 <script type="text/javascript">
-	byy.require(['jquery','win'],function(){
+	byy.require(['jquery','win','common'],function(){
+		byy.bindEvents({
+			login : function(){
+				byy.common.login();
+			}
+		});
 		$('#search').on('keyup',function(ev){
 			if(ev.keyCode === 13){
 				var v = $('#search').val();

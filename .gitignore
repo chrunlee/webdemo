@@ -6,11 +6,7 @@ lib-cov
 *.out
 *.pid
 *.gz
-wx.json
-wx-dev.json
-ym.json
-ymzs.json
-config.json
+json/
 sitemap.xml
 pids
 results

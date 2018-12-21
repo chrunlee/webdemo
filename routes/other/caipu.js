@@ -247,11 +247,11 @@ router.get('/home',function(req,res,next){
 			}
 		}
 		//如果
-		res.render('caipu/home',{
+		res.render('other/caipu/home',{
 			caipu : resobj
 		})
 	}).catch(function(){
-		res.render('caipu/home',{
+		res.render('other/caipu/home',{
 			caipu : []
 		})
 	});
@@ -293,16 +293,16 @@ router.get('/show/:id',function(req,res,next){
 					num : arr[1] || ''
 				}
 			});
-			res.render('caipu/detail',{
+			res.render('other/caipu/detail',{
 				caipu : caipuObj,
 				steps : steps,
 				links : links
 			});
 		}).catch(function(err){
-			res.redirect('caipu/error');
+			res.redirect('other/caipu/error');
 		})
 	}else{
-		res.redirect('caipu/error');
+		res.redirect('other/caipu/error');
 	}
 })
 //分类
@@ -321,7 +321,7 @@ router.get('/fenlei',function(req,res,next){
 			var fenlei = rs[0],
 				list = rs[1];
 			fenlei = fenlei.length > 0 ? fenlei[0] : {};
-			res.render('caipu/fenlei',{
+			res.render('other/caipu/fenlei',{
 				fenlei : fenlei,
 				list : list
 			})
@@ -375,12 +375,12 @@ router.get('/search',function(req,res,next){
 	query({sql : sql,params :params})
 	.then(function(rs){
 		var list = rs[0];
-		res.render('caipu/search',{
+		res.render('other/caipu/search',{
 			list : list,
 			searchValue : q
 		});
 	}).catch(function(){
-		res.render('caipu/search',{
+		res.render('other/caipu/search',{
 			list : []
 		});
 	})

@@ -16,7 +16,7 @@ var router = express.Router();
 var query = require('simple-mysql-query');
 
 router.get('/',function(req,res,next){
-	res.render('logs/index');
+	res.render('other/logs/index');
 })
 
 /**截止到目前为止24小时内数据--折线图**/

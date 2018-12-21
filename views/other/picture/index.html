@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>图小二 - 美图搜搜</title>
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+	<link rel="stylesheet" href="/css/other/picture/common.css">
+</head>
+<body>
+	<input type="hidden" name="searchvalue" value="{{searchValue}}">
+	<div class="search">
+		<form type="get" action="/picture/search">
+			<input type="text" placeholder="检索你想要的标签.." value="{{searchValue}}" name="search">
+			<button class="search-icon" type="submit"></button>
+		</form>
+	</div>
+	<section>
+		{{ if images.length == 0}}
+		没有数据
+		{{ /if }}
+		{{ each images value i}}
+		<article>
+			<img src="{{value.webformatURL}}" alt="">
+			<div class="tag">{{value.tags}}</div>
+		</article>
+		{{ /each }}
+	</section>
+	<div class="more">点击加载更多</div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/jquery/jquery.js"></script>
+<script type="text/javascript">
+	$(function(){
+    // 页数
+    var page = 1;
+    // 每页展示10个
+    var size = 20;
+    var data = true;
+    var loading = false;
+    function loadNext(){
+    	if(!data || loading){
+    		return;
+    	}
+    	loading = true;
+    	page ++;
+    	var result = '';
+    	var search = $('[name="search"]').val();
+    	$('.more').html('正在加载中..')
+    	$.ajax({
+            type: 'POST',
+            url: '/picture/search',
+            data : {
+            	q : search,
+            	page : page
+            },
+            dataType: 'json',
+            success: function(resobj){
+                var arr = resobj.hits;
+                if(arr.length > 0){
+                	loading = false;
+                	$('.more').html('点击加载更多')
+                    arr.forEach(function(item){
+                    	result += '<article><img src="'+item.webformatURL+'" /><div class="tag">'+item.tags+'</div></article>';
+                    });
+                    $('section').append(result);
+                }else{
+                	data = false;
+                    $('.more').html('已经到底啦');
+                }
+            },
+            error: function(xhr, type){
+                alert('加载出错，请重新加载')
+            }
+        });
+    }
+
+    $('.more').on('click',function(){
+    	loadNext();
+    })
+   
+});
+</script>

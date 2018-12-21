@@ -1,17 +1,31 @@
 <header class="index-header">
 	<ul class="byy-nav black-bg" id="topHeader">
 		<span class="pull-left logo"><a href="/"><img src="{{site.faviconhref}}" />{{site.sitename}}</a></span>
-		<li id="home" class="byy-nav-item byy-this"><a href="/">首页</a></li>
-		<li id="article" class="byy-nav-item"><a href="/article">博文 &nbsp;<span class="byy-badge-dot"></span></a></li>
-		<li id="demo" class="byy-nav-item"><a href="/demo">Demo </a></li>
-		<li id="about" class="byy-nav-item"><a href="/about">关于</a></li>
+		<li id="home" class="byy-nav-item {{d.header == 'home' ?'byy-this' : ''}}"><a href="/">首页</a></li>
+		<li id="article" class="byy-nav-item {{d.header=='article' ? 'byy-this' : ''}}">
+			<a href="/article">博文 &nbsp;<span class="byy-badge-dot"></span></a>
+		</li>
+		<li id="demo" class="byy-nav-item {{d.header == 'demo' ? 'byy-this' : ''}}"><a href="/demo">Demo </a></li>
+		<li id="about" class="byy-nav-item {{d.header == 'about' ? 'byy-this' : ''}}"><a href="/about">关于</a></li>
 		<!--<li id="tuku" class="byy-nav-item"><a href="/picture">图库</a></li>
 		<li id="caipu" class="byy-nav-item"><a href="/caipu/home">食谱</a></li>-->
-		<!--<li class=" pull-right">
-			<form>
-			<input type="text" class="index-search" name="search" id="bdMsmain" autocomplete="off">
-			<i class="byyicon icon-search"></i>
+		<li class="pull-right user">
+			{{if !site.github}}
+			<div class="unlogin" title="点击登录" filter="login">
+				<a href="javascript:;"><img src="/images/login-logo.png" /></a>
+			</div>
+			{{else}}
+			<div class="login">
+				<img src="{{site.github.avatar_url}}" title="{{site.github.name}}" alt="Avatar" />
+			</div>
+			{{/if}}
+		</li>
+		<li class=" pull-right">
+			<form action="/article/search" method="GET" id="queryForm">
+				<input type="text" class="index-search" value="{{d.q}}" name="q" id="bdMsmain" autocomplete="off" onkeyup="javascript:if(this.event.keyCode() == 13){document.getElementById('queryForm').submit();}">
+				<i class="byyicon icon-search" onclick="javascript:document.getElementById('queryForm').submit()"></i>
 			</form>
-		</li>-->
+		</li>
+
 	</ul>
 </header>

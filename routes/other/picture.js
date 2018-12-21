@@ -44,14 +44,14 @@ router.get('/search',(req,res,next) => {
 	superagent.get(api+'&q='+dq+'&page='+page)
 	.end(function(err,res2){
 		if(err){
-			res.render('picture/index',{
+			res.render('other/picture/index',{
 				images : [],
 				search : true,
 				searchValue : q
 			})
 		}else{
 			var resobj = JSON.parse(res2.text);
-			res.render('picture/index',{
+			res.render('other/picture/index',{
 				images : resobj.hits,
 				search : true,
 				searchValue : q

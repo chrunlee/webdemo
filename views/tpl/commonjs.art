@@ -1,4 +1,22 @@
 <script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<!-- 用户信息 -->
+<script type="text/javascript">
+var LoginUser;
+{{if site.github}}
+LoginUser = {
+	id : '{{site.github.id}}',
+	name : '{{site.github.name}}',
+	blog : '{{site.github.blog || site.github.html_url || ""}}',
+	avatar_url : '{{site.github.avatar_url}}'
+};
+{{/if}}
+byy.setRequire({
+	basePath : '/js/common/',
+	modules : {
+		common : 'common'
+	}
+});
+</script>
 <script>
 var _hmt = _hmt || [];
 (function() {
@@ -6,51 +24,5 @@ var _hmt = _hmt || [];
   hm.src = "https://hm.baidu.com/hm.js?6989c14fa2c7041996bde7f67269e2c0";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
-})();
-</script>
-
-<script>
-	//顶部选中
-	byy.require('jquery',function(){
-		var href = location.href;
-		if(href.indexOf('article') > -1){
-			$('#topHeader').find('.byy-this').removeClass('byy-this');	
-			$('#article').addClass('byy-this')
-		}else if(href.indexOf('demo') > -1){
-			$('#topHeader').find('.byy-this').removeClass('byy-this');	
-			$('#demo').addClass('byy-this')
-		}else if(href.indexOf('about')>-1){
-			$('#topHeader').find('.byy-this').removeClass('byy-this');	
-			$('#about').addClass('byy-this')
-		}
-	});
-
-	function storage(name,data){
-		if(window.localStorage){
-			if(data){
-				var str = byy.stringfy(data);
-				window.localStorage.setItem(name,str);
-			}else{
-				var str = window.localStorage.getItem(name);
-				var obj = byy.json(str);
-				return {result : obj};
-			}
-		}
-		return null;
-	}
-</script>
-<!--自动推送-->
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-    }
-    else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
 })();
 </script>

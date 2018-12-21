@@ -15,13 +15,13 @@ function format(  size, pointLength, units ){
 }
 
 router.get('/',(req,res,next)=>{
-	res.render('magnet/list',{q : false});
+	res.render('other/magnet/list',{q : false});
 })
 router.get('/search',(req,res,next)=>{
 	var name = req.query.name||'';
 	name = name.trim();
 	if(name.length ==0 ){
-		res.render('magnet/list',{q : true,list : []});
+		res.render('other/magnet/list',{q : true,list : []});
 	}else{
 		query({
 			sql : 'select name,infohash from demo_magnet where name like ? order by createTime desc',
@@ -29,8 +29,7 @@ router.get('/search',(req,res,next)=>{
 		})
 		.then(rs=>{
 			var rst = rs[0];
-			console.log(rst);
-			res.render('magnet/list',{
+			res.render('other/magnet/list',{
 				q : true,
 				list : rst,
 				search : name
@@ -40,16 +39,14 @@ router.get('/search',(req,res,next)=>{
 });
 router.get('/:id',(req,res,next)=>{
 	var id = req.params.id;
-	console.log(id);
 	query({
 		sql : 'select json from demo_magnet where infohash=? ',
 		params : [id]
 	})
 	.then(rs=> {
 		var rst = rs[0];
-		console.log(rst);
 		if(rst.length == 0){
-			res.render('magnet/detail',{
+			res.render('other/magnet/detail',{
 				success : false
 			});
 		}else{
@@ -58,10 +55,10 @@ router.get('/:id',(req,res,next)=>{
 			json.files.forEach( item=> {
 				item.size = format(item.size);
 			})
-			res.render('magnet/detail',json);
+			res.render('other/magnet/detail',json);
 		}
 	}).catch(err=>{
-		res.render('magnet/detail',{success : false});
+		res.render('other/magnet/detail',{success : false});
 	})
 })
 
