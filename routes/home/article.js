@@ -77,6 +77,7 @@ router.get('/',function(req,res,next){
 			total : all,
 			page : p,
 			site : this.mysite,
+			github : req.session.github,
 			d : {
 				header : 'article'
 			}
@@ -108,6 +109,7 @@ router.get('/:id.html',function(req,res,next){
 			res.render('index/detail',{
 				article : article,
 				site : this.mysite,
+				github : req.session.github,
 				links : rst2 || [],
 				d : {
 					header : 'article'
@@ -141,7 +143,7 @@ router.post('/zan',function(req,res,next){
 router.post('/saveComment',function(req,res,next){
 	var data = req.body;
 	var site = this.mysite,
-		user = site.github;
+		user = req.session.github;
 	data.name = user.name;
 	data.email = user.email||'';
 	data.userid = user.id;
@@ -247,6 +249,7 @@ router.get('/search',function(req,res,next){
 			var rst = rs[0];
 			res.render('index/search',{
 				site : this.mysite,
+				github : req.session.github,
 				d : {
 					q : q,
 					header : 'article',

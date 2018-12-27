@@ -48,7 +48,7 @@ router.get('/',function(req,res,next){
 		})
 		.then(rs=>{
 			//检查用户是否存在，不存在，则保存，然后将session保存
-			this.mysite.github = user;
+			req.session.github = user;
 			if(user && user.name == 'chrunlee'){//我是管理员
 				req.session.user = user;
 			}
@@ -79,7 +79,7 @@ router.post('/auto',function(req,res,next){
 		})
 		.then(rs=>{
 			var user = rs[0][0];
-			this.mysite.github = user;
+			req.session.github = user;
 			if(user && user.name == 'chrunlee'){//我是管理员
 				req.session.user = user;
 			}

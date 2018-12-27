@@ -2,12 +2,12 @@
 <!-- 用户信息 -->
 <script type="text/javascript">
 var LoginUser;
-{{if site.github}}
+{{if github}}
 LoginUser = {
-	id : '{{site.github.id}}',
-	name : '{{site.github.name}}',
-	blog : '{{site.github.blog || site.github.html_url || ""}}',
-	avatar_url : '{{site.github.avatar_url}}'
+	id : '{{github.id}}',
+	name : '{{github.name}}',
+	blog : '{{github.blog || github.html_url || ""}}',
+	avatar_url : '{{github.avatar_url}}'
 };
 {{/if}}
 byy.setRequire({
