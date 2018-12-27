@@ -154,7 +154,7 @@ router.post('/saveComment',function(req,res,next){
 		var email = site.email;
 		//还得查询文章的地址
 		Promise.all([
-			query({sql : 'select * from sys_user where id=?',params : [data.id]}),
+			query({sql : 'select * from sys_user where id=(select userid from user_comment where id=?)',params : [data.toid]}),
 			query({sql : 'select link,title from user_article where id=?',params : [data.articleId]})])
 		.then(rs=>{
 			var rs1 = rs[0],rs2 = rs[1];
@@ -196,7 +196,7 @@ router.post('/getComment',function(req,res,next){
 	var id = req.body.id;
 	if(id){
 		query({
-			sql :'select t1.*,t2.avatar_url,ifnull(ifnull(t2.blog,t2.html_url),"") as blog from user_comment t1 left join sys_user t2 on t1.userid=t2.id where t1.articleid=? order by ctime desc',
+			sql :'select t1.*,t2.avatar_url,(case when(t2.blog = '' or t2.blog is null) then t2.html_url else t2.blog end) as blog from user_comment t1 left join sys_user t2 on t1.userid=t2.id where t1.articleid=? order by ctime desc',
 			params : [id]
 		}).then(function(rs){
 			var rst = rs[0];

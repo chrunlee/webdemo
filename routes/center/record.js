@@ -10,7 +10,6 @@ var moment = require('moment');
 var query = require('simple-mysql-query');
 
 router.get('/',function(req,res,next){
-	console.log('in record')
 	//随机获得9找照片
 	query({
 		sql : 'select * from user_record order by utime asc',params : []
@@ -30,7 +29,6 @@ router.get('/',function(req,res,next){
 			albums : rst
 		});
 	}).catch(err=>{
-		console.log(err);
 		//获得记录
 		res.render('center/recorder/index',{
 			user : req.session.user,

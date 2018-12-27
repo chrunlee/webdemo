@@ -22,7 +22,6 @@ router.use(function(req,res,next){
 	}
 })
 router.get('/',function(req,res,next){
-	console.log('next home');
 	res.redirect('home');
 })
 
@@ -138,12 +137,10 @@ router.get('/links',function(req,res,next){
 
 //获得所有的友情链接信息
 router.post('/links/list',function(req,res,next){
-	console.log('links')
 	query({
 		sql : 'select * from user_links order by id asc',params : []
 	}).then(function(rs){
 		var rst = rs[0];
-		console.log(rst);
 		res.json({
 			rows : rst,
 			total : rst.length
@@ -154,7 +151,6 @@ router.post('/links/list',function(req,res,next){
 //保存友情链接
 router.post('/links/save',function(req,res,next){
 	var data = req.body;
-	console.log(data);
 	if(data.id){
 		query({
 			sql : 'update user_links set name=?,href=? where id=? ',params : [data.name,data.href,data.id]
