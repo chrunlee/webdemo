@@ -20,7 +20,7 @@ byy.define(['jquery','win','store'],function(exports){
 		}
 	};
 	//获取后自动登录
-	autoLogin();
+	// autoLogin();
 	var common = {
 		//弹窗登录
 		login : function(){	

@@ -47,6 +47,7 @@ router.get('/',function(req,res,next){
 			}
 		})
 		.then(rs=>{
+			console.log(user);
 			//检查用户是否存在，不存在，则保存，然后将session保存
 			req.session.github = user;
 			if(user && user.name == 'chrunlee'){//我是管理员

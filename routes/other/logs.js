@@ -16,7 +16,11 @@ var router = express.Router();
 var query = require('simple-mysql-query');
 
 router.get('/',function(req,res,next){
-	res.render('other/logs/index');
+	if(req.session.user){
+		res.render('other/logs/index');
+	}else{
+		res.redirect('/');
+	}
 })
 
 /**截止到目前为止24小时内数据--折线图**/

@@ -22,6 +22,7 @@ router.get('/', function(req, res, next) {
 			articles : articles,
 			demos : demos,
 			site : this.mysite,
+			github : req.session.github,
 			d : {
 				header : 'home'
 			}
@@ -34,6 +35,7 @@ router.get('/', function(req, res, next) {
 router.get('/about',function(req,res,next){
 	res.render('index/about',{
 		site : this.mysite,
+		github : req.session.github,
 		d : {
 			header : 'about'
 		}
@@ -43,6 +45,7 @@ router.get('/about',function(req,res,next){
 router.get('/demo',function(req,res,next){
 	res.render('demos/index',{
 		site : this.mysite,
+		github : req.session.github,
 		d : {
 			header : 'demo'
 		}

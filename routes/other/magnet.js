@@ -15,7 +15,11 @@ function format(  size, pointLength, units ){
 }
 
 router.get('/',(req,res,next)=>{
-	res.render('other/magnet/list',{q : false});
+	if(req.session.github){
+		res.render('other/magnet/list',{q : false});
+	}else{
+		res.redirect('/');
+	}
 })
 router.get('/search',(req,res,next)=>{
 	var name = req.query.name||'';

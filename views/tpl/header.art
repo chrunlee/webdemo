@@ -10,13 +10,13 @@
 		<!--<li id="tuku" class="byy-nav-item"><a href="/picture">图库</a></li>
 		<li id="caipu" class="byy-nav-item"><a href="/caipu/home">食谱</a></li>-->
 		<li class="pull-right user">
-			{{if !site.github}}
+			{{if !github}}
 			<div class="unlogin" title="点击登录" filter="login">
 				<a href="javascript:;"><img src="/images/login-logo.png" /></a>
 			</div>
 			{{else}}
 			<div class="login">
-				<img src="{{site.github.avatar_url}}" title="{{site.github.name}}" alt="Avatar" />
+				<img src="{{github.avatar_url}}" title="{{github.name}}" alt="Avatar" />
 			</div>
 			{{/if}}
 		</li>
