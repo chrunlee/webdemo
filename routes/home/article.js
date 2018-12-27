@@ -90,7 +90,6 @@ router.get('/',function(req,res,next){
 
 //文章详情页面
 router.get('/:id.html',function(req,res,next){
-	console.log(req.session);
 	var enname = req.params.id;
 	//查询文章本身的信息，作者的信息，关联的文章，评论
 	query([{
