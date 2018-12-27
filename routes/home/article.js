@@ -196,7 +196,7 @@ router.post('/getComment',function(req,res,next){
 	var id = req.body.id;
 	if(id){
 		query({
-			sql :'select t1.*,t2.avatar_url,(case when(t2.blog = '' or t2.blog is null) then t2.html_url else t2.blog end) as blog from user_comment t1 left join sys_user t2 on t1.userid=t2.id where t1.articleid=? order by ctime desc',
+			sql :'select t1.*,t2.avatar_url,(case when(t2.blog = "" or t2.blog is null) then t2.html_url else t2.blog end) as blog from user_comment t1 left join sys_user t2 on t1.userid=t2.id where t1.articleid=? order by ctime desc',
 			params : [id]
 		}).then(function(rs){
 			var rst = rs[0];
