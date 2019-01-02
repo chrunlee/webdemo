@@ -9,13 +9,13 @@ router.get('/',(req,res,next)=>{
 	superagent.get(api+'&q=')
 	.end(function(err,res2){
 		if(err){
-			res.render('picture/index',{
+			res.render('other/picture/index',{
 				images : [],
 				searchValue : ''
 			})
 		}else{
 			var resobj = JSON.parse(res2.text);
-			res.render('picture/index',{
+			res.render('other/picture/index',{
 				images : resobj.hits,
 				searchValue : ''
 			});
