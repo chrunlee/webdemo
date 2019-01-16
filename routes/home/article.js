@@ -34,7 +34,7 @@ marked.setOptions({
     tables: true,
     breaks: false,
     pedantic: false,
-    sanitize: true,
+    sanitize: false,//消毒：意思是将html转义成&xxx等。
     silent : true,
     smartLists: true,
     smartypants: false
