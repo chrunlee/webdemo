@@ -1,6 +1,19 @@
 var Article = {
 	id : '',
 	events : {
+		showdir : function(){
+			$('.article-dir').removeClass('closed');
+		},
+		closedir:function(){
+			$('.article-dir').addClass('closed');	
+		},
+		jump : function(d){
+			var id = d.id;
+			var $item = $('#'+id);
+			$('html,body').animate({
+				scrollTop : $item.offset().top - 65
+			},500);
+		},
 		login : function(){
 			byy.common.login();
 		},
@@ -138,6 +151,46 @@ var Article = {
 		}
 	},
 	tool : {
+		//创建目录，如果没有就算啦
+		createDir : function(){
+			console.log('dir');
+			var arr = [];
+			$('.article-detail').find('h1,h2,h3,h4,h5,h6').each(function(index,item){
+				var tagName = item.tagName;
+				var level = parseInt(tagName.replace('H',''),10);
+				var seq = 1;
+				//获得当前的seq
+				for(var i=arr.length-1;i>=0;i--){
+					var temp = arr[i];
+					if(level > temp.level){
+						seq = parseInt((temp.seq+'')+'1',10);
+						break;
+					}else if(level == temp.level){
+						seq = temp.seq + 1;
+						break;
+					}
+				}
+				var id = 'article-dir-'+seq;
+				$(item).attr('id',id);
+				arr.push({
+					id : id,
+					level : level,
+					seq : seq,
+					content : $(item).text()
+				});
+			})
+			//开始生成
+			if(arr.length > 0){
+				var $dir = $('<div class="article-dir closed"></div>'),
+				html = '<span class="article-dir-title">目录:</span><span class="article-dir-icon" filter="closedir" title="关闭目录"><i class="byyicon icon-ellipsis"></i></span><span class="article-dir-icon2" title="展开目录" filter="showdir"><i class="byyicon icon-expand"></i></span>';
+				arr.forEach(function(item){
+					var seq = item.seq,len = (seq+'').length,title = (seq+'').split('').join('.')+' '+item.content;
+					html += '<span class="article-dir-seq-'+len+'"><a href="javascript:;" title="'+title+'" filter="jump" data-id="'+item.id+'">'+title+'</a></span>';
+				});
+				$dir.html(html);
+				$('body').append($dir);
+			}
+		},
 		highlight : function(){
 			$('pre code').each(function(i, block) {
 		    	hljs.highlightBlock(block);
@@ -269,7 +322,7 @@ var Article = {
 		Article.tool.showPic();
 		Article.tool.checkTable();
 		Article.tool.checkZan();
-		
+		Article.tool.createDir();
 		//加载评论
 		Article.loadComment();
 		Article.addRead();
