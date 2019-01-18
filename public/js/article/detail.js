@@ -350,4 +350,4 @@ var Article = {
 	}
 };
 //启动
-byy.require(['jquery','win','moment','store','common'],function(){Article.init();})
+byy.require(['jquery','win','moment','store','common','easy'],function(){Article.init();})

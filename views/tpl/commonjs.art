@@ -13,7 +13,8 @@ LoginUser = {
 byy.setRequire({
 	basePath : '/js/common/',
 	modules : {
-		common : 'common'
+		common : 'common',
+		easy : 'easy'
 	}
 });
 </script>

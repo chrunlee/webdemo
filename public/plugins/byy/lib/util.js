@@ -1,7 +1,779 @@
-/*
-	@company 博育云
-	@site : www.boyuyun.cn
-	@author boyuyun
-*/
+/*** 
+ *工具类 
+ * @2018年11月9日 10:34:05 : 修复 byy.stringfy 在空对象的处理上发现的BUG;
+ * @2018年12月3日 11:37:42 : 修复stringfy 与 json函数，在JSON可以使用的情况下优先使用该函数。
+ * @2019年1月18日 14:36:36 : bindEvents 增加单页面多个不同应用处理。
+ ***/
 
-byy.define(function(a){var b={},c=window,d=document,e={};byy.extend({contains:function(a,b){return a.indexOf(b)>-1},removeAt:function(a,b){return!!a.splice(b,1).length},remove:function(a,b){var c=a.indexOf(b);return c>-1&&byy.removeAt(a,c)},shuffle:function(a){var b,c,d;for(d=a.length;d>0;)c=parseInt(Math.random()*d),b=a[--d],a[d]=a[c],a[c]=b;return a},random:function(a){return a[parseInt(Math.random()*a.length)]},flatten:function(a){var b=[];return a.forEach(function(a,c){Array.isArray(a)?b=b.concat(byy.flatten(a)):b.push(a)}),b},unique:function(a){var b=[];a:for(var c=0,d=a.length;c<d;c++){for(var e=c+1;e<d;e++)if(a[e]===a[c])continue a;b.push(a[c])}return b},compact:function(a,b){return b=b||!1,a.filter(function(a){return!(byy.isNull(a)||(b?""===byy.trim(a+""):a+""==""))})},pluck:function(a,b,c){var d,e=[];return a.forEach(function(a){d=a[b],null!=d?e.push(d):!0===c&&e.push(d)}),e},union:function(){for(var a=arguments.length,b=[],c=0;c<a;c++)b=b.concat(arguments[c]);return byy.unique(b)},min:function(a){return Math.min.apply(0,a)},max:function(a){return Math.max.apply(0,a)}}),byy.extend({isNull:function(a){return null==a||void 0==a},isEmpty:function(a){return null==a||void 0==a||""==a},isArray:function(a){return $.isArray(a)},isFunction:function(a){return $.isFunction(a)},isEmptyObject:function(a){return $.isEmptyObject(a)},isPlainObject:function(a){return $.isPlainObject(a)},isWindow:function(a){return $.isWindow(a)},isNumeric:function(a){return $.isNumeric(a)},type:function(a){return $.type(a)}}),byy.extend({isIE:function(){return $.browser.msie},isOpera:function(){return $.browser.opera},isFF:function(){return $.browser.mozilla},isSafari:function(){return $.browser.safari},isMobile:function(){var a=byy.device();return!(!a.android&&!a.ios)},isIOS:function(){return byy.device().ios}}),byy.extend({getSearch:function(a,b){b||(b=a,a=location.href);var c={};if(""!=(a=a.indexOf("?")>-1?a.split("?")[1]:""))for(var d=a.split("&"),e=0;e<d.length;e++){var f=d[e],g=f.split("=")[0]||"",h=f.split("=")[1]||"";try{h=decodeURIComponent(h)}catch(a){try{h=unescape(h)}catch(a){}}c[g]=h}return b?c[b]:c},addUrlParams:function(a,b){b||(b=a,a=location.href);var c=function(a){var b="";for(var c in a){b+=c+"="+encodeURIComponent(a[c])+"&"}return b=b.substring(0,b.lastIndexOf("&"))}(b);return a=a.indexOf("?")>-1?a+"&"+c:a+"?"+c}}),byy.extend({trim:function(a){return"string"==typeof a?a.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,""):a},formatStr:function(){var a=arguments[0],b=[].splice.call(arguments,1,arguments.length-1);return a.replace(/\{(\d+)\}/g,function(a,c){return"0"!=b[c]?b[c]||"":b[c]})},hex2rgb:function(a,b){if(byy.isNull(a)||""==a)return"";if(a=$.trim(a.replace("#","")),3==a.length||6==a.length){3==a.length&&(a=a.split("").map(function(a){return a+""+a}).join(""));for(var c=a.split(""),d=[],e=0;e<c.length;e+=2){var f=c[e]+""+c[e+1];d.push(parseInt(f,16))}return b?"rgb("+d.join(",")+")":d.join(",")}return""}}),byy.extend({md5:function(a){var b,c,d,e,f,g,h,i,j,k=function(a,b){return a<<b|a>>>32-b},l=function(a,b){var c,d,e,f,g;return e=2147483648&a,f=2147483648&b,c=1073741824&a,d=1073741824&b,g=(1073741823&a)+(1073741823&b),c&d?2147483648^g^e^f:c|d?1073741824&g?3221225472^g^e^f:1073741824^g^e^f:g^e^f},m=function(a,b,c){return a&b|~a&c},n=function(a,b,c){return a&c|b&~c},o=function(a,b,c){return a^b^c},p=function(a,b,c){return b^(a|~c)},q=function(a,b,c,d,e,f,g){return a=l(a,l(l(m(b,c,d),e),g)),l(k(a,f),b)},r=function(a,b,c,d,e,f,g){return a=l(a,l(l(n(b,c,d),e),g)),l(k(a,f),b)},s=function(a,b,c,d,e,f,g){return a=l(a,l(l(o(b,c,d),e),g)),l(k(a,f),b)},t=function(a,b,c,d,e,f,g){return a=l(a,l(l(p(b,c,d),e),g)),l(k(a,f),b)},u=function(a){var b,c,d="",e="";for(c=0;c<=3;c++)b=a>>>8*c&255,e="0"+b.toString(16),d+=e.substr(e.length-2,2);return d},v=Array();for(a=function(a){a=a.replace(/\x0d\x0a/g,"\n");for(var b="",c=0;c<a.length;c++){var d=a.charCodeAt(c);d<128?b+=String.fromCharCode(d):d>127&&d<2048?(b+=String.fromCharCode(d>>6|192),b+=String.fromCharCode(63&d|128)):(b+=String.fromCharCode(d>>12|224),b+=String.fromCharCode(d>>6&63|128),b+=String.fromCharCode(63&d|128))}return b}(a),v=function(a){for(var b,c=a.length,d=c+8,e=(d-d%64)/64,f=16*(e+1),g=Array(f-1),h=0,i=0;i<c;)b=(i-i%4)/4,h=i%4*8,g[b]=g[b]|a.charCodeAt(i)<<h,i++;return b=(i-i%4)/4,h=i%4*8,g[b]=g[b]|128<<h,g[f-2]=c<<3,g[f-1]=c>>>29,g}(a),g=1732584193,h=4023233417,i=2562383102,j=271733878,b=0;b<v.length;b+=16)c=g,d=h,e=i,f=j,g=q(g,h,i,j,v[b+0],7,3614090360),j=q(j,g,h,i,v[b+1],12,3905402710),i=q(i,j,g,h,v[b+2],17,606105819),h=q(h,i,j,g,v[b+3],22,3250441966),g=q(g,h,i,j,v[b+4],7,4118548399),j=q(j,g,h,i,v[b+5],12,1200080426),i=q(i,j,g,h,v[b+6],17,2821735955),h=q(h,i,j,g,v[b+7],22,4249261313),g=q(g,h,i,j,v[b+8],7,1770035416),j=q(j,g,h,i,v[b+9],12,2336552879),i=q(i,j,g,h,v[b+10],17,4294925233),h=q(h,i,j,g,v[b+11],22,2304563134),g=q(g,h,i,j,v[b+12],7,1804603682),j=q(j,g,h,i,v[b+13],12,4254626195),i=q(i,j,g,h,v[b+14],17,2792965006),h=q(h,i,j,g,v[b+15],22,1236535329),g=r(g,h,i,j,v[b+1],5,4129170786),j=r(j,g,h,i,v[b+6],9,3225465664),i=r(i,j,g,h,v[b+11],14,643717713),h=r(h,i,j,g,v[b+0],20,3921069994),g=r(g,h,i,j,v[b+5],5,3593408605),j=r(j,g,h,i,v[b+10],9,38016083),i=r(i,j,g,h,v[b+15],14,3634488961),h=r(h,i,j,g,v[b+4],20,3889429448),g=r(g,h,i,j,v[b+9],5,568446438),j=r(j,g,h,i,v[b+14],9,3275163606),i=r(i,j,g,h,v[b+3],14,4107603335),h=r(h,i,j,g,v[b+8],20,1163531501),g=r(g,h,i,j,v[b+13],5,2850285829),j=r(j,g,h,i,v[b+2],9,4243563512),i=r(i,j,g,h,v[b+7],14,1735328473),h=r(h,i,j,g,v[b+12],20,2368359562),g=s(g,h,i,j,v[b+5],4,4294588738),j=s(j,g,h,i,v[b+8],11,2272392833),i=s(i,j,g,h,v[b+11],16,1839030562),h=s(h,i,j,g,v[b+14],23,4259657740),g=s(g,h,i,j,v[b+1],4,2763975236),j=s(j,g,h,i,v[b+4],11,1272893353),i=s(i,j,g,h,v[b+7],16,4139469664),h=s(h,i,j,g,v[b+10],23,3200236656),g=s(g,h,i,j,v[b+13],4,681279174),j=s(j,g,h,i,v[b+0],11,3936430074),i=s(i,j,g,h,v[b+3],16,3572445317),h=s(h,i,j,g,v[b+6],23,76029189),g=s(g,h,i,j,v[b+9],4,3654602809),j=s(j,g,h,i,v[b+12],11,3873151461),i=s(i,j,g,h,v[b+15],16,530742520),h=s(h,i,j,g,v[b+2],23,3299628645),g=t(g,h,i,j,v[b+0],6,4096336452),j=t(j,g,h,i,v[b+7],10,1126891415),i=t(i,j,g,h,v[b+14],15,2878612391),h=t(h,i,j,g,v[b+5],21,4237533241),g=t(g,h,i,j,v[b+12],6,1700485571),j=t(j,g,h,i,v[b+3],10,2399980690),i=t(i,j,g,h,v[b+10],15,4293915773),h=t(h,i,j,g,v[b+1],21,2240044497),g=t(g,h,i,j,v[b+8],6,1873313359),j=t(j,g,h,i,v[b+15],10,4264355552),i=t(i,j,g,h,v[b+6],15,2734768916),h=t(h,i,j,g,v[b+13],21,1309151649),g=t(g,h,i,j,v[b+4],6,4149444226),j=t(j,g,h,i,v[b+11],10,3174756917),i=t(i,j,g,h,v[b+2],15,718787259),h=t(h,i,j,g,v[b+9],21,3951481745),g=l(g,c),h=l(h,d),i=l(i,e),j=l(j,f);return(u(g)+u(h)+u(i)+u(j)).toLowerCase()}}),byy.extend({json:function(a,b){if(null!=a&&void 0!=a&&""!=a&&"object"!=typeof a){var c={};try{c=JSON&&JSON.parse?JSON.parse(a):$.parseJSON(a)}catch(b){return a}return null!=b&&void 0!=b&&1==b&&byy.fixJson(c),c}return"object"==typeof a?a:{}},fixJson:function(a){var b={},c=function(a){if(a.hasOwnProperty("$id")){var d=a.$id;b[d]=a}if(!$.isEmptyObject(a)&&!$.isFunction(a)&&null!=a&&a&&"null"!=a)for(var e in a)a.hasOwnProperty(e)&&a[e]instanceof Object&&c(a[e])},d=function(a){if(a.hasOwnProperty("$id")&&(delete a.$id,delete a.$type),a.hasOwnProperty("$ref")){var c=a.$ref;return a=b[c]}if(!$.isEmptyObject(a)&&!$.isFunction(a))for(var e in a)a[e]instanceof Object&&(a[e]=d(a[e]));return a};c(a),d(a)},stringfy:function(a){if(JSON&&JSON.stringify)return JSON.stringify(a);if(null!=a&&void 0!=a){if("string"==typeof a)return a;if("number"==typeof a)return a;var b=function(a){var b=[];b.push("[");for(var d=0;d<a.length;d++){var e=a[d],f=c(e);b.push(f),d!=a.length-1&&b.push(",")}return b.push("]"),b.join("")},c=function(a){return"object"!=typeof a?"function"==typeof a?""+a.toString():'"'+a+'"':a instanceof Array?b(a):a instanceof Object?d(a):""},d=function(a){var b=[];b.push("{");for(var d in a){var e=a[d],f=c(e);b.push('"'+d+'":'+f),b.push(",")}return b.length>1&&b.splice(b.length-1),b.push("}"),b.join("")};return c(a)}}}),byy.extend({guid:function(a){var b=0;return function(a){for(var c=(+new Date).toString(32),d=0;d<5;d++)c+=Math.floor(65535*Math.random()).toString(32);return(a||"byy_")+c+(b++).toString(32)}(a)},formatSize:function(a,b,c){var d;for(c=c||["B","KB","M","G","TB"];(d=c.shift())&&a>1024;)a/=1024;return("B"===d?a:a.toFixed(b||2))+d}}),byy.extend({findFrameByName:function(a){var b=window.top.document;if(!$)return void error("jquery未引入");var c=$(b).find("iframe");return byy.findFrameByNameOfArr(c,a,0)},frameLevel:50,findFrameByNameOfArr:function(a,b,c){if(++c==byy.frameLevel)return null;for(var d=null,e=0;e<a.length;e++){var f=a[e];if($(f).attr("name")==b){d=$(f);break}if(!(f.src&&f.src.indexOf("www.sogou.com")>-1)){var g=$($(f).get(0).contentWindow.document).find("iframe");if(g.length>0){if(null==(d=byy.findFrameByNameOfArr(g,b,c)))continue;break}}}return d},refreshFrame:function(a){var b=null;b=a?byy.findFrameByName(a):$(top.window.document).find("iframe"),null!=b?b[0]&&b[0].contentWindow.location.reload():error("刷新失败，没有查找到该frame对象，请检查name是否正确")}}),byy.extend({getPageWH:function(){var a=c.innerWidth,b=c.innerHeight;return"number"!=typeof a&&("CSSICompat"==d.compatMode?(a=d.documentElement.clientWidth,b=d.documentElement.clientHeight):(a=d.body.clientWidth,b=d.body.clientHeight)),{width:a,height:b}},getObjectLength:function(a){var b=0;for(var c in a)a.hasOwnProperty(c)&&b++;return b},fullScreen:function(){var a=d.documentElement;a.requestFullscreen?a.requestFullscreen():a.mozRequestFullScreen?a.mozRequestFullScreen():a.webkitRequestFullScreen?a.webkitRequestFullScreen():elem.msRequestFullscreen&&elem.msRequestFullscreen()},registerNameSpace:function(a,c){b[a]=c},getSpace:function(a){return b[a]},throttle:function(a,b,c,d){var e,f,g,h=+new Date,i=0,j=0,k=null,l=function(){j=h,a.apply(f,g)};return function(){h=+new Date,f=this,g=arguments,e=h-(d?i:j)-b,clearTimeout(k),d?c?k=setTimeout(l,b):e>=0&&l():e>=0?l():c&&(k=setTimeout(l,-e)),i=h}},debounce:function(a,b,c){return byy.throttle(a,b,c,!0)},bindEvents:function(a,b){"object"!=typeof a&&null!==a&&void 0!==a||(b=a,a="filter"),e=b,delete b,$("body").off("click","["+a+"]").on("click","["+a+"]",function(b){var c=$(this),d=c.attr(a),f=c.data();e&&d&&e[d]&&e[d].call(c,f,b)})}}),a("util",{version:"1.0",msg:"工具类函数"})});
+byy.define(function( exports ){
+	var byynsc = {};//byy命名空间存储
+	var win = window;//兼容移动出后的window
+	var doc = document;
+	var eventsCache = {};//存放页面事件空间
+	/**工具类：数组**/
+	byy.extend({
+		contains : function( target , item ){
+			return target.indexOf(item) > -1;
+		},
+		removeAt : function( target , index ){
+			return !!target.splice( index , 1).length;
+		},
+		remove : function( target , item ){
+			var index = target.indexOf( item );
+			if( index > -1 ){
+				return byy.removeAt( target , index);
+			}
+			return false;
+		},
+		shuffle : function( target ){
+			var x , j , l ;
+			for(l = target.length; l > 0 ;){
+				j = parseInt(Math.random() * l);
+				x = target[--l],target[l] = target[j],target[j] = x;
+			}
+			return target;
+		},
+		random : function( target ){
+			return target[parseInt(Math.random() * target.length )];
+		},
+		flatten : function( target ){
+			var res = [];
+			target.forEach(function( ele , index){
+				if(Array.isArray( ele )){
+					res = res.concat( byy.flatten( ele ) );
+				}else{
+					res.push( ele );
+				}
+			});
+			return res;
+		},
+		unique : function( target ){
+			var res = [];
+			loop : for( var i =0 ,n = target.length;i<n;i++){
+				for(var x = i + 1 ;x < n ; x++ ){
+					if(target[x] === target[i]){
+						continue loop;
+					}
+				}
+				res.push(target[i]);
+			}
+			return res;
+		},
+		compact : function( target , isTrim){
+			isTrim = isTrim ? isTrim : false;
+			return target.filter(function( ele ){
+				//isTrim -- true  判断"  ",false 不判断
+				return !byy.isNull( ele ) && ( isTrim ? !(byy.trim(ele+'') === '') : !(ele+'' === ''));
+				// return ( isTrim ? (byy.trim(ele) === '' ? false : true ) : true ) && !byy.isNull( ele );
+			});
+		},
+		/*仅仅能提取一层关系，主要是对于纯对象*/
+		pluck : function( target , name ,rtnNull){
+			var result = [], prop ;
+			target.forEach(function( ele ){
+				prop = ele[name];
+				if(prop != null){
+					result.push(prop);
+				}else if(rtnNull === true){
+					result.push(prop);
+				}
+			});
+			return result;
+		},
+		union : function(){
+			var len = arguments.length,res = [];
+			for(var i=0;i<len;i++){
+				res = res.concat(arguments[i]);
+			}
+			return byy.unique(res);
+		},
+		min : function( target ){
+			return Math.min.apply(0 , target);
+		},
+		max : function( target ){
+			return Math.max.apply(0 , target);
+		}
+
+	});
+
+
+	/**工具类：变量判断**/
+	byy.extend({
+		isNull : function( obj ){
+			return null == obj || undefined == obj;
+		},
+		isEmpty : function( obj ){
+			return null == obj || undefined == obj || '' == obj;
+		},
+		isArray : function( obj ){
+			return $.isArray( obj );
+		},
+		isFunction : function( obj ){
+			return $.isFunction( obj );
+		},
+		isEmptyObject : function( obj ){
+			return $.isEmptyObject( obj );
+		},
+		isPlainObject : function( obj ){
+			return $.isPlainObject( obj );
+		},
+		isWindow : function( obj ){
+			return $.isWindow( obj );
+		},
+		isNumeric : function( obj ){
+			return $.isNumeric( obj );
+		},
+		type : function( obj ){
+			return $.type ( obj );
+		}
+	});
+
+
+	/**工具类：浏览器判断**/
+	byy.extend({	
+		isIE : function(){
+			return $.browser.msie;
+		},
+		isOpera : function(){
+			return $.browser.opera;
+		},
+		isFF : function(){
+			return $.browser.mozilla;
+		},
+		isSafari : function(){
+			return $.browser.safari;
+		},
+		//校验当前是否为移动端设备
+		isMobile : function(){
+			var rs = byy.device();
+			return rs.android || rs.ios ? true : false;
+		},
+		isIOS : function(){
+			return byy.device().ios;
+		}
+	});
+
+	/**工具类：url**/
+	byy.extend({
+		getSearch : function( url , name ){
+			if( !name ){
+				name = url;
+				url = location.href;
+			}
+			var rv = {};
+			url = url.indexOf('?') > -1 ? url.split('?')[1] : '';
+			if(url != ''){
+				var ls = url.split('&');
+				for(var i=0;i<ls.length;i++){
+					var ele = ls[i];
+					var kname = ele.split('=')[0] ||'',kvalue = ele.split('=')[1] || '';
+					try{
+						kvalue = decodeURIComponent(kvalue);
+					}catch(e){
+						try{
+							kvalue = unescape(kvalue);//该函数已经从V3中删除，不建议使用。
+						}catch(e){}
+					}
+					rv[kname] = kvalue;
+				}
+			}
+			if(name)return rv[name];
+			return rv;
+		},
+		addUrlParams : function( url , params){
+			if(!!!params){
+				params = url;
+				url = location.href;
+			}
+			var addStr = (function(opt){
+				var ts = '';
+				for(var k in opt){
+					var value = encodeURIComponent(opt[k]);
+					ts += k+'='+value+'&';
+				}
+				ts = ts.substring(0,ts.lastIndexOf('&'));
+				return ts;
+			})(params);
+			if(url.indexOf('?') > -1 ){
+				url = url + '&' + addStr;
+			}else{
+				url = url + '?' + addStr;
+			}
+			return url;
+		}
+
+	});
+
+
+	/***工具类：字符串*/
+	byy.extend({
+		trim : function( str ){
+			if( typeof str === 'string'){
+				return str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,'');
+			}
+			return str;
+		},
+		/**格式化字符串替换**/
+		formatStr : function( ){
+			var str = arguments[0];
+			var arr = [].splice.call(arguments,1,arguments.length -1);
+			return str.replace(/\{(\d+)\}/g,function(s,i){
+				if(arr[i]!='0'){
+					return arr[i] || '';
+				}else{
+					return arr[i];
+				}
+			});
+		},
+		//16进制颜色转化成rgb展示,返回 rgb(222,222,222) 或者 222,222,222
+		hex2rgb : function( str ,iswrap/*是否包裹，默认包裹为true*/){
+			if(byy.isNull(str) || str == '')return '';
+			str = $.trim(str.replace('#',''));//替换
+			if(str.length == 3 || str.length == 6){
+				if(str.length == 3){
+					str = str.split('').map(function(item){
+						return item+''+item;
+					}).join('');
+				}
+				var arr = str.split('');
+				var rs = [];
+				for(var i=0;i<arr.length;i+=2){
+					var code = arr[i]+''+arr[i+1];
+					rs.push(parseInt(code,16));
+				}
+				return iswrap ? ('rgb('+rs.join(',')+')') : rs.join(',');
+			}
+			return '';
+		}
+	});
+
+	/**工具类：md5**/
+	byy.extend({
+		md5 : function( string ){
+			var rotateLeft = function(lValue, iShiftBits) {
+				return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
+			};
+			var addUnsigned = function(lX, lY) {
+				var lX4, lY4, lX8, lY8, lResult;
+				lX8 = (lX & 0x80000000);
+				lY8 = (lY & 0x80000000);
+				lX4 = (lX & 0x40000000);
+				lY4 = (lY & 0x40000000);
+				lResult = (lX & 0x3FFFFFFF) + (lY & 0x3FFFFFFF);
+				if (lX4 & lY4) return (lResult ^ 0x80000000 ^ lX8 ^ lY8);
+				if (lX4 | lY4) {
+					if (lResult & 0x40000000) return (lResult ^ 0xC0000000 ^ lX8 ^ lY8);
+					else return (lResult ^ 0x40000000 ^ lX8 ^ lY8);
+				} else {
+					return (lResult ^ lX8 ^ lY8);
+				}
+			};
+			var F = function(x, y, z) {
+				return (x & y) | ((~ x) & z);
+			};
+			var G = function(x, y, z) {
+				return (x & z) | (y & (~ z));
+			};
+			var H = function(x, y, z) {
+				return (x ^ y ^ z);
+			};
+			var I = function(x, y, z) {
+				return (y ^ (x | (~ z)));
+			};
+			var FF = function(a, b, c, d, x, s, ac) {
+				a = addUnsigned(a, addUnsigned(addUnsigned(F(b, c, d), x), ac));
+				return addUnsigned(rotateLeft(a, s), b);
+			};
+			var GG = function(a, b, c, d, x, s, ac) {
+				a = addUnsigned(a, addUnsigned(addUnsigned(G(b, c, d), x), ac));
+				return addUnsigned(rotateLeft(a, s), b);
+			};
+			var HH = function(a, b, c, d, x, s, ac) {
+				a = addUnsigned(a, addUnsigned(addUnsigned(H(b, c, d), x), ac));
+				return addUnsigned(rotateLeft(a, s), b);
+			};
+			var II = function(a, b, c, d, x, s, ac) {
+				a = addUnsigned(a, addUnsigned(addUnsigned(I(b, c, d), x), ac));
+				return addUnsigned(rotateLeft(a, s), b);
+			};
+			var convertToWordArray = function(string) {
+				var lWordCount;
+				var lMessageLength = string.length;
+				var lNumberOfWordsTempOne = lMessageLength + 8;
+				var lNumberOfWordsTempTwo = (lNumberOfWordsTempOne - (lNumberOfWordsTempOne % 64)) / 64;
+				var lNumberOfWords = (lNumberOfWordsTempTwo + 1) * 16;
+				var lWordArray = Array(lNumberOfWords - 1);
+				var lBytePosition = 0;
+				var lByteCount = 0;
+				while (lByteCount < lMessageLength) {
+					lWordCount = (lByteCount - (lByteCount % 4)) / 4;
+					lBytePosition = (lByteCount % 4) * 8;
+					lWordArray[lWordCount] = (lWordArray[lWordCount] | (string.charCodeAt(lByteCount) << lBytePosition));
+					lByteCount++;
+				}
+				lWordCount = (lByteCount - (lByteCount % 4)) / 4;
+				lBytePosition = (lByteCount % 4) * 8;
+				lWordArray[lWordCount] = lWordArray[lWordCount] | (0x80 << lBytePosition);
+				lWordArray[lNumberOfWords - 2] = lMessageLength << 3;
+				lWordArray[lNumberOfWords - 1] = lMessageLength >>> 29;
+				return lWordArray;
+			};
+			var wordToHex = function(lValue) {
+				var WordToHexValue = "", WordToHexValueTemp = "", lByte, lCount;
+				for (lCount = 0; lCount <= 3; lCount++) {
+					lByte = (lValue >>> (lCount * 8)) & 255;
+					WordToHexValueTemp = "0" + lByte.toString(16);
+					WordToHexValue = WordToHexValue + WordToHexValueTemp.substr(WordToHexValueTemp.length - 2, 2);
+				}
+				return WordToHexValue;
+			};
+			var uTF8Encode = function(string) {
+				string = string.replace(/\x0d\x0a/g, "\x0a");
+				var output = "";
+				for (var n = 0; n < string.length; n++) {
+					var c = string.charCodeAt(n);
+					if (c < 128) {
+						output += String.fromCharCode(c);
+					} else if ((c > 127) && (c < 2048)) {
+						output += String.fromCharCode((c >> 6) | 192);
+						output += String.fromCharCode((c & 63) | 128);
+					} else {
+						output += String.fromCharCode((c >> 12) | 224);
+						output += String.fromCharCode(((c >> 6) & 63) | 128);
+						output += String.fromCharCode((c & 63) | 128);
+					}
+				}
+				return output;
+			};
+			var x = Array();
+			var k, AA, BB, CC, DD, a, b, c, d;
+			var S11=7, S12=12, S13=17, S14=22;
+			var S21=5, S22=9 , S23=14, S24=20;
+			var S31=4, S32=11, S33=16, S34=23;
+			var S41=6, S42=10, S43=15, S44=21;
+			string = uTF8Encode(string);
+			x = convertToWordArray(string);
+			a = 0x67452301; b = 0xEFCDAB89; c = 0x98BADCFE; d = 0x10325476;
+			for (k = 0; k < x.length; k += 16) {
+				AA = a; BB = b; CC = c; DD = d;
+				a = FF(a, b, c, d, x[k+0],  S11, 0xD76AA478);
+				d = FF(d, a, b, c, x[k+1],  S12, 0xE8C7B756);
+				c = FF(c, d, a, b, x[k+2],  S13, 0x242070DB);
+				b = FF(b, c, d, a, x[k+3],  S14, 0xC1BDCEEE);
+				a = FF(a, b, c, d, x[k+4],  S11, 0xF57C0FAF);
+				d = FF(d, a, b, c, x[k+5],  S12, 0x4787C62A);
+				c = FF(c, d, a, b, x[k+6],  S13, 0xA8304613);
+				b = FF(b, c, d, a, x[k+7],  S14, 0xFD469501);
+				a = FF(a, b, c, d, x[k+8],  S11, 0x698098D8);
+				d = FF(d, a, b, c, x[k+9],  S12, 0x8B44F7AF);
+				c = FF(c, d, a, b, x[k+10], S13, 0xFFFF5BB1);
+				b = FF(b, c, d, a, x[k+11], S14, 0x895CD7BE);
+				a = FF(a, b, c, d, x[k+12], S11, 0x6B901122);
+				d = FF(d, a, b, c, x[k+13], S12, 0xFD987193);
+				c = FF(c, d, a, b, x[k+14], S13, 0xA679438E);
+				b = FF(b, c, d, a, x[k+15], S14, 0x49B40821);
+				a = GG(a, b, c, d, x[k+1],  S21, 0xF61E2562);
+				d = GG(d, a, b, c, x[k+6],  S22, 0xC040B340);
+				c = GG(c, d, a, b, x[k+11], S23, 0x265E5A51);
+				b = GG(b, c, d, a, x[k+0],  S24, 0xE9B6C7AA);
+				a = GG(a, b, c, d, x[k+5],  S21, 0xD62F105D);
+				d = GG(d, a, b, c, x[k+10], S22, 0x2441453);
+				c = GG(c, d, a, b, x[k+15], S23, 0xD8A1E681);
+				b = GG(b, c, d, a, x[k+4],  S24, 0xE7D3FBC8);
+				a = GG(a, b, c, d, x[k+9],  S21, 0x21E1CDE6);
+				d = GG(d, a, b, c, x[k+14], S22, 0xC33707D6);
+				c = GG(c, d, a, b, x[k+3],  S23, 0xF4D50D87);
+				b = GG(b, c, d, a, x[k+8],  S24, 0x455A14ED);
+				a = GG(a, b, c, d, x[k+13], S21, 0xA9E3E905);
+				d = GG(d, a, b, c, x[k+2],  S22, 0xFCEFA3F8);
+				c = GG(c, d, a, b, x[k+7],  S23, 0x676F02D9);
+				b = GG(b, c, d, a, x[k+12], S24, 0x8D2A4C8A);
+				a = HH(a, b, c, d, x[k+5],  S31, 0xFFFA3942);
+				d = HH(d, a, b, c, x[k+8],  S32, 0x8771F681);
+				c = HH(c, d, a, b, x[k+11], S33, 0x6D9D6122);
+				b = HH(b, c, d, a, x[k+14], S34, 0xFDE5380C);
+				a = HH(a, b, c, d, x[k+1],  S31, 0xA4BEEA44);
+				d = HH(d, a, b, c, x[k+4],  S32, 0x4BDECFA9);
+				c = HH(c, d, a, b, x[k+7],  S33, 0xF6BB4B60);
+				b = HH(b, c, d, a, x[k+10], S34, 0xBEBFBC70);
+				a = HH(a, b, c, d, x[k+13], S31, 0x289B7EC6);
+				d = HH(d, a, b, c, x[k+0],  S32, 0xEAA127FA);
+				c = HH(c, d, a, b, x[k+3],  S33, 0xD4EF3085);
+				b = HH(b, c, d, a, x[k+6],  S34, 0x4881D05);
+				a = HH(a, b, c, d, x[k+9],  S31, 0xD9D4D039);
+				d = HH(d, a, b, c, x[k+12], S32, 0xE6DB99E5);
+				c = HH(c, d, a, b, x[k+15], S33, 0x1FA27CF8);
+				b = HH(b, c, d, a, x[k+2],  S34, 0xC4AC5665);
+				a = II(a, b, c, d, x[k+0],  S41, 0xF4292244);
+				d = II(d, a, b, c, x[k+7],  S42, 0x432AFF97);
+				c = II(c, d, a, b, x[k+14], S43, 0xAB9423A7);
+				b = II(b, c, d, a, x[k+5],  S44, 0xFC93A039);
+				a = II(a, b, c, d, x[k+12], S41, 0x655B59C3);
+				d = II(d, a, b, c, x[k+3],  S42, 0x8F0CCC92);
+				c = II(c, d, a, b, x[k+10], S43, 0xFFEFF47D);
+				b = II(b, c, d, a, x[k+1],  S44, 0x85845DD1);
+				a = II(a, b, c, d, x[k+8],  S41, 0x6FA87E4F);
+				d = II(d, a, b, c, x[k+15], S42, 0xFE2CE6E0);
+				c = II(c, d, a, b, x[k+6],  S43, 0xA3014314);
+				b = II(b, c, d, a, x[k+13], S44, 0x4E0811A1);
+				a = II(a, b, c, d, x[k+4],  S41, 0xF7537E82);
+				d = II(d, a, b, c, x[k+11], S42, 0xBD3AF235);
+				c = II(c, d, a, b, x[k+2],  S43, 0x2AD7D2BB);
+				b = II(b, c, d, a, x[k+9],  S44, 0xEB86D391);
+				a = addUnsigned(a, AA);
+				b = addUnsigned(b, BB);
+				c = addUnsigned(c, CC);
+				d = addUnsigned(d, DD);
+			}
+			var tempValue = wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
+			return tempValue.toLowerCase();
+		}
+	});
+
+
+	/**** 工具类： json ****/
+	byy.extend({
+		json : function(str,flag){
+			if(null !=str && undefined != str && ''!=str && typeof str != 'object'){
+				var obj = {};
+				try{
+					if(JSON && JSON.parse){
+						obj = JSON.parse(str);
+					}else{
+						obj = $.parseJSON(str);
+					}
+				}catch(Error){
+					return str;
+				}
+				null != flag && undefined != flag && flag == true ? byy.fixJson(obj) : '';
+				return obj;
+			}else if(typeof str == 'object'){
+				return str;
+			}
+			return {};
+		},
+		fixJson : function(target){
+			var map = {};
+			var scan = function(o){
+				if(o.hasOwnProperty('$id')){
+					var v = o['$id'];
+					map[v] = o;
+				}
+				//如果含有ID ，则为独立对象，需要对ref进行替换
+				if(!$.isEmptyObject(o) && !$.isFunction(o) &&null!=o&&o&&'null'!=o){
+					for(var n in o){
+						if(o.hasOwnProperty(n)){
+							if(o[n] instanceof Object){
+								scan(o[n]);
+							}	
+						}
+					}
+				}	
+			};
+			var replaceObj = function(o){
+				//移除其他属性
+				if(o.hasOwnProperty('$id')){
+					delete o['$id'];
+					delete o['$type'];
+				}
+				if(o.hasOwnProperty('$ref')){
+					var v = o['$ref'];
+					o = map[v];
+					return o;
+				}
+				if(!$.isEmptyObject(o) && !$.isFunction(o)){
+					for(var n in o){
+						if(o[n] instanceof Object){
+							o[n] = replaceObj(o[n]);
+						}
+					}
+				}
+				return o;
+			};
+			scan(target);
+			replaceObj(target);
+		},
+		stringfy : function( obj ){
+			if(JSON && JSON.stringify)return JSON.stringify(obj);
+			if(null == obj || obj == undefined)return undefined;
+			if(typeof obj == 'string')return obj;
+			if(typeof obj =='number')return obj;
+			var arrParse = function(temp){
+				var tempstr = [];
+				tempstr.push('[');
+				for(var i=0;i<temp.length;i++){
+					var tempobj = temp[i];
+					var str = switchObj(tempobj);
+					tempstr.push(str);
+					if(i != temp.length-1){
+						tempstr.push(',');
+					}
+				}
+				tempstr.push(']');
+				return tempstr.join('');
+			
+			};
+			var switchObj  = function(tempobj){
+				if(typeof tempobj == 'object'){
+					if(tempobj instanceof Array){
+						return arrParse(tempobj);
+					}else if(tempobj instanceof Object){
+						return objParse(tempobj);	
+					}
+				}else if(typeof tempobj == 'function'){
+					return ''+tempobj.toString()+'';
+				}else{
+					return '"'+tempobj+'"';
+				}
+				return '';
+			};
+			var objParse = function(obj){
+				var htmls = [];
+				htmls.push('{');
+				for(var p in obj){
+					var tempobj = obj[p];
+					var str= switchObj(tempobj);
+					htmls.push('"'+p+'":'+str+'');
+					htmls.push(',');
+				}
+				//如果是空对象，则不处理
+				if(htmls.length > 1){
+					htmls.splice(htmls.length-1);
+				}
+				htmls.push('}');
+				return htmls.join('');
+			};
+			return switchObj(obj);
+		}
+	});
+
+
+	/**guid**/
+	byy.extend({
+		//guid 生成工具
+		guid : function( prefix ){
+			var counter = 0;
+	        return (function( prefix ) {
+	            var guid = (+new Date()).toString( 32 ),i = 0;
+	            for ( ; i < 5; i++ ) {
+	                guid += Math.floor( Math.random() * 65535 ).toString( 32 );
+	            }
+	            return (prefix || 'byy_') + guid + (counter++).toString( 32 );
+	        })( prefix )
+		},
+		//格式化文件大小
+		formatSize : function(  size, pointLength, units ){
+			var unit;
+	        units = units || [ 'B', 'KB', 'M', 'G', 'TB' ];
+
+	        while ( (unit = units.shift()) && size > 1024 ) {
+	            size = size / 1024;
+	        }
+	        return (unit === 'B' ? size : size.toFixed( pointLength || 2 )) + unit;
+		}
+	});
+
+	/**frame 相关工具类**/
+	byy.extend({
+		//贯穿整个文档，查找该name的frame 对象<..实在找不到咋整昂。>
+		findFrameByName : function(name){
+			var w = window.top.document;
+			//向下查找
+			var num = 0;
+			if(!$){
+				error('jquery未引入');
+				return;
+			}
+			var $iframes = $(w).find('iframe');
+			var result = byy.findFrameByNameOfArr($iframes,name,0);
+			return result;
+		},
+		frameLevel : 50,//frame 层级
+		findFrameByNameOfArr : function(arr,name,num){
+			num++;
+			if(num == byy.frameLevel){
+				return null;
+			}
+			var result = null;
+			for(var i=0;i<arr.length;i++){
+				var temp = arr[i];
+				if($(temp).attr('name') == name){
+					result =  $(temp);
+					break;
+				}else if(temp.src && temp.src.indexOf('www.sogou.com') > -1){
+					//针对搜狗浏览器默认插入frame收集信息，且不允许访问frame导致的问题
+					continue;
+				}else{
+					var tempArr = $($(temp).get(0).contentWindow.document).find('iframe');
+					if(tempArr.length>0){
+						result = byy.findFrameByNameOfArr(tempArr,name,num);
+						if(result == null){
+							continue;
+						}else{
+							break;
+						}
+					}else{
+						continue;
+					}
+				}
+			}
+			return result;
+		},
+		//从顶级窗口开始查找frame,进行刷新reload,如果没有传递sel，则刷新第一个frame
+		refreshFrame : function(frameName){
+			var tempFrame = null;
+			if(frameName){
+				tempFrame = byy.findFrameByName(frameName);
+			}else{
+				tempFrame = $(top.window.document).find('iframe');
+			}
+			if(null != tempFrame){
+				//刷新替换为location.reload，这样，在已经存在条件的页面则可以不丢失条件刷新。
+				if(tempFrame[0]){
+					tempFrame[0].contentWindow.location.reload();
+				}
+				//tempFrame.attr('src',tempFrame.attr('src'));
+			}else{
+				error('刷新失败，没有查找到该frame对象，请检查name是否正确');
+			}
+		}
+	});
+
+	/**其他工具类函数**/
+	byy.extend({
+		/**
+		 * 获得视口的宽度和高度
+		 ***/
+		getPageWH : function(){
+			var pageWidth=win.innerWidth,pageHeight=win.innerHeight;
+			if ( typeof pageWidth !="number"){
+				if ( doc.compatMode== "CSSICompat"){
+					pageWidth=doc.documentElement.clientWidth;
+					pageHeight=doc.documentElement.clientHeight;
+				} else{
+					pageWidth=doc.body.clientWidth;
+					pageHeight=doc.body.clientHeight;
+				}
+			}
+			return {
+				width : pageWidth,
+				height : pageHeight
+			};
+		},
+		/***
+		 * 得到obj对象中属性的个数
+		 * @param obj
+		 */
+		getObjectLength : function(obj){
+			var len = 0;
+			for(var p in obj){
+				if(obj.hasOwnProperty(p)){
+					len++;
+				}
+			}
+			return len;
+		},
+		/**
+		 * 全屏处理
+		 **/
+		fullScreen : function(){
+			var docElm = doc.documentElement;
+	        //W3C  
+	        if (docElm.requestFullscreen) {
+	            docElm.requestFullscreen();
+	        }
+	        //FireFox  
+	        else if (docElm.mozRequestFullScreen) {
+	            docElm.mozRequestFullScreen();
+	        }
+	        //Chrome等  
+	        else if (docElm.webkitRequestFullScreen) {
+	            docElm.webkitRequestFullScreen();
+	        }
+	        //IE11
+	        else if (elem.msRequestFullscreen) {
+	            elem.msRequestFullscreen();
+	        }
+		},
+		/****
+ 		 * 注册命名控件，用于多frame查找
+		 ***/
+		 registerNameSpace : function( name , obj ){
+		 	byynsc[name] = obj;
+		 },
+		 /**
+		  * 获得对应空间的对象
+		  **/
+		 getSpace : function( name ){
+		 	return byynsc[name];
+		 },
+		 /**
+		  *函数节流 debounce
+		  **/
+		 throttle : function( fn , delay , immediate, debounce){
+		 	var curr = +new Date(),//当前事件
+		       last_call = 0,
+		       last_exec = 0,
+		       timer = null,
+		       diff, //时间差
+		       context,//上下文
+		       args,
+		       exec = function () {
+		           last_exec = curr;
+		           fn.apply(context, args);
+		       };
+		   return function () {
+		       curr= +new Date();
+		       context = this,
+		       args = arguments,
+		       diff = curr - (debounce ? last_call : last_exec) - delay;
+		       clearTimeout(timer);
+		       if (debounce) {
+		           if (immediate) {
+		               timer = setTimeout(exec, delay);
+		           } else if (diff >= 0) {
+		               exec();
+		           }
+		       } else {
+		           if (diff >= 0) {
+		               exec();
+		           } else if (immediate) {
+		               timer = setTimeout(exec, -diff);
+		           }
+		       }
+		       last_call = curr;
+		   }
+		 },
+		 debounce : function( fn , delay , immediate){
+		 	return byy.throttle(fn , delay, immediate , true);
+		 },
+		 /****
+		  * 页面通用绑定点击事件函数
+		  * 例如:绑定所有带有 filter的函数，并根据值进行回调。
+		  * <span filter="showMe">Click Me</span> 
+		  * 那么就可以这样绑定 byy.bindEvents('filter',{
+		  *     showMe : function(){alert('show me')}
+		  * })
+		  * 注意:该函数仅限于点击事件
+		  **/
+		 bindEvents : function(type , events){
+		 	if(typeof type === 'object' || null === type || undefined === type){
+				events = type;
+				type = 'filter';
+			}
+			eventsCache[type] = events;
+			delete events;
+			$('body').off('click','['+type+']').on('click','['+type+']',function(ev){
+				var $dom = $(this),eventType = $dom.attr(type),data = $dom.data();
+				if(eventsCache && eventType && eventsCache[type] && eventsCache[type][eventType]){
+					eventsCache[type][eventType].call($dom,data,ev);
+				}
+			});
+		 }
+	});
+
+	exports('util',{
+		version : '1.0',
+		msg : '工具类函数'
+	})
+});
