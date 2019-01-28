@@ -3,7 +3,7 @@
  * @author chrunlee
  * @description 音乐+物理弹球小游戏
  ***/
- byy.define(['jquery'],function(exports){
+ byy.define(['jquery','bball'],function(exports){
 
  	/***
  	 * 加载后，自动在页面右侧增加点点图标，然后以此进行
@@ -27,7 +27,7 @@
  	 	},
  	 	music : function(){
  	 		createMusic();
- 	 		getNext();
+ 	 		
  	 	},
  	 	hideMusic : function(){
  	 		_defaults.container.find('.easy-music').addClass('closed');
@@ -40,7 +40,9 @@
  	 		$(this).text($(this).text() == '暂停' ? '播放' : '暂停');
  	 	},
  	 	game : function(){
-
+ 	 		createGame();
+ 	 		var ball = new byy.bball('easy-game-canvas');
+ 	 		ball.drawBall();
  	 	}
  	 };
  	 //创建页面原点
@@ -75,6 +77,7 @@
 			</div>
  	 		`;
  	 		_defaults.container.append(html);
+ 	 		getNext();
  	 	}else{
  	 		_defaults.container.find('.easy-music').removeClass('closed');
  	 	}
@@ -105,6 +108,23 @@
  	 		audio.pause();	
  	 	}
  	 }
+
+ 	 //创建画布
+ 	 function createGame(){
+ 	 	_defaults.container.find('.easy-game').remove();
+ 	 	var w = window.innerWidth,h = window.innerHeight;
+ 	 	var html = `
+		<div class="easy-game">
+			<span class="byy-btn easy-game-start">Play</span>
+			<canvas width="${w}px" height="${h}px" id="easy-game-canvas">
+				您当前的浏览器太过古老，不支持Canvas,请更换或升级浏览器!
+			</canvas>
+		</div>
+ 	 	`;
+ 	 	_defaults.container.append(html);
+ 	 }
+
+
  	 createDot();
 
  	 byy.bindEvents('easyfilter',events);

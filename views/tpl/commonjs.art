@@ -14,7 +14,8 @@ byy.setRequire({
 	basePath : '/js/common/',
 	modules : {
 		common : 'common',
-		easy : 'easy'
+		easy : 'easy',
+		bball : 'bball'
 	}
 });
 </script>
