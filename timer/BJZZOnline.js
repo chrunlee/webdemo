@@ -48,6 +48,18 @@ function work(){
 }
 function check(item,cb){
 	superagent.get(item.url)
+	.set({
+		'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+		'Accept-Encoding': 'gzip, deflate',
+		'Accept-Language': 'en,zh-CN;q=0.9,zh;q=0.8',
+		'Cache-Control': 'no-cache',
+		'Connection': 'keep-alive',
+		'Cookie': 'SESSION=2a37080b-6dcd-4030-9827-c3110825f3c5; Hm_lvt_b0474253cc9d735d0a714670e344da53=1547722097,1547775014,1548311215,1548640957; SESSION=84c721b5-5a4c-4cd7-ace5-9d43cef3c676; Hm_lpvt_b0474253cc9d735d0a714670e344da53=1548641414',
+		'Host': 'zhxy.bjzzschool.com',
+		'Pragma': 'no-cache',
+		'Upgrade-Insecure-Requests': '1',
+		'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+	})
 	.end(function(err,res){
 		if(err){
 			console.log(err);
