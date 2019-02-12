@@ -44,6 +44,7 @@
 </body>
 </html>
 <script>
+	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 	var events = {
 		open : function(){
 			LV.open();
@@ -51,7 +52,6 @@
 		close : function(){
 			console.log(LV.timer);
 			clearInterval(LV.timer);
-			// LV.media && LV.media.stop();
 		},
 		screenshot : function(){
 			//获得当前帧的图像并拿到数据
@@ -66,12 +66,14 @@
 		media : null,
 		open :function(){
 			if(!LV.timer){
-				navigator.mediaDevices.getUserMedia({
+				navigator.getUserMedia({
 					video : {width:500,height:300}
-				}).then(function(stream){
-					LV.media = typeof stream.stop === 'function' ? stream : stream.getTracks()[0];
-					LV.video.src = /*对stream转成url*/(window.URL || window.webkitURL).createObjectURL(stream);
-				}).catch(function(err){
+				},function(stream){
+					LV.video.srcObject = stream;
+			        LV.video.onloadedmetadata = function(e) {
+			        	LV.video.play();
+			        };
+				},function(err){
 					alert(err);//弹窗报错
 				})
 			}
