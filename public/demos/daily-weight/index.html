@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>日常体重记录</title>
+	<link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+	<style>
+		html,body{
+			margin:0px;
+			padding:0px;
+			overflow:hidden;
+		}
+		#show{
+			width:100%;
+			height:300px;
+			overflow:hidden;
+			box-sizing:border-box;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="form-info">
+			记录我自己每天早上称的体重或晚上的体重，然后查看最近锻炼的效果。 
+		</div>
+		<div class="info">
+			<form action="" class="form">
+				<div class="form-item">
+					<input type="text" class="byy-form-input" name="weight" id="weight">	
+				</div>
+				<div class="form-item">
+					<span class="byy-btn" onclick="save()">提交</span>
+				</div>
+			</form>
+		</div>
+		<div id="show">
+			
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="./index.js"></script>
+<script type="text/javascript" src="/plugins/echarts/echarts.min.js"></script>
+<script type="text/javascript">
+	var xmlhttp;
+	function save(){
+		var v = document.getElementById('weight').value;
+		xmlhttp = new XMLHttpRequest();
+  		xmlhttp.open("GET",'/weight?weight='+v,true);
+  		xmlhttp.send(null);
+	}
+
+	var option = {
+	    xAxis: {
+	        type: 'category'
+	    },
+	    yAxis: {
+	        type: 'value'
+	    },
+	    series: [{
+	        data: weight,
+	        type: 'line',
+	        smooth: true
+	    }]
+	};
+	var myChart = echarts.init(document.getElementById('show'));
+	myChart.setOption(option);
+</script>

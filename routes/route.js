@@ -50,6 +50,9 @@ module.exports = function( app ){
 	//dht magnet
 	app.use('/magnet',require('../routes/other/magnet'));
 
+	//体重信息
+	app.use('/weight',require('../routes/other/weight'))
+
 
 
 	//个人中心
