@@ -8,9 +8,12 @@
 		html,body{
 			margin:0px;
 			padding:0px;
-			overflow:hidden;
+			overflow-x:hidden;
 		}
-		#show{
+		.fluid{
+			position:relative;
+		}
+		#show1,#show2{
 			width:100%;
 			height:300px;
 			overflow:hidden;
@@ -33,14 +36,32 @@
 		<div class="info">
 			<form action="" class="form">
 				<div class="form-item">
-					<input type="text" class="byy-form-input" name="weight" id="weight">	
+					<input type="text" class="byy-form-input" name="weight迅哥" id="weight迅哥">	
 				</div>
 				<div class="form-item">
-					<span class="byy-btn" onclick="save()">提交</span>
+					<span class="byy-btn" onclick="save('迅哥')">提交</span>
 				</div>
 			</form>
 		</div>
-		<div id="show" style="height:800px;width:95%;margin:0px auto;">
+		<div id="show1" style="height:800px;width:95%;margin:0px auto;">
+			
+		</div>
+	</div>
+	<div class="fluid">
+		<div class="form-info">
+			记录我媳妇每天早上称的体重或晚上的体重，然后查看最近长宝宝的效果。 
+		</div>
+		<div class="info">
+			<form action="" class="form">
+				<div class="form-item">
+					<input type="text" class="byy-form-input" name="weight二蛋" id="weight二蛋">	
+				</div>
+				<div class="form-item">
+					<span class="byy-btn" onclick="save('二蛋')">提交</span>
+				</div>
+			</form>
+		</div>
+		<div id="show2" style="height:800px;width:95%;margin:0px auto;">
 			
 		</div>
 	</div>
@@ -49,18 +70,18 @@
 <script type="text/javascript" src="/plugins/echarts/echarts.min.js"></script>
 <script type="text/javascript">
 	
-	function save(){
-		var v = document.getElementById('weight').value;
+	function save(flag){
+		var v = document.getElementById('weight'+flag).value;
 		var xmlhttp;
 		xmlhttp = new XMLHttpRequest();
-  		xmlhttp.open("GET",'/weight/save?weight='+v,true);
+  		xmlhttp.open("GET",'/weight/save?weight='+v+'&name='+flag,true);
   		xmlhttp.send(null);
 	}
 	function render(){
 		var xmlhttp;
 		xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = getData;
-		xmlhttp.open('GET','/weight');
+		xmlhttp.open('GET','/weight?name=迅哥');
 		xmlhttp.send(null);
 		function getData(){
 			if(xmlhttp.readyState==4 && xmlhttp.status == 200){
@@ -115,11 +136,75 @@
 			            },
 				    }]
 				};
-				var myChart = echarts.init(document.getElementById('show'));
+				var myChart = echarts.init(document.getElementById('show1'));
+				myChart.setOption(option);
+			}
+		}
+	}
+	function render2(){
+		var xmlhttp;
+		xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = getData;
+		xmlhttp.open('GET','/weight?name=二蛋');
+		xmlhttp.send(null);
+		function getData(){
+			if(xmlhttp.readyState==4 && xmlhttp.status == 200){
+				var txt = xmlhttp.responseText;
+				var obj = JSON.parse(txt);
+				var name = [],val = [];
+				obj.data.forEach(function(item){
+					name.push(item.str);
+					val.push(item.weight);
+				})
+				var option = {
+					tooltip: {
+				        trigger: 'axis'
+				    },
+				    xAxis: {
+				        type: 'category',
+				        data : name,
+				        axisLabel : {
+				        	color : '#52C2BB'
+				        },
+				        splitLine : {
+				        	lineStyle:{
+				        		color : '#eee',
+				        		type : 'dotted'
+				        	}
+				        }
+				    },
+				    yAxis: {
+				        type: 'value',
+				        min : 60,
+				        splitNumber : 20,
+				        axisLabel : {
+				        	color : '#52C2BB'
+				        },
+				        splitLine : {
+				        	lineStyle:{
+				        		color : '#eee',
+				        		type : 'dotted'
+				        	}
+				        }
+
+				    },
+				    series: [{
+				        data: val,
+				        type: 'line',
+				        smooth: true,
+				        markPoint: {
+			                data: [
+			                    {type: 'max', name: '最肥的时候'},
+			                    {type: 'min', name: '最帅的时候'}
+			                ]
+			            },
+				    }]
+				};
+				var myChart = echarts.init(document.getElementById('show2'));
 				myChart.setOption(option);
 			}
 		}
 	}
 	render();
-	
+	render2();
 </script>

@@ -20,6 +20,7 @@
     "art-template": "^4.12.2",
     "async": "^2.6.1",
     "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
     "compression": "^1.7.3",
     "cookie-parser": "^1.4.3",
     "core-js": "^2.5.7",
@@ -37,6 +38,7 @@
     "qiniu": "^7.2.1",
     "serve-favicon": "^2.4.5",
     "simple-mysql-query": "^1.0.0",
+    "sqlquery-tool": "^1.0.6",
     "superagent": "^3.8.3",
     "xml2js": "^0.4.19"
   }
