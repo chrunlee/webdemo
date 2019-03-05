@@ -40,7 +40,7 @@ router.get('/',(req,res,next)=>{
 					})));`;
 					fs.writeFileSync(filePath,fileContent);
 				}
-			}catch(){}
+			}catch(e){console.log(e);}
 		}
 		res.end('suc');
 	}else{
