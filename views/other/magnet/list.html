@@ -81,6 +81,14 @@
 		{{if q && list.length == 0}}
 		<div class="empty">没有检索到关于"{{search}}"的记录</div>
 		{{/if}}
+		{{if !q}}
+			<!-- 如果没有检索内容，默认展示最近的前100条记录-->
+			{{each showList value i}}
+			<div class="block">
+				<a href="/magnet/{{value.infohash}}">{{value.name}}</a>
+			</div>
+			{{/each}}
+		{{/if}}
 		{{each list value i}}
 		<div class="block">
 			<a href="/magnet/{{value.infohash}}">{{value.name}}</a>

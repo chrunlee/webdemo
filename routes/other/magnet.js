@@ -16,7 +16,11 @@ function format(  size, pointLength, units ){
 
 router.get('/',(req,res,next)=>{
 	if(req.session.github){
-		res.render('other/magnet/list',{q : false});
+		query({
+			sql : 'select name,infohash from demo_magnet order by createTime desc limit 0,100',params : []
+		}).then(rs=>{
+			res.render('other/magnet/list',{q : false,showList : rs[0]});	
+		})
 	}else{
 		res.redirect('/');
 	}
@@ -25,7 +29,11 @@ router.get('/search',(req,res,next)=>{
 	var name = req.query.name||'';
 	name = name.trim();
 	if(name.length ==0 ){
-		res.render('other/magnet/list',{q : true,list : []});
+		query({
+			sql : 'select name,infohash from demo_magnet order by createTime desc limit 0,100',params : []
+		}).then(rs=>{
+			res.render('other/magnet/list',{q : false,list : [],showList : rs[0]});	
+		});
 	}else{
 		query({
 			sql : 'select name,infohash from demo_magnet where name like ? order by createTime desc',
