@@ -21,7 +21,7 @@ router.get('/',async function(req,res,next){
 		pdf : list[0],
 		categoryId : firstCateId,
 		categoryList : categoryList[0],
-		optionList : optionList,
+		optionList : optionList[0],
 		site : this.mysite,
 		user : req.session.user,
 		github : req.session.github,
