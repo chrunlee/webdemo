@@ -44,7 +44,7 @@ byy.require(['jquery','uploader','win'],function(){
 				//加载上传组件
 				byy.uploader().simpleImage({
 					selector : '#addPdfPost',
-					server : '/center/upload',
+					server : '/center/upload/file',
 					onSuccess : function(file,res){
 						$('[name="postpath"]').val(res.result.filePath);
 						$('#postPathShow').html(res.result.filePath);
