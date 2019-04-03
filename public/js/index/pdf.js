@@ -1,5 +1,5 @@
 //pdf 页面浏览新增
-byy.require(['jquery','uploader','win'],function(){
+byy.require(['jquery','uploader','win','common'],function(){
 
 	byy.bindEvents({
 		preview : function(data){
