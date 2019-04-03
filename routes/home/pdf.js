@@ -38,7 +38,7 @@ router.post('/save',async function(req,res,next){
 	//插入关联表
 	let sqlparams = '';
 	let sqlparamsB = [];
-	body['categoryid[]'].forEach(str=>{
+	(body['categoryid'] ? [body['categoryid']] : body['categoryid[]']).forEach(str=>{
 		sqlparams += '(?,?),';
 		sqlparamsB.push(insertA[0].insertId);
 		sqlparamsB.push(str);
