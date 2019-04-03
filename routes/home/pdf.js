@@ -10,6 +10,9 @@ router.get('/',async function(req,res,next){
 	let categoryList = await query({
 		sql : 'select t1.categoryid as id,t2.name,count(1) as num from user_pdf_pdf_category t1 left join user_pdf_category t2 on t1.categoryid = t2.id group by t1.categoryid order by t1.categoryid',params : []
 	});
+	let optionList = await query({
+		sql : 'select * from user_pdf_category ',params : []
+	});
 	let firstCateId = cId || ((categoryList[0][0] || {}).id || '');
 	let list = await query({
 		sql : 'select t2.* from user_pdf_pdf_category t1 left join user_pdf t2 on t1.pdfid= t2.id where t1.categoryid=? ',params : [firstCateId]
@@ -18,6 +21,7 @@ router.get('/',async function(req,res,next){
 		pdf : list[0],
 		categoryId : firstCateId,
 		categoryList : categoryList[0],
+		optionList : optionList,
 		site : this.mysite,
 		user : req.session.user,
 		github : req.session.github,
