@@ -33,7 +33,10 @@ app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-    secret : 'xunge'
+	resave: false, //添加 resave 选项
+  	saveUninitialized: true, //添加 saveUninitialized 选项
+  	secret: '0b8d3104f46ce1ce884d3c494fac1b64', // 建议使用 128 个字符的随机字符串
+  	cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
 app.use(compression());//gzip压缩
