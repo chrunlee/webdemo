@@ -25,7 +25,6 @@ router.post('/',upload('file','public/upload/tmp'),function(req,res,next){
 				result : req.file
 			});
 		}).catch(function(msg){
-			console.log(msg);
 			res.json({
 				success : false,
 				msg : msg
@@ -38,6 +37,30 @@ router.post('/',upload('file','public/upload/tmp'),function(req,res,next){
 		})
 	}
 })
+//文件上传
+router.post('/file',upload('file','public/upload/tmp'),function(req,res,next){
+	if(req.file && req.session.user){
+		var user = req.session.user;
+		ImageUtil.FileUtil(user.id,req.file).then(function(rs){
+			req.file.filePath = rs;
+			res.json({
+				success : true,
+				result : req.file
+			});
+		}).catch(function(msg){
+			res.json({
+				success : false,
+				msg : msg
+			});
+		})
+	}else{
+		res.json({
+			success : false,
+			msg : '未上传文件'
+		})
+	}
+})
+
 
 //文件删除
 router.post('/delete',function(req,res,next){

@@ -32,4 +32,21 @@ var ImageUtil = function(userId,file){
 		}
 	});
 }
+ImageUtil.FileUtil = function(userId,file){
+	userId = userId || 'user';
+	return new Promise(function(resolve,reject){
+		if(file){
+			var realPath = path.join(__dirname,'../',file.filePath);
+  			var rstPath=  getNewPath(userId,path.extname(file.name))
+  			var savePath = path.join(__dirname,'../public',rstPath);
+  			var readStream = fs.createReadStream(realPath);
+  			var writeStream = fs.createWriteStream(savePath);
+  			readStream.pipe(writeStream);
+  			fs.unlinkSync(realPath);
+  			resolve(rstPath);
+		}else{
+			reject('no file');
+		}
+	});
+}
 module.exports = ImageUtil;

@@ -6,6 +6,7 @@
 			<a href="/article">博文 &nbsp;<span class="byy-badge-dot"></span></a>
 		</li>
 		<li id="demo" class="byy-nav-item {{d.header == 'demo' ? 'byy-this' : ''}}"><a href="/demo">Demo </a></li>
+		<li id="pdf" class="byy-nav-item {{d.header == 'pdf' ? 'byy-this' : ''}}"><a href="/pdf">电子书</a></li>
 		<li id="about" class="byy-nav-item {{d.header == 'about' ? 'byy-this' : ''}}"><a href="/about">关于</a></li>
 		<!--<li id="tuku" class="byy-nav-item"><a href="/picture">图库</a></li>
 		<li id="caipu" class="byy-nav-item"><a href="/caipu/home">食谱</a></li>-->

@@ -62,7 +62,8 @@ module.exports = function( app ){
 
 	//文章列表
 	app.use('/article',require('../routes/home/article'));
-	
+	//pdf 处理
+	app.use('/pdf',require('../routes/home/pdf'));
 	//首页
 	app.use('/',require('../routes/home/home'));
 

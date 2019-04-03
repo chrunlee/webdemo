@@ -15,6 +15,9 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 var template = require('express-art-template')
+//对art-template 增加函数
+require('./util/template')(template);
+
 app.engine('html',template);
 app.set('view options',{
 	debug : process.env.NODE_ENV !== 'production'

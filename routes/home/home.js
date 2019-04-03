@@ -51,6 +51,7 @@ router.get('/demo',function(req,res,next){
 		}
 	});
 });
+
 //登录管理中心
 router.get('/login',function(req,res,next){
 	if(req.session.user){
