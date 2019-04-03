@@ -24,9 +24,11 @@
 				<div class="byy-side-scroll">
 					<ul class="byy-nav byy-nav-side dark byy-nav-tree">
 						<li class="text-center">PDF 电子书籍</li>
+						{{if user}}
 						<li class="byy-nav-item">
 							<a href="javascript:;" filter="addPdf">新增PDF书籍</a>
 						</li>
+						{{/if}}
 						{{ each categoryList value i}}
 						<li class="byy-nav-item {{value.id ==categoryId ? 'byy-this' : ''}}">
 							<a data-id="{{value.id}}" href="javascript:;" filter="openMenu">{{value.name}} ({{value.num}})</a>
@@ -113,6 +115,9 @@
 								<span><i class="byyicon icon-time"></i>{{value.createtime | dateformat 'yyyy-MM-dd' }}</span>
 								<span class="pull-right">
 									<span class="byy-btn mini" data-href="{{value.pdfpath}}" filter="preview">PDF预览</span>
+									{{if user}}
+									<span class="byy-btn mini" data-id="{{value.id}}" filter="edit">编辑</span>
+									{{/if}}
 								</span>
 							</p>
 						</div>
