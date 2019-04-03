@@ -10,6 +10,17 @@ byy.require(['jquery','uploader','win'],function(){
 			//进行重新获取
 			location.href = '/pdf?c='+id;
 		},
+		delete : function(d){
+			$.ajax({
+				url : '/pdf/delete',
+				type : 'POST',
+				data : {id : d.id},
+				success : function(){
+					byy.win.msg('删除成功')
+					location.reload();
+				}
+			});
+		},
 		addPdf : function(){
 			if($('.addpdf-form').hasClass('hide')){
 				$('.addpdf-form').removeClass('hide');

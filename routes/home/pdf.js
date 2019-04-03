@@ -26,31 +26,53 @@ router.get('/',async function(req,res,next){
 		}
 	});
 })
-
+//删除文档
+router.post('/delete',async function(req,res,next){
+	var id = req.body.id;
+	if(req.session.user){
+		//同时删除对应的文件？不需要，有定时清理
+		let rst = await query([{
+			sql : 'delete from user_pdf where id=?',params : [id]
+		},{
+			sql : 'delete from user_pdf_pdf_category where pdfid=?',params :[id]
+		}]);
+		res.json({
+			success : true
+		});
+	}else{
+		res.json({
+			success : true
+		});
+	}
+})
 //pdf 数据保存
 router.post('/save',async function(req,res,next){
 	let body = req.body;
-
-	let paramsA = [body.title,body.author,body.postpath,body.pdfpath,body.filesize,body.description,new Date()];
-	let insertA = await query({
-		sql : 'insert into user_pdf (title,author,postpath,pdfpath,filesize,description,createtime) values (?,?,?,?,?,?,?)',params : paramsA
-	});
-	//插入关联表
-	let sqlparams = '';
-	let sqlparamsB = [];
-	(body['categoryid'] ? [body['categoryid']] : body['categoryid[]']).forEach(str=>{
-		sqlparams += '(?,?),';
-		sqlparamsB.push(insertA[0].insertId);
-		sqlparamsB.push(str);
-	})
-	sqlparams = sqlparams.substr(0,sqlparams.length-1);
-	let insertB = await query({
-		sql : 'insert into user_pdf_pdf_category (pdfid,categoryid) values '+sqlparams,params : sqlparamsB
-	})
-	res.json({
-		success : true
-	});
-	//数据保存
+	if(req.session.user){
+		let paramsA = [body.title,body.author,body.postpath,body.pdfpath,body.filesize,body.description,new Date()];
+		let insertA = await query({
+			sql : 'insert into user_pdf (title,author,postpath,pdfpath,filesize,description,createtime) values (?,?,?,?,?,?,?)',params : paramsA
+		});
+		//插入关联表
+		let sqlparams = '';
+		let sqlparamsB = [];
+		(body['categoryid'] ? [body['categoryid']] : body['categoryid[]']).forEach(str=>{
+			sqlparams += '(?,?),';
+			sqlparamsB.push(insertA[0].insertId);
+			sqlparamsB.push(str);
+		})
+		sqlparams = sqlparams.substr(0,sqlparams.length-1);
+		let insertB = await query({
+			sql : 'insert into user_pdf_pdf_category (pdfid,categoryid) values '+sqlparams,params : sqlparamsB
+		})
+		res.json({
+			success : true
+		});
+	}else{
+		res.json({
+			success : true
+		});
+	}
 })
 //保存pdf的分类目录
 router.post('/category',async (req,res,next)=>{
