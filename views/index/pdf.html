@@ -114,7 +114,7 @@
 								<span><i class="byyicon icon-attachment"></i>{{value.filesize}}</span>
 								<span><i class="byyicon icon-time"></i>{{value.createtime | dateformat 'yyyy-MM-dd' }}</span>
 								<span class="pull-right">
-									<span class="byy-btn mini" data-href="{{value.pdfpath}}" filter="preview">PDF预览</span>
+									<span class="byy-btn mini" data-href="{{value.pdfpath}}"><a href="/plugins/pdfjs/web/viewer.html?file={{value.pdfpath}}">PDF预览</a></span>
 									{{if user}}
 									<span class="byy-btn mini" data-id="{{value.id}}" filter="delete">删除</span>
 									{{/if}}
