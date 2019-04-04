@@ -30,6 +30,12 @@
 						<input type="text" name="href" placeholder="输入地址">		
 					</div>	
 				</span>
+				<span class="byy-panel-search-block">
+					<label for="">ICON:</label>
+					<div class="byy-inline" style="width:200px;">
+						<input type="text" name="iconpath" placeholder="输入图标地址">		
+					</div>	
+				</span>
 				<span class="byy-btn small" filter="saveLink"><i class="byyicon icon-search"></i>保存</span>
 			</div>
 		</div>
@@ -53,10 +59,8 @@
 
 		byy.bindEvents({
 			saveLink : function(){
-				console.log('save');
 				//校验
 				var values = byy('#saveForm').getValues();
-				console.log(values)
 				if(!values.name || !values.href){
 					byy.win.msg('填写完整信息');
 					return;
@@ -103,8 +107,9 @@
 				{field : 'id',title : 'ID'},
 				{field : 'name',title : '友情链接标题'},
 				{field : 'href',title : '友情链接地址'},
+				{field : 'iconpath',title : 'icon'},
 				{field : 'tool',tool : true,title : '操作',templet : function(data){
-					return '<span class="byy-btn mini" filter="edit" data-id="'+data.id+'" data-name="'+data.name+'" data-href="'+data.href+'">编辑</span><span class="byy-btn mini" filter="delete" data-id="'+data.id+'">删除</span>';
+					return '<span class="byy-btn mini" filter="edit" data-id="'+data.id+'" data-name="'+data.name+'" data-href="'+data.href+'" data-iconpath="'+data.iconpath+'">编辑</span><span class="byy-btn mini" filter="delete" data-id="'+data.id+'">删除</span>';
 				}}
 			]]
 

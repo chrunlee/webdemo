@@ -153,7 +153,7 @@ router.post('/links/save',function(req,res,next){
 	var data = req.body;
 	if(data.id){
 		query({
-			sql : 'update user_links set name=?,href=? where id=? ',params : [data.name,data.href,data.id]
+			sql : 'update user_links set name=?,href=?,iconpath=? where id=? ',params : [data.name,data.href,data.iconpath,data.id]
 		}).then(function(rs){
 			res.json({
 				success : true,msg : '更新成功'
@@ -165,7 +165,7 @@ router.post('/links/save',function(req,res,next){
 		})
 	}else{
 		query({
-			sql : 'insert into user_links (name,href) values (?,?) ',params : [data.name,data.href]
+			sql : 'insert into user_links (name,href,iconpath) values (?,?,?) ',params : [data.name,data.href,data.iconpath]
 		}).then(function(){
 			res.json({
 				success : true,msg : '保存成功'
