@@ -32,9 +32,13 @@ router.get('/', function(req, res, next) {
 	})
 });
 //关于-我
-router.get('/about',function(req,res,next){
+router.get('/about',async function(req,res,next){
+	let links = await query({
+		sql : 'select * from user_links order by id asc',params : []
+	});
 	res.render('index/about',{
 		site : this.mysite,
+		links : links[0],
 		github : req.session.github,
 		d : {
 			header : 'about'
