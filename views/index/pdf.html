@@ -31,7 +31,7 @@
 						{{/if}}
 						{{ each categoryList value i}}
 						<li class="byy-nav-item {{value.id ==categoryId ? 'byy-this' : ''}}">
-							<a data-id="{{value.id}}" href="javascript:;" filter="openMenu">{{value.name}} ({{value.num}})</a>
+							<a href="/pdf?c={{value.id}}">{{value.name}} ({{value.num}})</a>
 						</li>
 						{{ /each }}
 					</ul>

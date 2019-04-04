@@ -5,11 +5,6 @@ byy.require(['jquery','uploader','win','common'],function(){
 		preview : function(data){
 			location.href = data.href;
 		},
-		openMenu : function( data ){
-			let id = data.id;
-			//进行重新获取
-			location.href = '/pdf?c='+id;
-		},
 		delete : function(d){
 			$.ajax({
 				url : '/pdf/delete',
