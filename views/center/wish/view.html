@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>心愿单</title>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <style>
+        html,body{
+            width:100%;
+            margin:0px;
+            padding:0px;
+            height:100%;
+            overflow:hidden;
+        }
+        body{
+            background-image:url(/images/wish.jpg);
+            background-position:center center;
+            background-size:auto 100%;
+        }
+        h3{
+            position:absolute;
+            top:-20px;
+            color:white;
+            text-align:center;
+            width:100%;
+            font-size:32px;
+        }
+        .wish-list{
+            top:60px;
+            position:absolute;
+            left:0px;
+            right:0px;
+            bottom:0px;
+            overflow:auto;
+            padding-left:10px;
+            padding-right:10px;
+        }
+        .wish-block{
+            background-color:rgba(250,250,250,0.8);
+            border-radius:5px;
+            height:150px;
+            box-shadow: 0px 0px 10px 3px rgba(225,225,225,0.9);
+        }
+        .wish-block .logo{
+            width:130px;
+            height:130px;
+            line-height:130px;
+            float:left;
+            margin-top:10px;
+            margin-left:10px;
+            border-radius:50%;
+        }
+        .title{
+            text-align:center;
+            font-size:24px;
+            color:#333;
+            height:30px;
+            font-weight:bold;
+            line-height:80px;
+        }
+        .status{
+            text-align: center;
+            line-height: 78px;
+            font-size: 18px;
+            height: 50px;
+            font-size: 22px;
+            color: #25ca92;
+        }
+        .ths{
+            text-align:center;
+            color:red;
+            font-size:18px;
+        }
+        .song{
+            font-size:18px;
+            text-align:center;
+            color:#1500ff;
+            margin-top:-20px;
+        }
+    </style>
+</head>
+<body>
+    <h3>{{wish.name}}</h3>
+    <div class="wish-list">
+        {{each list value i}}
+        <div class="wish-block">
+            <img class="logo" src="{{value.filepath}}" alt="">
+            <div class="wish-content">
+                <p class="title">{{value.title}}</p>
+                <p class="status">
+                    {{if value.status=='1'}}
+                    <img src="/images/over.gif" style="width:40px;height:40px;"/>达成
+                    <p class="ths">谢谢~{{value.answer}},么么哒</p>
+                    {{else }}
+                    <p class="song">喜欢我的话可以送我啊~</p>
+                    {{/if}}
+                </p>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</body>
+</html>

@@ -53,7 +53,8 @@ module.exports = function( app ){
 	//体重信息
 	app.use('/weight',require('../routes/other/weight'))
 
-
+	//心愿单查看
+	app.use('/wish',require('../routes/center/wish'));
 
 	//个人中心
 	app.use('/center',require('../routes/center/center'))

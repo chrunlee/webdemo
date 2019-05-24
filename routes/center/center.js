@@ -477,6 +477,135 @@ router.post('/comment/delete',function(req,res,next){
 	}
 })
 
+
+//------------ 心愿单管理--------------//
+//跳转一系列的页面
+router.get('/wish/list',(req,res,next)=>{
+	res.render('center/wish/list',{});
+})
+router.get('/wish/option/:id',(req,res,next)=>{
+	res.render('center/wish/option',{id : req.params.id})
+})
+router.get('/wish/option/add/:id',(req,res,next)=>{
+	res.render('center/wish/add',{wishid : req.params.id});
+})
+//获得系列单
+router.post('/wish/list',(req,res,next)=>{
+	query({
+		sql : 'select * from wish_list',params : []
+	})
+	.then(rs=>{
+		res.json({
+			code : 200,
+			rows : rs[0]
+		});
+	})
+})
+//获取心愿单
+router.post('/wish/option',(req,res,next)=>{
+	var id = req.body.id;
+	query({
+		sql : 'select * from wish_list_option where wishid=?',params : [id]
+	})
+	.then(rs=>{
+		res.json({
+			code : 200,
+			rows : rs[0]
+		});
+	})
+})
+//心愿系列保存
+router.post('/wish/save',(req,res,next)=>{
+	var data = req.body;
+	query({
+		sql : 'insert into wish_list (name,bgfilepath) values (?,?)',
+		params : [data.name,data.path]
+	})
+	.then(rs=>{
+		res.json({
+			code : 0,
+			msg : '保存成功'
+		});
+	})
+	.catch(err=>{
+		res.json({code : 500,msg : '保存失败'});
+	})
+})
+//心愿系列删除
+router.post('/wish/delete',(req,res,next)=>{
+	var id = req.body.id;
+	query({
+		sql : 'delete from wish_list where id=?',
+		params : [id]
+	})
+	.then(rs=>{
+		res.json({
+			code : 0,
+			msg : '删除成功'
+		});
+	})
+	.catch(err=>{
+		res.json({code : 500,msg : '删除失败'});
+	})
+})
+//心愿删除
+router.post('/wish/option/delete',(req,res,next)=>{
+	var id = req.body.id;
+	query({
+		sql : 'delete from wish_list_option where id=?',params : [id]
+	})
+	.then(rs=>{
+		res.json({success : true});
+	})
+})
+//心愿保存
+router.post('/wish/option/save',(req,res,next)=>{
+	var data = req.body;
+	//分为更新或新增
+	if(data.id == '' || data.id == null || data.id == undefined){
+		query({
+			sql : 'insert into wish_list_option (title,filepath,createtime,wishid,status) values (?,?,?,?,?)',
+			params : [data.title,data.filepath,new Date(),data.wishid,'0']
+		})
+		.then(rs=>{
+			res.json({
+				code : 0,
+				success : true,
+				msg : '保存成功'
+			});
+		})
+	}else{
+		query({
+			sql : 'update wish_list_option set title=?,filepath=?,createtime=?,wishid=? where id=?',
+			params : [data.title,data.filepath,new Date(),data.wishid,data.id]
+		})
+		.then(rs=>{
+			res.json({
+				code : 0,
+				success : true,
+				msg : '更新成功'
+			});
+		})
+	}
+})
+//心愿达成
+router.post('/wish/option/answer',(req,res,next)=>{
+	var id = req.body.id,answer = req.body.answer;
+	query({
+		sql : 'update wish_list_option set answer=?,answertime=?,status=? where id=?',
+		params : [answer,new Date(),1,id]
+	})
+	.then(rs=>{
+		res.json({success : true});
+	})
+});
+
+
+
+
+
+
+
 router.get('*',function(req,res,next){
 	res.redirect('/error/404');
 })

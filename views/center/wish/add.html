@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增心愿 </title>
+    <link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+    <link rel="stylesheet" href="/css/center/home.css">
+</head>
+<body class="grey-bg">
+    <div class="container-fluid">
+        <form action="" class="byy-form">
+            <input type="hidden" name="wishid" value="{{wishid}}">
+            <input type="hidden" name="id" value="{{id}}">
+            <div class="byy-form-item">
+                <label for="" class="byy-label">想得到:</label>
+                <div class="byy-block fw" >
+                    <input type="text" name="title" value="{{title}}" autocomplete="off" placeholder="想得到什么">
+                </div>
+            </div>
+            <div class="byy-form-item">
+                <label for="" class="byy-label">图片描述</label>
+                <div class="byy-block fw">
+                    <input type="text" name="filepath" placeholder="写个外网地址就行" value="{{filepath}}" />
+                </div>
+            </div>
+            <div class="byy-form-item">
+                <div class="byy-block fw">
+                    <span class="byy-btn small" filter="save" style="width:200px;">保存或更新</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+    byy.require(['jquery','win'],function(){
+
+        var wishId = $('[name="wishid"]').val();
+        //保存
+        byy.bindEvents({
+            save : function(){
+                var data = byy('.byy-form').getValues();
+                var ldx = byy.win.load(1);
+                $.ajax({
+                    url : '/center/wish/option/save',
+                    type : 'post',
+                    data : data,
+                    success : function(res){
+                        byy.win.close(ldx);
+                        if(res.success){
+                            byy.win.msg('保存成功',{shift:'-1'},function(){
+                                window.location.href = '/center/wish/option/'+wishId;
+                            })
+                        }else{
+                            byy.win.msg('保存失败');
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>

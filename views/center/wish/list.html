@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>心愿单管理</title>
+    <link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+    <link rel="stylesheet" href="/css/center/home.css">
+</head>
+<body class="grey-bg frame-body">
+    <div class="byy-panel list-panel">
+        <div class="byy-panel-title">
+            <span class="byy-breadcrumb">
+                <a href="/center/home" target="_parent">首页</a>
+                <a><cite>心愿管理</cite></a>
+            </span>
+            <span class="byy-btn-group pull-right">
+                <span class="byy-btn small danger" filter="openAdd"><i class="byyicon icon-plus"></i>新增系列单</span>
+            </span>
+        </div>
+        <div class="byy-panel-content byy-clear">
+            <div class="byy-table"></div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+    byy.require(['jquery','table','win'],function(){
+
+        var events = {
+            option : function(data){
+                location.href = '/center/wish/option/'+data.id;
+            },
+            view : function(data){
+                top.window.open('/wish/view/'+data.id);
+            },
+            delete : function(data){
+                $.ajax({
+                    url : '/center/wish/delete',
+                    type : 'post',
+                    data : {id : data.id},
+                    success : function(){
+                        location.reload();
+                    }
+                });
+            },
+            save : function(){
+                var name = $('body').find('[name="wishName"]').val();
+                var path = $('body').find('[name="wishPath"]').val();
+                console.log(name);
+                console.log(path);
+                $.ajax({
+                    url : '/center/wish/save',
+                    type : 'post',
+                    data : {
+                        name : name,
+                        path : path
+                    },success : function(){
+                        //关闭所有弹窗
+                        byy.win.closeAll();
+                        byy.win.msg('保存成功');
+                        //刷新table
+                        byy.table.reload('wishTable')
+                    }
+                });
+            },
+            //新增系列
+            openAdd : function(){
+                byy.win.open({
+                    type : '1',
+                    title : '新增系列',
+                    content : '<div class="byy-form" id="wishAddForm"><div class="byy-form-item"><label class="byy-label">系列：</label><div class="byy-block"><input type="text" class="byy-form-input" name="wishName" /></div></div><div class="byy-form-item"><label class="byy-label">背景图：</label><div class="byy-block"><input type="text" class="byy-form-input" name="wishPath" /></div></div><div class="byy-form-item"><div class="byy-block"><span class="byy-btn small danger" filter="save">保存</span></div></div></div>',
+                    success : function(){
+
+                    }
+                });
+            }
+        };
+        byy.table.render({
+            id : 'wishTable',
+            elem : '.byy-table',
+            url : '/center/wish/list',
+            method : 'post',
+            response : {
+                statusCode : 200
+            },
+            cols : [[
+                {field : 'name',title : '心愿系列'},
+                {tool : true,title : '操作',width : 200,templet : function(data){
+                    return '<span class="byy-btn mini danger" filter="view" data-id="'+data.id+'">查看</span><span class="byy-btn mini" filter="option" data-id="'+data.id+'" >管理</span><span filter="delete" class="byy-btn mini danger" data-id="'+data.id+'">删除</span>';
+                }}
+            ]]
+        });
+
+        byy.bindEvents(events);
+    })
+</script>

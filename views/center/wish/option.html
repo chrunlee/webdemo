@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>心愿单列表</title>
+    <link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+    <link rel="stylesheet" href="/css/center/home.css">
+</head>
+<body class="grey-bg frame-body">
+    <input type="hidden" name="id" value="{{id}}">
+    <div class="byy-panel list-panel">
+        <div class="byy-panel-title">
+            <span class="byy-breadcrumb">
+                <a href="/center/home" target="_parent">首页</a>
+                <a><cite>心愿单列表</cite></a>
+            </span>
+            <span class="byy-btn-group pull-right">
+                <span class="byy-btn small danger" filter="openAdd"><i class="byyicon icon-plus"></i>新增心愿</span>
+            </span>
+        </div>
+        <div class="byy-panel-content byy-clear">
+            <div class="byy-table"></div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+    byy.require(['jquery','table','win'],function(){
+        var id = $('[name="id"]').val();
+        var events = {
+            view : function(data){
+                top.window.open('/wish/view/'+data.id);
+            },
+            delete : function(data){
+                $.ajax({
+                    url : '/center/wish/option/delete',
+                    type : 'post',
+                    data : {id : data.id},
+                    success : function(){
+                        location.reload();
+                    }
+                });
+            },
+            answer : function(data){
+                byy.win.prompt({
+                    formType : 0,
+                    value : '',
+                    title : '请问是谁帮你达成的心愿啊?'
+                },function(value,ldx){
+                    byy.win.close(ldx);
+                    if(value != ''){
+                        $.ajax({
+                            url : '/center/wish/option/answer',
+                            type : 'post',
+                            data : {
+                                id : data.id,
+                                answer : value
+                            },
+                            success  : function(){
+                                location.reload();
+                            }
+                        });
+                    }
+                    console.log(value);
+                });
+            },
+            save : function(){
+                var name = $('body').find('[name="wishName"]').val();
+                var path = $('body').find('[name="wishPath"]').val();
+                console.log(name);
+                console.log(path);
+                $.ajax({
+                    url : '/center/wish/save',
+                    type : 'post',
+                    data : {
+                        name : name,
+                        path : path
+                    },success : function(){
+                        //关闭所有弹窗
+                        byy.win.closeAll();
+                        byy.win.msg('保存成功');
+                        //刷新table
+                        byy.table.reload('wishTable')
+                    }
+                });
+            },
+            //新增系列
+            openAdd : function(){
+                location.href = '/center/wish/option/add/'+id;
+            }
+        };
+        byy.table.render({
+            id : 'wishTable',
+            elem : '.byy-table',
+            url : '/center/wish/option',
+            method : 'post',
+            response : {
+                statusCode : 200
+            },
+            where : {
+                id : id
+            },
+            cols : [[
+                {field : 'title',title : '名称'},
+                {field : 'status',title : '是否达成',templet : function(data){
+                    return data.status == 1 ? '<span class="green-c">达成</span>' : '<span class="red-c">未达成</span>'
+                }},
+                {field : 'answer',title : '达成人'},
+                {tool : true,title : '操作',width : 200,templet : function(data){
+                    if(data.status == 0){
+                        return '<span class="byy-btn mini" filter="answer" data-id="'+data.id+'">达成</span><span data-id="'+data.id+'" filter="delete" class="byy-btn mini danger">删除</span>';
+                    }
+                    return '';
+                }}
+            ]]
+        });
+
+        byy.bindEvents(events);
+    })
+</script>
