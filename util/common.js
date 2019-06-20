@@ -4,7 +4,6 @@ var query = require('simple-mysql-query');
  *
  ***/
 module.exports = function(req,res,next){
-	req.session.user = {name : 'chrunlee'}
 	if(this.mysite){
 		next();
 	}else{
@@ -18,7 +17,6 @@ module.exports = function(req,res,next){
 			this.mysite.friendLink = links;
 			next();
 		}).catch(function(){
-			//error
 			next();
 		})
 	}

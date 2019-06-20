@@ -12,6 +12,8 @@ var ImageUtil = require('../../util/ImageUtil');
 
 var moment = require('moment');
 
+var axios = require('axios');
+
 var fs = require('fs');
 //测试
 router.use(function(req,res,next){
@@ -384,6 +386,31 @@ router.post('/article/publish',function(req,res,next){
 		})
 	}else{
 		res.json({success : false})
+	}
+})
+
+//推送到熊掌号
+router.post('/article/baidu',function(req,res,next){
+	var id = req.body.id;
+	if(id){
+		query({
+			sql : 'select * from user_article where id=?',params : [id]
+		}).then(function(rs){
+			console.log(rs);
+			var obj = rs[0][0];
+			var url = 'https://chrunlee.cn'+ obj.link;
+			axios.post('http://data.zz.baidu.com/urls?appid=1611479274533915&token=qjNaEG5dUPtn1nJG&type=realtime',url)
+			.then(rs=>{
+				res.json({success : true,msg:'推送成功<'+JSON.stringify(rs.data)+'>'})	
+			}).catch(e=>{
+				res.json({success : false,msg : '推送失败'})	
+			})
+		}).catch(function(e){
+			console.log(e);
+			res.json({success : false,msg : '推送失败'})
+		})
+	}else{
+		res.json({success : false,msg : '没有文章记录'})
 	}
 })
 

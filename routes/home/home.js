@@ -78,12 +78,18 @@ router.post('/login',function(req,res,next){
 		req.session.user = this.mysite;
 		res.redirect('/center/home');
 	}else{
-		res.render('login',{
+		res.render('index/login',{
 			msg : '登录失败，用户名或密码不正确',
 			user : user,
 			pwd : pwd
 		})
 	}
 });
+//登出
+router.get('/logout',function(req,res,next){
+	req.session.user = null;
+	console.log(req.session);
+	res.redirect('/');
+})
 
 module.exports = router;

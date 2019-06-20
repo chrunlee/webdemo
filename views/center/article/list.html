@@ -33,6 +33,17 @@
 	byy.require(['jquery','win','table'],function(){
 		var category = [];
 		byy.bindEvents({
+			baidu : function(d){
+				var id = d.id;
+				$.ajax({
+					type : 'post',
+					url : '/center/article/baidu',
+					data : {id : id},
+					success : function(rs){
+						byy.win.msg(rs.msg);
+					}
+				})
+			},
 			openAdd : function(){
 				location.href = '/center/article/add';
 			},
@@ -126,11 +137,11 @@
 					{field : 'ismy',title : '原创',width:100,templet : function(data){
 						return data.ismy == 0 ? '<span style="color:#49e;">转载</span>' : '<span style="color:#25ca92;">原创</span>'
 					}},
-					{field : 'enname',title : '英文路径',width:250},
+					// {field : 'enname',title : '英文路径',width:250},
 					{field : 'readnum',title : '阅读',sort : true,width:100},
-					{field : 'type',title : '类型',width:100,templet : function(data){
-						return data.type == 0 ? '<span style="color:#25ca92;">文章</span>' : '<span style="color:#49e;">DEMO</span>'
-					}},
+					// {field : 'type',title : '类型',width:100,templet : function(data){
+					// 	return data.type == 0 ? '<span style="color:#25ca92;">文章</span>' : '<span style="color:#49e;">DEMO</span>'
+					// }},
 					{field : 'category',title : '目录',width:100,templet : function(data){
 						var str ='';
 						category.forEach(function(item){
@@ -140,7 +151,7 @@
 						})
 						return str;
 					}},
-					{field : 'tool',title:'操作',tool : true,width:250,templet : function( data ){
+					{field : 'tool',title:'操作',tool : true,width:300,templet : function( data ){
 						return ['<span class="byy-btn mini" data-id="'+data.id+'" filter="edit">去编辑</span>',
 								data.ispublish == '0' ? 
 								'<span class="byy-btn mini" data-id="'+data.id+'" filter="publish">发布</span>' : 
@@ -148,7 +159,8 @@
 								'<span class="byy-btn mini danger" data-id="'+data.id+'" filter="delete">删除</span>',
 								data.recommend == '1' ? 
 								'<span class="byy-btn mini" data-id="'+data.id+'">已置顶</span>' 
-								: '<span class="byy-btn mini danger" data-id="'+data.id+'" filter="recommend">置顶</span>'
+								: '<span class="byy-btn mini danger" data-id="'+data.id+'" filter="recommend">置顶</span>',
+								'<span class="byy-btn mini" data-id="'+data.id+'" filter="baidu">熊掌</span>'
 							].join('');
 					}}
 				]]

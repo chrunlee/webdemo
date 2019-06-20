@@ -9,6 +9,7 @@ var superagent = require('superagent');
 
 
 router.get('/',function(req,res,next){
+	console.log('login');
 	var code = req.query.code;
 	var state = req.query.state;
 	var redirectURL = req.session.loginRefer||'/';
@@ -51,7 +52,7 @@ router.get('/',function(req,res,next){
 			req.session.github = user;
 			if(user && user.name == 'chrunlee'){//我是管理员
 				console.log('super admin logined');
-				req.session.user = user;
+				// req.session.user = user;
 			}
 			//重新跳转回原来的地址
 			res.redirect(redirectURL);
@@ -65,7 +66,9 @@ router.get('/',function(req,res,next){
 /* GET home page. */
 router.get('/login', function(req, res, next) {
 	//获取clientId进行重定向
+
 	var redirectURL = req.headers.referer;
+	console.log(redirectURL)
 	var state = (new Date()).valueOf();
 	req.session.loginRefer = redirectURL;
 	var url = `https://github.com/login/oauth/authorize?client_id=${github.clientId}&scope=${github.scope}&state=${state}`;
@@ -74,6 +77,7 @@ router.get('/login', function(req, res, next) {
 //自动登录
 router.post('/auto',function(req,res,next){
 	var id = req.body.id;
+	console.log(id);
 	if(id){
 		query({
 			sql : 'select * from sys_user where id=?',params : [id]
@@ -81,9 +85,10 @@ router.post('/auto',function(req,res,next){
 		.then(rs=>{
 			var user = rs[0][0];
 			req.session.github = user;
-			if(user && user.name == 'chrunlee'){//我是管理员
-				req.session.user = user;
-			}
+			console.log(user);
+			// if(user && user.name == 'chrunlee'){//我是管理员
+			// 	req.session.user = user;
+			// }
 			res.json({success : true})
 		}).catch(err=>{
 			res.json({success : false})
