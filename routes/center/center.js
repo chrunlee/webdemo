@@ -396,7 +396,6 @@ router.post('/article/baidu',function(req,res,next){
 		query({
 			sql : 'select * from user_article where id=?',params : [id]
 		}).then(function(rs){
-			console.log(rs);
 			var obj = rs[0][0];
 			var url = 'https://chrunlee.cn'+ obj.link;
 			axios.post('http://data.zz.baidu.com/urls?appid=1611479274533915&token=qjNaEG5dUPtn1nJG&type=realtime',url)
