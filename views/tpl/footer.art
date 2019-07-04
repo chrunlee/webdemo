@@ -5,7 +5,7 @@
 			<img src="{{site.faviconhref}}" alt=""> &nbsp; {{site.sitename}}
 		</div>
 		<div class="footer-block-content">
-			{{site.sitedes}}
+			{{site.sitename}} : {{site.sitedes}}
 		</div>
 	</div>
 	<div class="footer-block">
