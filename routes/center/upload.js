@@ -81,14 +81,15 @@ router.post('/delete',function(req,res,next){
 		res.json({success : false})
 	}
 })
-
+var datCount= 0;
 //微信dat文件解码
 router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
 	//1.文件大小超过20M 且不是dat的即刻删除;
 	//2.转码完成后删除;
 	//3.解码完成后生成base64,删除；
 	var file = req.file;
-	console.log(file);
+	datCount ++;
+	console.log(datCount+',dat='+file.name+',time='+new Date());
 	var maxSize = 20 * 1024 * 1024;
 	var extName = '.dat';
 	if(file.size > maxSize || path.extname(file.name).toLowerCase() != extName){
