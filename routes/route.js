@@ -57,9 +57,10 @@ module.exports = function( app ){
 	app.use('/wish',require('../routes/center/wish'));
 
 	//个人中心
+	app.use('/center/upload',require('../routes/center/upload'));
 	app.use('/center',require('../routes/center/center'))
 	app.use('/record',require('../routes/center/record'))
-	app.use('/center/upload',require('../routes/center/upload'));
+	
 
 	//文章列表
 	app.use('/article',require('../routes/home/article'));

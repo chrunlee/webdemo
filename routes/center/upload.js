@@ -82,5 +82,41 @@ router.post('/delete',function(req,res,next){
 	}
 })
 
+//微信dat文件解码
+router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
+	//1.文件大小超过20M 且不是dat的即刻删除;
+	//2.转码完成后删除;
+	//3.解码完成后生成base64,删除；
+	var file = req.file;
+	console.log(file);
+	var maxSize = 20 * 1024 * 1024;
+	var extName = '.dat';
+	if(file.size > maxSize || path.extname(file.name).toLowerCase() != extName){
+		fs.unlinkSync(file.filePath);
+		res.json({success : false,msg : '文件不符合规范，已经删除'});
+	}else{
+		//转成图片，然后转base64
+		var first = null,coder = null,base = 0xFF;
+		fs.readFile(path.join(__dirname,'../../',file.filePath),(err,content)=>{
+	        if(err){
+	            res.json({success : false,msg : err.toString()})
+	        }else{
+	        	if(!first){
+	        		first = content[0];
+	        	}
+		        if(!coder){
+		            coder = first ^ base;
+		        }
+		        let bb = content.map(br=>{
+		            return br ^ coder
+		        })
+		        let b64 = bb.toString('base64');
+		        fs.unlinkSync(file.filePath);
+		        res.json({success : true,base64 : b64});
+	        }
+	    })
+	}
+})
+
 
 module.exports = router;
