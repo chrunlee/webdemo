@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>微信dat文件解码</title>
+    <link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+    <style>
+        html,body{margin:0px;padding:0px;}
+        body{
+            padding:10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="byy-form-info">
+        微信.dat文件解码仅限于在微信 /filestorage/image/ 或temp下的dat 图片文件，其他的文件无法解码。而且以现在的解码方式没办法把所有文件全部解码，会有失败的几率。
+        <br />
+        说明:<br />
+        1. 本站存储空间有限，所有上传文件解码完成后即可删除。<br />
+        2. 在该页面仅仅允许上传dat文件，且文件大小不能超过20M。<br />
+        3. 文件解码后dat文件即可删除，生成的图片文件会转成base64 后删除.<br />
+
+    </div>    
+    <div class="text-center">
+        <span class="byy-btn" id="upload">点击选择dat文件</span>
+    </div>
+    <div>
+        <div class="tool" style="margin-bottom:20px;">
+            <span class="byy-btn small danger" filter="clear">清空图片</span>
+        </div>
+        <!-- 图片区域-->
+        <div class="content">
+            
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+    var counter = 0;
+    function downloadFile(content, fileName) { //下载base64图片
+        var base64ToBlob = function(code) {
+            let parts = code.split(';base64,');
+            let contentType = parts[0].split(':')[1];
+            let raw = window.atob(parts[1]);
+            let rawLength = raw.length;
+            let uInt8Array = new Uint8Array(rawLength);
+            for(let i = 0; i < rawLength; ++i) {
+                uInt8Array[i] = raw.charCodeAt(i);
+            }
+            return new Blob([uInt8Array], {
+                type: contentType
+            });
+        };
+        let aLink = document.createElement('a');
+        let blob = base64ToBlob(content); //new Blob([content]);
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("click", true, true); //initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
+        aLink.download = fileName;
+        aLink.href = URL.createObjectURL(blob);
+        aLink.click();
+    };
+    byy.require(['jquery','uploader','win'],function(){
+        byy.bindEvents({
+            clear : function(){
+                $('.content').html('');
+            },
+            download : function(){
+                var $p = $(this).parent();
+                var $img = $p.find('img');
+                downloadFile($img.attr('src'),(counter++)+'.png');
+            }
+        });
+        byy.uploader().multiFile({
+            selector : '#upload',
+            accept : {
+                title : 'dat文件',
+                extensions : 'dat',
+                mimeType : 'application/octet-stream'
+            },
+            server : '/center/upload/dat',
+            size : 1024 * 1024,
+            onSuccess : function(file,res){
+                if(res.success){
+                    //添加图片
+                    var img = new Image();
+                    img.src = 'data:image/png;base64,'+res.base64;
+                    img.onload = function(){
+                        var $img = $(this);
+                        $img.css({
+                            height : '200px',
+                            width : 'auto',
+                            display:'block'
+                        });
+                        var $span = $('<span style="height:230px;float:left;display:inline-block;text-align:center;"></span>');
+                        $span.append($img);
+                        $span.append('<span class="byy-btn mini" filter="download">点击下载</span>');
+                        $('.content').append($span);
+                    }
+                }
+            },
+            onError : function(er,msg){
+               byy.win.msg(msg+',仅限dat文件(20M以内)!');
+            }
+        });
+    })
+</script>
