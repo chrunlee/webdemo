@@ -13,6 +13,7 @@ module.exports = function(req,res,next){
   var url = req.url;
   if(url.length > 500 || url.indexOf('.php') > -1){
     res.json({success : false,msg : '麻烦您了哎，别盯着我这1M小水管瞎几把访问了好吧。'});
+    return;
   }
   var urlobj = URL.parse(url);
   //获得时间
