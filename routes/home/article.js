@@ -226,7 +226,7 @@ router.post('/read',function(req,res,next){
 //关键字检索
 router.get('/search',function(req,res,next){
 	var referer = req.headers['referer'];
-	var q = req.query.q;
+	var q = req.query.q || '';
 	if(q.trim() == ''){
 		//重新返回来源网页
 		res.redirect(referer);
