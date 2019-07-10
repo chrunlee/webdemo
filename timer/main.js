@@ -6,6 +6,8 @@ module.exports = function(){
 	var clear = require('./ClearUpload');//附件清理
 	clear.start();
 
+	//定时备份文章附件
+	require('./FileBackUp')();
 
 	//每10分钟检查正泽产品是否在线
 	// require('./BJZZOnline')();
