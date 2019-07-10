@@ -87,6 +87,13 @@ router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
 	//1.文件大小超过20M 且不是dat的即刻删除;
 	//2.转码完成后删除;
 	//3.解码完成后生成base64,删除；
+	let base = 0xFF;
+	let next = 0xD8;
+	let gifA = 0x47;
+	let gifB = 0x49;
+	let pngA = 0x89;
+	let pngB = 0x50;
+
 	var file = req.file;
 	datCount ++;
 	console.log(datCount+',dat='+file.name+',time='+new Date());
@@ -97,16 +104,25 @@ router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
 		res.json({success : false,msg : '文件不符合规范，已经删除'});
 	}else{
 		//转成图片，然后转base64
-		var first = null,coder = null,base = 0xFF;
 		fs.readFile(path.join(__dirname,'../../',file.filePath),(err,content)=>{
 	        if(err){
 	            res.json({success : false,msg : err.toString()})
 	        }else{
-	        	if(!first){
-	        		first = content[0];
-	        	}
-		        if(!coder){
-		            coder = first ^ base;
+	        	let firstV = content[0],
+		            nextV = content[1],
+		            jT = firstV ^ base,
+		            jB = nextV ^ next,
+		            gT = firstV ^ gifA,
+		            gB = nextV ^ gifB,
+		            pT = firstV ^ pngA,
+		            pB = nextV ^ pngB;
+		        var coder = firstV ^ base;
+		        if(jT == jB){
+		            coder = jT;
+		        }else if(gT == gB){
+		            coder = gT;
+		        }else if(pT == pB){
+		            coder = pT;
 		        }
 		        let bb = content.map(br=>{
 		            return br ^ coder
