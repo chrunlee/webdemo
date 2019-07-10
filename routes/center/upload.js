@@ -88,7 +88,7 @@ router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
 	//2.转码完成后删除;
 	//3.解码完成后生成base64,删除；
 	let base = 0xFF;
-	let next = 0xD8;
+	let jn = 0xD8;
 	let gifA = 0x47;
 	let gifB = 0x49;
 	let pngA = 0x89;
@@ -111,7 +111,7 @@ router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
 	        	let firstV = content[0],
 		            nextV = content[1],
 		            jT = firstV ^ base,
-		            jB = nextV ^ next,
+		            jB = nextV ^ jn,
 		            gT = firstV ^ gifA,
 		            gB = nextV ^ gifB,
 		            pT = firstV ^ pngA,
