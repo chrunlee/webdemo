@@ -24,13 +24,20 @@
     </style>
 </head>
 <body>
-    
-    {{each data value i}}
-    <div style="float:left;">
-        <img src="{{value}}" alt="" style="max-width:200px;height:auto;max-height:300px;">
-        <a class="download" href="{{value}}" target="_blank"><span class="byyui-btn">DOWNLOAD</span></a>
-        <a class="delete" href="/center/album/delete?p={{value}}" target="_blank"><span class="byyui-btn">DELETE</span></a>
+    <div class="page" style="text-align:center;height:50px;line-height:50px;">
+        <a href="/center/album/list?p={{next}}">下一页</a>
+        <a href="/center/album/list/clear/chrunlee" target="_blank"><span>CLEAR</span></a>
     </div>
+    <div>
+    {{each data value i}}
+        <div style="float:left;">
+            <img src="{{value.path}}" alt="" style="width:200px;height:auto;max-height:300px;">
+            <a class="download" href="{{value.path}}" target="_blank"><span class="byyui-btn">DOWNLOAD</span></a>
+            <a class="delete" href="/center/album/delete?p={{value.path}}" target="_blank"><span class="byyui-btn">DELETE</span></a>
+        </div>
     {{/each}}
+    </div>
+    <div style="clear:both;"></div>
+    <div style="font-size:20px;text-align:center;">OVER</div>
 </body>
 </html>

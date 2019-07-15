@@ -632,16 +632,37 @@ router.post('/wish/option/answer',(req,res,next)=>{
 
 //-----我的相册系列------//
 router.get('/album/list',(req,res,next)=>{
-	var config = require('../../json/config');
-	var album = config.album;
-	//获得列表信息，然后展示图片数据和名称
-	var fileList = fs.readdirSync(album.path);
-	var newList = fileList.map(function(item){
-		return album.prefix+item;
-	})
-	res.render('center/album/list',{
-		data : newList
-	});
+	var rows = 1;
+	try{
+		var start = parseInt(req.query.p || 1);
+		var config = require('../../json/config');
+		var album = config.album;
+		//获得列表信息，然后展示图片数据和名称
+		var fileList = fs.readdirSync(album.path);
+		var newList = fileList.map(function(item){
+			var absPath = album.prefix+item;
+			var realPath = path.join(album.path,item);
+			var stats = fs.statSync(realPath);
+			var times = stats.atimeMs;
+			return {
+				path : absPath,
+				time : times
+			}
+		})
+		//newList sort
+		newList.sort(function(a,b){
+			return b.time - a.time;
+		})
+		var count = newList.length;
+		//分页。
+		var nextList = newList.splice( (start-1)*rows ,rows );
+		res.render('center/album/list',{
+			data : nextList,
+			next : start*rows > count ? 1 : start+1
+		});
+	}catch(e){
+		res.end(e.toString())
+	}	
 })
 router.get('/album/list/clear/chrunlee',(req,res,next)=>{
 	//clear
