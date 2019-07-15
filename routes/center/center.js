@@ -632,7 +632,7 @@ router.post('/wish/option/answer',(req,res,next)=>{
 
 //-----我的相册系列------//
 router.get('/album/list',(req,res,next)=>{
-	var rows = 1;
+	var rows = 100;
 	try{
 		var start = parseInt(req.query.p || 1);
 		var config = require('../../json/config');
