@@ -10,8 +10,16 @@
         .download{
             position:absolute;
             top:0px;
+            left:5px;
             display:inline-block;
             background-color:rgba(0,0,0,0.3);
+            font-size:12px;
+        }
+        .delete{
+            position:absolute;
+            right:5px;
+            top:0px;
+            font-size:12px;
         }
     </style>
 </head>
@@ -21,6 +29,7 @@
     <div style="float:left;">
         <img src="{{value}}" alt="" style="max-width:200px;height:auto;max-height:300px;">
         <a class="download" href="{{value}}" target="_blank"><span class="byyui-btn">DOWNLOAD</span></a>
+        <a class="delete" href="/center/album/delete?p={{value}}" target="_blank"><span class="byyui-btn">DELETE</span></a>
     </div>
     {{/each}}
 </body>

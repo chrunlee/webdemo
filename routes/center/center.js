@@ -657,6 +657,12 @@ router.get('/album/list/clear/chrunlee',(req,res,next)=>{
 	})
 	res.end('clear');
 })
+router.get('/album/delete',(req,res,next)=>{
+	var id = req.query.p;
+	var filePath = path.join(__dirname,'../../public',id);
+	fs.unlinkSync(filePath);
+	res.end('suc');
+})
 
 
 
