@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的相册</title>
+    <style>
+        div{
+            position:relative;
+        }
+        .download{
+            position:absolute;
+            top:0px;
+            display:inline-block;
+            background-color:rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    
+    {{each data value i}}
+    <div style="float:left;">
+        <img src="{{value}}" alt="" style="max-width:200px;height:auto;max-height:300px;">
+        <a class="download" href="{{value}}" target="_blank"><span class="byyui-btn">DOWNLOAD</span></a>
+    </div>
+    {{/each}}
+</body>
+</html>

@@ -15,6 +15,7 @@ var moment = require('moment');
 var axios = require('axios');
 
 var fs = require('fs');
+var path = require('path');
 //测试
 router.use(function(req,res,next){
 	if(req.session.user){
@@ -629,6 +630,33 @@ router.post('/wish/option/answer',(req,res,next)=>{
 
 
 
+//-----我的相册系列------//
+router.get('/album/list',(req,res,next)=>{
+	var config = require('../../json/config');
+	var album = config.album;
+	//获得列表信息，然后展示图片数据和名称
+	var fileList = fs.readdirSync(album.path);
+	var newList = fileList.map(function(item){
+		return album.prefix+item;
+	})
+	res.render('center/album/list',{
+		data : newList
+	});
+})
+router.get('/album/list/clear/chrunlee',(req,res,next)=>{
+	//clear
+	var config = require('../../json/config');
+	var album = config.album;
+	//获得列表信息，然后展示图片数据和名称
+	var fileList = fs.readdirSync(album.path);
+	fileList.forEach(function(item){
+		fs.unlinkSync(path.join(album.path,item));
+	})
+	var newList = fileList.map(function(item){
+		return album.prefix+item;
+	})
+	res.end('clear');
+})
 
 
 
