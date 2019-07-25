@@ -88,7 +88,6 @@ router.post('/login',function(req,res,next){
 //登出
 router.get('/logout',function(req,res,next){
 	req.session.user = null;
-	console.log(req.session);
 	res.redirect('/');
 })
 

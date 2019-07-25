@@ -406,7 +406,6 @@ router.post('/article/baidu',function(req,res,next){
 				res.json({success : false,msg : '推送失败'})	
 			})
 		}).catch(function(e){
-			console.log(e);
 			res.json({success : false,msg : '推送失败'})
 		})
 	}else{
