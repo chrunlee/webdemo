@@ -13,17 +13,35 @@
         html,body{margin:0px;padding:0px;}
         body{
             padding:10px 20px;
+            background-color:#fafafa;
         }
+        .left{padding-right:260px;font-size:16px;}
+        .right{
+            position:absolute;
+            right:10px;
+            top:10px;
+            width:250px;
+            text-align:center;
+        }
+        .right p,.right img{text-align:center;font-weight:bold;line-height:22px;}
     </style>
 </head>
 <body>
     <div class="byy-form-info" style="line-height:22px;">
-        微信.dat文件解码仅限于在微信 /filestorage/image/ 或temp下的dat 图片文件，其他的文件无法解码。而且以现在的解码方式没办法把所有文件全部解码，会有失败的几率。<br />
-        说明:
-        1. 本站存储空间有限，所有上传文件解码完成后立刻删除。
-        2. 在该页面仅仅允许上传dat文件，且文件大小不能超过20M。
-        3. 文件解码后dat文件即刻删除，生成的图片文件会转成base64 后删除.<br />
-        <span style="color:red;font-size:14px;">站点是开源的，代码透明，也可自己搭建。<span style="font-weight:bold;font-size:20px">各位同学觉的好用，随便给点几个下边的广告，就相当于资助我升级服务器啦！万分感谢！！！(一万遍)</span>。服务器是1M带宽小水管,图片越大回传越慢，稍微等一会就有了，如果一直不出来，那估计是废了..。量大了后偶尔会有些异常处理问题导致服务器宕机..没关系，稍等几秒就自动重启啦。 </span>
+        <div class="left">
+            说明：<br />
+            1.微信文件默认在【 C:\Users\Administrator\Documents\WeChat Files 】下，找到FileStorage/Image 下的dat文件上传即可。<br />
+            2.上传大小限制20M，实际上5M以上下载就会很慢了(服务器带宽1M,所以很慢).<br />
+            3.文件是获取即转，然后删除并下发base64图片内容<br />
+            4.有编码能力的可以直接看源码，实现不难，这里主要提供给无编码能力的人使用.<br />
+            5.各位老板可以扫右侧二维码捐助，也可以点下下边的广告进行间接支持.感谢！
+        </div>
+        <div class="right">
+            <p>友情捐助/提升服务</p>
+            <img src="https://chrunlee.cn/zhifubao.jpg" alt="">
+            <p>十块不嫌少，五十不嫌多</p>
+        </div>
+        
     </div>    
     <div class="text-center">
         <span class="byy-btn" id="upload">点击选择dat文件(可批量选择)</span>

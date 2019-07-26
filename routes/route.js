@@ -12,7 +12,9 @@ module.exports = function( app ){
 
 	app.use(require('../util/common'));
 
-
+	//alipay
+	app.use('/alipay',require('../routes/other/alipay'));
+	
 	//github 登录
 	app.use('/github',require('../routes/login/login'));
 
