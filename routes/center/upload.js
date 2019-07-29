@@ -97,7 +97,7 @@ router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
     var file = req.file;
     datCount ++;
     console.log(datCount+',dat='+file.name+',time='+new Date());
-    var maxSize = 20 * 1024 * 1024;
+    var maxSize = 1 * 1024 * 1024;
     var extName = '.dat';
     if(file.size > maxSize || path.extname(file.name).toLowerCase() != extName){
         fs.unlinkSync(file.filePath);
