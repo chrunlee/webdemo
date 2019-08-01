@@ -94,44 +94,48 @@ router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
     let pngA = 0x89;
     let pngB = 0x50;
 
-    var file = req.file;
+    var file = req.file||{name : 'errorfile',size :0};
     datCount ++;
     console.log(datCount+',dat='+file.name+',time='+new Date());
     var maxSize = 1 * 1024 * 1024;
     var extName = '.dat';
-    if(file.size > maxSize || path.extname(file.name).toLowerCase() != extName){
-        fs.unlinkSync(file.filePath);
-        res.json({success : false,msg : '文件不符合规范，已经删除'});
-    }else{
-        //转成图片，然后转base64
-        fs.readFile(path.join(__dirname,'../../',file.filePath),(err,content)=>{
-            if(err){
-                res.json({success : false,msg : err.toString()})
-            }else{
-                let firstV = content[0],
-                    nextV = content[1],
-                    jT = firstV ^ base,
-                    jB = nextV ^ jn,
-                    gT = firstV ^ gifA,
-                    gB = nextV ^ gifB,
-                    pT = firstV ^ pngA,
-                    pB = nextV ^ pngB;
-                var coder = firstV ^ base;
-                if(jT == jB){
-                    coder = jT;
-                }else if(gT == gB){
-                    coder = gT;
-                }else if(pT == pB){
-                    coder = pT;
+    try{
+        if(file.size == 0 || file.size > maxSize || path.extname(file.name).toLowerCase() != extName){
+            fs.unlinkSync(file.filePath);
+            res.json({success : false,msg : '文件不符合规范，已经删除'});
+        }else{
+            //转成图片，然后转base64
+            fs.readFile(path.join(__dirname,'../../',file.filePath),(err,content)=>{
+                if(err){
+                    res.json({success : false,msg : err.toString()})
+                }else{
+                    let firstV = content[0],
+                        nextV = content[1],
+                        jT = firstV ^ base,
+                        jB = nextV ^ jn,
+                        gT = firstV ^ gifA,
+                        gB = nextV ^ gifB,
+                        pT = firstV ^ pngA,
+                        pB = nextV ^ pngB;
+                    var coder = firstV ^ base;
+                    if(jT == jB){
+                        coder = jT;
+                    }else if(gT == gB){
+                        coder = gT;
+                    }else if(pT == pB){
+                        coder = pT;
+                    }
+                    let bb = content.map(br=>{
+                        return br ^ coder
+                    })
+                    let b64 = bb.toString('base64');
+                    fs.unlinkSync(file.filePath);
+                    res.json({success : true,base64 : b64});
                 }
-                let bb = content.map(br=>{
-                    return br ^ coder
-                })
-                let b64 = bb.toString('base64');
-                fs.unlinkSync(file.filePath);
-                res.json({success : true,base64 : b64});
-            }
-        })
+            })
+        }
+    }catch(e){
+        res.json({success : false,msg : '数据不规范'});   
     }
 })
 
