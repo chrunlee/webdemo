@@ -12,6 +12,8 @@ var ImageUtil = require('../../util/ImageUtil');
 
 var path = require('path');
 
+var query = require('simple-mysql-query');
+
 var fs = require('fs');
 
 //文件上传
@@ -81,7 +83,7 @@ router.post('/delete',function(req,res,next){
         res.json({success : false})
     }
 })
-var datCount= 0;
+
 //微信dat文件解码
 router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
     //1.文件大小超过20M 且不是dat的即刻删除;
@@ -95,8 +97,7 @@ router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
     let pngB = 0x50;
 
     var file = req.file||{name : 'errorfile',size :0};
-    datCount ++;
-    console.log(datCount+',dat='+file.name+',time='+new Date());
+    
     var maxSize = 1 * 1024 * 1024;
     var extName = '.dat';
     try{
@@ -104,6 +105,7 @@ router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
             fs.unlinkSync(file.filePath);
             res.json({success : false,msg : '文件不符合规范，已经删除'});
         }else{
+            query({sql : 'update site_set set intval=intval+1 where name=?',params : ['datcount']})
             //转成图片，然后转base64
             fs.readFile(path.join(__dirname,'../../',file.filePath),(err,content)=>{
                 if(err){

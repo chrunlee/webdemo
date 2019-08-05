@@ -29,6 +29,7 @@
     </style>
 </head>
 <body>
+    <div id="tipss" style="font-weight:bold;font-size:16px;height:30px;"></div>
     <div class="byy-form-info" style="line-height:22px;">
         <div class="left">
             说明：<br />
@@ -105,6 +106,14 @@
         aLink.click();
     };
     byy.require(['jquery','uploader','win'],function(){
+        $.ajax({
+            url : '/datcount/count',
+            type : 'GET',
+            success : function(rs){
+                console.log(rs);
+                $('#tipss').html(rs.msg);
+            }
+        });
         byy.bindEvents({
             clear : function(){
                 $('.content').html('');

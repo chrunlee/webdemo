@@ -21,7 +21,12 @@ module.exports = function( app ){
 	//小程序知识点
 	app.use('/exam',require('../routes/other/exam'));
 
+	//sitemap 生成
+	app.use('/sitemap',require('../routes/other/sitemap'));
 
+	//datcount 
+	app.use('/datcount',require('../routes/other/datfile'));
+	
 	//小游戏：练习速度
 	app.use('/speed',require('../routes/other/speed'));
 
