@@ -12,6 +12,11 @@ var cheerio = require('cheerio');
 
 query(db);
 
+
+
+
+
+
 var sitemapPath = path.join(__dirname,'../public/sitemap.xml');
 var domain = 'https://chrunlee.cn';
 var links = [
@@ -41,10 +46,28 @@ function start (){
 }
 
 function fetch(){
-	query({
+	var urls = [
+		{url : '/', 				changefreq : 'daily' , 		priority : 0.3 },
+		{url : '/article', 			changefreq : 'daily' , 		priority : 0.3 },
+		{url : '/demo',				changefreq : 'weekly' , 	priority : 0.5 },
+		{url : '/about',			changefreq : 'monthly',		priority : 0.7 },
+		{url : '/pdf',				changefreq : 'monthly',		priority : 0.7 },
+		{url : '/picture',			changefreq : 'daily',		priority : 0.3 },
+		{url : '/caipu/home',		changefreq : 'yearly',		priority : 0.8 },
+		{url : '/caipu/search',		changefreq : 'monthly',		priority : 0.8 }
+
+	];
+	query([{
 		sql : 'select link,ctime from user_article where ispublish=1 order by ctime desc',params : []
-	}).then(function(rs){
+	},{
+		sql : 'select id,title from caipu_item',params : []
+	},{
+		sql : 'select id,name from caipu_fenlei',params : []
+	}]).then(function(rs){
 		var article = rs[0];//文章链接
+		var caipus = rs[1];//菜谱地址
+		var fenleis = rs[2];//菜谱分类
+
 		var demoLink = [];
 		//还有demo链接
 		superagent.get(domain+'/demo')
@@ -56,19 +79,23 @@ function fetch(){
 				})
 			}
 			//构建并生成
-			var xml = '<?xml version="1.0" encoding="utf-8"?><urlset>';
-			links.forEach(function(href){
-				xml+= getUrl(href);
-			})
+			
 			article.forEach(function(item){
-				xml+= getUrl(item.link,item.ctime);
+				urls.push({url : item.link , changefreq : 'yearly', priority : 1.0 , lastmod : item.ctime,lastmodrealtime : true});
 			})
+
 			demoLink.forEach(function(href){
-				xml+=getUrl(href);
+				urls.push({url : href, changefreq : 'monthly', priority : 1.0 ,lastmodrealtime : true,lastmodfile : path.join(__dirname,'../public/',href)});
 			})
-			xml+='</urlset>'
+			caipus.forEach(function(item){
+				urls.push({url : '/caipu/show/'+item.id,changefreq : 'yearly', priority : 0.8 });
+			})
+			fenleis.forEach(function(item){
+				urls.push({url : '/caipu/fenlei?id='+item.id,changefreq : 'yearly',priority : 0.8})
+			})
+			
 			//生成
-			createXml(xml);
+			createXml(urls);
 			setTimeout(function(){
 				start();
 			},60 * 60 * 1000)
@@ -79,13 +106,14 @@ function fetch(){
 		},60 * 60 * 1000)
 	})
 }
-function createXml (str){
-	fs.writeFileSync(sitemapPath,str);
-}
-function getUrl(url,time){
-	url = domain+url;
-	time = time ? time.substring(0,10) : '';
-	return '<url><loc>'+url+'</loc>'+(time ? '<lastmod>'+time+'</lastmod>' : '<changefreq>daily</changefreq>')+'</url>';
+function createXml (urls){
+	var sm = require('sitemap');
+	var sitemap = sm.createSitemap({
+		hostname : domain,
+		cacheTime : 600000,
+		urls : urls
+	});
+	fs.writeFileSync(sitemapPath,sitemap.toString());
 }
 
 module.exports= start;
