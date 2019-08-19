@@ -56,7 +56,7 @@ router.get('/',function(req,res,next){
 			res.redirect(redirectURL);
 		})
 	}).catch(err=>{
-		console.log('github 登录报错'+err);
+		console.log(err);
 		//跳转到授权失败的页面
 		res.redirect('/');
 	})
