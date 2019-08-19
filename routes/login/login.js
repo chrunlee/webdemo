@@ -24,7 +24,7 @@ router.get('/',function(req,res,next){
 		return JSON.parse(res2.text);
 	})
 	.then(function(obj){
-		return superagent.get('https://api.github.com/user?access_token='+obj.access_token);
+		return superagent.get('https://api.github.com/user?access_token='+obj.access_token).set('User-Agent','chrunleeAutoLogin');
 	})
 	.then(function(res2){
 		return JSON.parse(res2.text);

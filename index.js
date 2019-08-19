@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 var compression = require('compression');
 
 var sqlquery = require('simple-mysql-query');
@@ -36,7 +37,8 @@ app.use(session({
     resave: false, //添加 resave 选项
     saveUninitialized: true, //添加 saveUninitialized 选项
     secret: '0b8d3104f46ce1ce884d3c494fac1b64', // 建议使用 128 个字符的随机字符串
-    cookie: { maxAge: 24 * 60 * 60 * 1000 }
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+    store : new RedisStore() // redis 存储session
 }));
 
 app.use(compression()); //gzip压缩
