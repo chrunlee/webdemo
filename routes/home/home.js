@@ -76,7 +76,6 @@ router.post('/login',function(req,res,next){
 	if(this.mysite.superaccount === user && this.mysite.superpwd === pwd2){
 		//登录成功
 		req.session.user = this.mysite;
-		console.log(req.session)
 		res.redirect('/center/home');
 	}else{
 		res.render('index/login',{
