@@ -5,7 +5,6 @@ var query = require('simple-mysql-query');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	
 	//1.查询banner数据
 	//2.查询博主推荐数据
 	//3.查询DEMO数据
@@ -27,7 +26,8 @@ router.get('/', function(req, res, next) {
 				header : 'home'
 			}
 		});
-	}).catch(function(){
+	}).catch(function(e){
+		console.log(e);
 		res.redirect('error/500')
 	})
 });
@@ -76,6 +76,7 @@ router.post('/login',function(req,res,next){
 	if(this.mysite.superaccount === user && this.mysite.superpwd === pwd2){
 		//登录成功
 		req.session.user = this.mysite;
+		console.log(req.session)
 		res.redirect('/center/home');
 	}else{
 		res.render('index/login',{

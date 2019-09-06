@@ -3,8 +3,12 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
+
 var session = require('express-session');
-// var RedisStore = require('connect-redis')(session);
+var redis = require('redis');
+var redisClient = redis.createClient();
+var RedisStore = require('connect-redis')(session);
 var compression = require('compression');
 
 var sqlquery = require('simple-mysql-query');
@@ -33,18 +37,20 @@ app.use(bodyParser.urlencoded({ extended: false, limit: '200mb' }));
 app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(session({
     resave: false, //添加 resave 选项
     saveUninitialized: true, //添加 saveUninitialized 选项
     secret: '0b8d3104f46ce1ce884d3c494fac1b64', // 建议使用 128 个字符的随机字符串
-    cookie: { maxAge: 24 * 60 * 60 * 1000 }
-    // store : new RedisStore() // redis 存储session
+    // cookie: { maxAge: 24 * 60 * 60 * 1000,secure : true },
+    store : new RedisStore({client : redisClient}) // redis 存储session
 }));
 
 app.use(compression()); //gzip压缩
 require('./timer/main')(); //定时任务
 
 //全局路由控制
+
 var routes = require('./routes/route');
 routes(app);
 

@@ -40,7 +40,7 @@ ClearUpload.prototype.start = function(){
 				that.start();
 			},that.period);
 		}else{
-			async.mapLimit(files,1,function(name,cb){
+			async.mapLimit(files,100,function(name,cb){
 				that.check(name,cb);
 			},function(){
 				console.log('本次附件清理已完毕，共计清理无效附件:'+that.num+'个,所有文件'+files.length+'个,下次执行时间为一周后.');
