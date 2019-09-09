@@ -68,7 +68,9 @@ module.exports = function( app ){
 	app.use('/center',require('../routes/center/center'))
 	app.use('/record',require('../routes/center/record'))
 	
-
+	//钉我。
+	app.use('/ding',require('../routes/other/ding'));
+	
 	//文章列表
 	app.use('/article',require('../routes/home/article'));
 	//pdf 处理
