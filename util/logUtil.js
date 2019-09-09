@@ -42,7 +42,8 @@ module.exports = function(req,res,next){
         query({
           sql : 'insert into demo_logs (url,ip,xitong,ctime,browser,originurl,region) values (?,?,?,?,?,?,?)',
           params : [rs.url,rs.ip,rs.xitong,rs.ctime,rs.browser,rs.originurl,rs.region]
-        });
+        })
+        .catch(e=>{})
       }catch(e){}
     }
   })

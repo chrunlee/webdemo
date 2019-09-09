@@ -106,6 +106,7 @@ router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
             res.json({success : false,msg : '文件不符合规范，已经删除'});
         }else{
             query({sql : 'update site_set set intval=intval+1 where name=?',params : ['datcount']})
+            .catch(ea=>{console.log(ea)})
             //转成图片，然后转base64
             fs.readFile(path.join(__dirname,'../../',file.filePath),(err,content)=>{
                 if(err){
