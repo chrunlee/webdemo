@@ -20,8 +20,8 @@ function send (text){
     });
     
 }
-router.get('/',(req,res,next)=>{
-    var msg = req.query.msg;
+router.all('/',(req,res,next)=>{
+    var msg = req.query.msg || req.body.msg;
     send(msg)
     .then(err=>{
         res.end('发送成功');    
