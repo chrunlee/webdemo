@@ -10,8 +10,8 @@ router.get('/', function(req, res, next) {
 	//3.查询DEMO数据
 	query.query([
 		{sql : 'select * from user_banner where type=1 and isenable=1 ',params : []},
-		{sql : 'select * from user_article where ispublish=1 and type=0 and recommend=1 order by ctime desc limit 0,8'},
-		{sql : 'select * from user_article where ispublish=1 and type=1 order by likenum desc limit 0,8'}
+		{sql : 'select * from user_article where ispublish=1 and type=0 and recommend=1 order by ctime desc limit 0,8',params : []},
+		{sql : 'select * from user_article where ispublish=1 and type=1 order by likenum desc limit 0,8',params : []}
 	]).then(function(rs){
 		var banners = rs[0],
 			articles = rs[1],
