@@ -2,7 +2,7 @@ var express= require('express');
 
 var router = express.Router();
 
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 
 function format(  size, pointLength, units ){
 	var unit;
@@ -16,7 +16,7 @@ function format(  size, pointLength, units ){
 
 router.get('/',(req,res,next)=>{
 	if(req.session.github){
-		query({
+		query.query({
 			sql : 'select name,infohash from demo_magnet order by createTime desc limit 0,100',params : []
 		}).then(rs=>{
 			res.render('other/magnet/list',{q : false,showList : rs[0]});	
@@ -29,13 +29,13 @@ router.get('/search',(req,res,next)=>{
 	var name = req.query.name||'';
 	name = name.trim();
 	if(name.length ==0 ){
-		query({
+		query.query({
 			sql : 'select name,infohash from demo_magnet order by createTime desc limit 0,100',params : []
 		}).then(rs=>{
 			res.render('other/magnet/list',{q : false,list : [],showList : rs[0]});	
 		});
 	}else{
-		query({
+		query.query({
 			sql : 'select name,infohash from demo_magnet where name like ? order by createTime desc',
 			params : ['%'+name+'%']
 		})
@@ -51,7 +51,7 @@ router.get('/search',(req,res,next)=>{
 });
 router.get('/:id',(req,res,next)=>{
 	var id = req.params.id;
-	query({
+	query.query({
 		sql : 'select json from demo_magnet where infohash=? ',
 		params : [id]
 	})

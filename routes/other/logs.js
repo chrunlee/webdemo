@@ -13,7 +13,7 @@ var express = require('express');
 
 var router = express.Router();
 
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 
 router.get('/',function(req,res,next){
 	if(req.session.user){
@@ -25,7 +25,7 @@ router.get('/',function(req,res,next){
 
 /**截止到目前为止24小时内数据--折线图**/
 router.post('/day',function(req,res,next){
-	query({
+	query.query({
 		sql : "SELECT DATE_FORMAT(ctime,'%Y-%m-%d %H:%i') as ctime,count(1) as num FROM demo_logs t WHERE  t.ctime>DATE_ADD(NOW(), INTERVAL -1440 MINUTE) group by ctime order by ctime asc ",
 		params : []
 	}).then(function(rs){
@@ -44,7 +44,7 @@ router.post('/os',function(req,res,next){
 	}else if(type == 'month'){
 		min = 1440 * 30;
 	}
-	query({
+	query.query({
 		sql : 'select xitong,count(1) as num from demo_logs t where t.ctime>DATE_ADD(NOW(), INTERVAL -'+min+' MINUTE) group by xitong',
 		params : []
 	}).then(function(rs){
@@ -63,7 +63,7 @@ router.post('/browser',function(req,res,next){
 	}else if(type == 'month'){
 		min = 1440 * 30;
 	}
-	query({
+	query.query({
 		sql : 'select browser,count(1) as num from demo_logs t where t.ctime>DATE_ADD(NOW(), INTERVAL -'+min+' MINUTE) group by browser',
 		params : []
 	}).then(function(rs){
@@ -82,7 +82,7 @@ router.post('/location',function(req,res,next){
 	}else if(type == 'month'){
 		min = 1440 * 30;
 	}
-	query({
+	query.query({
 		sql : 'select region,count(1) as num from demo_logs t where t.ctime>DATE_ADD(NOW(), INTERVAL -'+min+' MINUTE) group by region',
 		params : []
 	}).then(function(rs){
@@ -101,7 +101,7 @@ router.post('/path',function(req,res,next){
 	}else if(type == 'month'){
 		min = 1440 * 30;
 	}
-	query({
+	query.query({
 		sql : 'select url,count(1) as num from demo_logs t where t.ctime>DATE_ADD(NOW(), INTERVAL -'+min+' MINUTE) group by url order by num desc limit 0,10',
 		params : []
 	}).then(function(rs){

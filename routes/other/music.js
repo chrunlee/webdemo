@@ -3,12 +3,12 @@ var express = require('express');
 
 var router = express.Router();
 
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 
 var https = require('https');
 
 router.get('/random',function(req,res,next){
-	query({
+	query.query({
 		sql : 'select * from music_music order by rand() limit 0,1',params : []
 	}).then(function(rs){
 		var music = rs[0][0];

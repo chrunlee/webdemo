@@ -4,10 +4,10 @@ let express = require('express');
 
 let router = express.Router();
 
-let query = require('simple-mysql-query');
+let query = require('sqlquery-tool');
 
 router.get('/count',(req,res,next)=>{
-    query({sql : 'select intval from site_set where name=? ',params:['datcount']})
+    query.query({sql : 'select intval from site_set where name=? ',params:['datcount']})
     .then(rs=>{
         let count = rs[0][0].intval;
         res.json({

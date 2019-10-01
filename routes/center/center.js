@@ -6,11 +6,13 @@ var express = require('express');
 
 var router = express.Router();
 
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 
 var ImageUtil = require('../../util/ImageUtil');
 
 var moment = require('moment');
+
+var uuid = require('node-uuid');
 
 var axios = require('axios');
 
@@ -38,19 +40,19 @@ router.get('/home',function(req,res,next){
 //后台管理-站点属性
 router.get('/site',function(req,res,next){
 	res.render('center/site/list',{
-		site : this.mysite
+		site : req.session.mysite
 	})
 });
 //更新后台站点属性
 router.post('/site/update',function(req,res,next){
 	var body = req.body;
-	var nowObj = this.mysite;
+	var nowObj = req.session.mysite;
 	var newObj = Object.assign(nowObj,body);
 	//更新数据库
-	query({
+	query.query({
 		sql : 'update site set sitename=?,faviconhref=?,sitedes=?,sitescan=?,publichref=?,authorname=?,avatar=?,email=?,zan=?,domain=?',params : [newObj.sitename,newObj.faviconhref,newObj.sitedes,newObj.sitescan,newObj.publichref,newObj.authorname,newObj.avatar,newObj.email,newObj.zan,newObj.domain]
 	}).then(function(rs){
-		this.mysite = newObj;
+		req.session.mysite = newObj;
 		//更新session user
 		req.session.user = newObj;
 		res.json({success : true});	
@@ -70,7 +72,7 @@ router.get('/banner/add',function(req,res,next){
 	var id = req.query.id;
 	var obj = {};
 	if(id){
-		query({
+		query.query({
 			sql : 'select * from user_banner where id=?',params : [id]
 		}).then(function(rs){
 			obj = rs[0][0] || {};
@@ -85,7 +87,7 @@ router.get('/banner/add',function(req,res,next){
 })
 //banner 获得列表信息
 router.post('/banner/list',function(req,res,next){
-	query({sql : 'select * from user_banner',params : []})
+	query.query({sql : 'select * from user_banner',params : []})
 	.then(function(rs){
 		var list = rs[0];
 		res.json({
@@ -110,7 +112,7 @@ router.post('/banner/save',function(req,res,next){
 		sql : 'insert into user_banner (title,bannerdes,bannerpath,bannerstyle,bannerheight,type,isenable) values (?,?,?,?,?,?,?)',
 		params : [data.title,data.bannerdes,data.bannerpath,data.bannerstyle,data.bannerheight,data.type,data.isenable]
 	};
-	query(queryobj)
+	query.query(queryobj)
 	.then(function(rs){
 		res.json({success : true});
 	}).catch(function(){
@@ -121,7 +123,7 @@ router.post('/banner/save',function(req,res,next){
 router.post('/banner/delete',function(req,res,next){
 	var id = req.body.id;
 	if(id){
-		query({
+		query.query({
 			sql : 'delete from user_banner where id=?',params : [id]
 		}).then(function(rs){
 			res.json({success : true})
@@ -140,7 +142,7 @@ router.get('/links',function(req,res,next){
 
 //获得所有的友情链接信息
 router.post('/links/list',function(req,res,next){
-	query({
+	query.query({
 		sql : 'select * from user_links order by id asc',params : []
 	}).then(function(rs){
 		var rst = rs[0];
@@ -155,7 +157,7 @@ router.post('/links/list',function(req,res,next){
 router.post('/links/save',function(req,res,next){
 	var data = req.body;
 	if(data.id){
-		query({
+		query.query({
 			sql : 'update user_links set name=?,href=?,iconpath=? where id=? ',params : [data.name,data.href,data.iconpath,data.id]
 		}).then(function(rs){
 			res.json({
@@ -167,7 +169,7 @@ router.post('/links/save',function(req,res,next){
 			})
 		})
 	}else{
-		query({
+		query.query({
 			sql : 'insert into user_links (name,href,iconpath) values (?,?,?) ',params : [data.name,data.href,data.iconpath]
 		}).then(function(){
 			res.json({
@@ -184,7 +186,7 @@ router.post('/links/save',function(req,res,next){
 router.post('/links/delete',function(req,res,next){
 	var id = req.body.id;
 	if(id){
-		query({
+		query.query({
 			sql : 'delete from user_links where id=? ',params : [id]
 		}).then(function(rs){
 			res.json({
@@ -205,7 +207,7 @@ router.post('/links/delete',function(req,res,next){
 
 //category 保存
 router.get('/category',function(req,res,next){
-	query({
+	query.query({
 		sql : 'select * from user_category',params : []
 	}).then(function(rs){
 		var rows = rs[0];
@@ -222,7 +224,7 @@ router.get('/category',function(req,res,next){
 router.post('/category/save',function(req,res,next){
 	var name = req.body.name;
 	if(name){
-		query({
+		query.query({
 			sql : 'insert into user_category (name) values (?)',params : [name]
 		}).then(function(rs){
 			res.json({success : true})
@@ -236,7 +238,7 @@ router.post('/category/save',function(req,res,next){
 
 //post 获得目录信息
 router.post('/category/list',function(req,res,next){
-	query({
+	query.query({
 		sql : 'select * from user_category',params : []
 	}).then(function(rs){
 		var category = rs[0];
@@ -264,7 +266,7 @@ router.post('/article/list',function(req,res,next){
 	var data = req.body;
 	var page = parseInt(data.page,10);
 	var rows = parseInt(data.rows,10);
-	query([
+	query.query([
 		{sql : 'select * from user_article order by id desc limit ?,?',params : [rows * (page-1),rows]},
 		{sql : 'select count(1) as total from user_article',params : []}
 	]).then(function(rs){
@@ -288,7 +290,7 @@ router.get('/article/add',function(req,res,next){
 	//获得category
 	var id = req.query.id;
 	if(id){
-		query([
+		query.query([
 			{sql : 'select * from user_article where id=?',params : [id]},
 			{sql : 'select * from user_category',params : []}
 		]).then(function(rs){
@@ -308,7 +310,7 @@ router.get('/article/add',function(req,res,next){
 			});
 		})
 	}else{
-		query({
+		query.query({
 			sql : 'select * from user_category',params : []
 		}).then(function(rs){
 			var rst = rs[0];
@@ -332,7 +334,7 @@ router.post('/article/save',function(req,res,next){
 		sql : 'insert into user_article (title,ismy,enname,postpath,zhaiyao,cancomment,type,category,ispublish,tags,link) values (?,?,?,?,?,?,?,?,?,?,?)',
 		params : [data.title,data.ismy,data.enname,data.postpath,data.zhaiyao,data.cancomment,data.type,data.category,data.ispublish,data.tags,data.link]
 	};
-	query(sql)
+	query.query(sql)
 	.then(function(rs){
 		var rst = rs[0];
 		res.json({
@@ -347,7 +349,7 @@ router.post('/article/save',function(req,res,next){
 router.post('/article/update',function(req,res,next){
 	var data = req.body;
 	if(data.id){
-		query({
+		query.query({
 			sql : 'update user_article set content=? where id=? ',params : [data.content,data.id]
 		}).then(function(rs){
 			var rst = rs[0];
@@ -378,7 +380,7 @@ router.post('/article/paste',function(req,res,next){
 router.post('/article/publish',function(req,res,next){
 	var id = req.body.id;
 	if(id){
-		query({
+		query.query({
 			sql : 'update user_article set ispublish=1,ctime=? where id=?',params : [moment(new Date()).format('YYYY-MM-DD HH:mm'),id]
 		}).then(function(rs){
 			res.json({success : true})
@@ -394,7 +396,7 @@ router.post('/article/publish',function(req,res,next){
 router.post('/article/baidu',function(req,res,next){
 	var id = req.body.id;
 	if(id){
-		query({
+		query.query({
 			sql : 'select * from user_article where id=?',params : [id]
 		}).then(function(rs){
 			var obj = rs[0][0];
@@ -417,7 +419,7 @@ router.post('/article/baidu',function(req,res,next){
 router.post('/article/cancel',function(req,res,next){
 	var id = req.body.id;
 	if(id){
-		query({
+		query.query({
 			sql : 'update user_article set ispublish=0 where id=?',params : [id]
 		}).then(function(rs){
 			res.json({success : true})
@@ -433,7 +435,7 @@ router.post('/article/cancel',function(req,res,next){
 router.post('/article/delete',function(req,res,next){
 	var id = req.body.id;
 	if(id){
-		query({
+		query.query({
 			sql : 'delete from user_article where id=?',params : [id]
 		}).then(function(rs){
 			res.json({success : true})
@@ -448,7 +450,7 @@ router.post('/article/delete',function(req,res,next){
 router.post('/article/recommend',function(req,res,next){
 	var id = req.body.id;
 	if(id){
-		query({
+		query.query({
 			sql : 'update user_article set recommend=? where id=?',params : ['1',id]
 		}).then(function(rs){
 			res.json({success : true})
@@ -472,7 +474,7 @@ router.post('/comment/list',function(req,res,next){
 	var data = req.body;
 	var page = parseInt(data.page,10);
 	var rows = parseInt(data.rows,10);
-	query([
+	query.query([
 		{sql : 'select t.id,c.link,t.name,t.content,t.ctime,t.email,t.toname,c.title from user_comment t left join user_article c on t.articleid=c.id order by ctime desc limit ?,?',params : [(page -1) * rows,rows]},
 		{sql : 'select count(1) as total from user_comment ',params : []}
 	]).then(function(rs){
@@ -491,7 +493,7 @@ router.post('/comment/list',function(req,res,next){
 router.post('/comment/delete',function(req,res,next){
 	var id= req.body.id;
 	if(id){
-		query({
+		query.query({
 			sql : 'delete from user_comment where id=? ',params : [id]
 		}).then(function(){
 			res.json({success : true})
@@ -517,7 +519,7 @@ router.get('/wish/option/add/:id',(req,res,next)=>{
 })
 //获得系列单
 router.post('/wish/list',(req,res,next)=>{
-	query({
+	query.query({
 		sql : 'select * from wish_list',params : []
 	})
 	.then(rs=>{
@@ -530,7 +532,7 @@ router.post('/wish/list',(req,res,next)=>{
 //获取心愿单
 router.post('/wish/option',(req,res,next)=>{
 	var id = req.body.id;
-	query({
+	query.query({
 		sql : 'select * from wish_list_option where wishid=?',params : [id]
 	})
 	.then(rs=>{
@@ -543,7 +545,7 @@ router.post('/wish/option',(req,res,next)=>{
 //心愿系列保存
 router.post('/wish/save',(req,res,next)=>{
 	var data = req.body;
-	query({
+	query.query({
 		sql : 'insert into wish_list (name,bgfilepath) values (?,?)',
 		params : [data.name,data.path]
 	})
@@ -560,7 +562,7 @@ router.post('/wish/save',(req,res,next)=>{
 //心愿系列删除
 router.post('/wish/delete',(req,res,next)=>{
 	var id = req.body.id;
-	query({
+	query.query({
 		sql : 'delete from wish_list where id=?',
 		params : [id]
 	})
@@ -577,7 +579,7 @@ router.post('/wish/delete',(req,res,next)=>{
 //心愿删除
 router.post('/wish/option/delete',(req,res,next)=>{
 	var id = req.body.id;
-	query({
+	query.query({
 		sql : 'delete from wish_list_option where id=?',params : [id]
 	})
 	.then(rs=>{
@@ -589,7 +591,7 @@ router.post('/wish/option/save',(req,res,next)=>{
 	var data = req.body;
 	//分为更新或新增
 	if(data.id == '' || data.id == null || data.id == undefined){
-		query({
+		query.query({
 			sql : 'insert into wish_list_option (title,filepath,createtime,wishid,status) values (?,?,?,?,?)',
 			params : [data.title,data.filepath,new Date(),data.wishid,'0']
 		})
@@ -601,7 +603,7 @@ router.post('/wish/option/save',(req,res,next)=>{
 			});
 		})
 	}else{
-		query({
+		query.query({
 			sql : 'update wish_list_option set title=?,filepath=?,createtime=?,wishid=? where id=?',
 			params : [data.title,data.filepath,new Date(),data.wishid,data.id]
 		})
@@ -617,7 +619,7 @@ router.post('/wish/option/save',(req,res,next)=>{
 //心愿达成
 router.post('/wish/option/answer',(req,res,next)=>{
 	var id = req.body.id,answer = req.body.answer;
-	query({
+	query.query({
 		sql : 'update wish_list_option set answer=?,answertime=?,status=? where id=?',
 		params : [answer,new Date(),1,id]
 	})
@@ -684,7 +686,104 @@ router.get('/album/delete',(req,res,next)=>{
 	res.end('suc');
 })
 
+//商品相关---------------start
+router.get('/shop/list', (req,res,next)=>{
+	res.render('center/shop/list');
+});
+router.post('/shop/list',(req,res,next)=>{
+	query.query({
+		sql : 'select * from order_goods',params : []
+	})
+	.then(rs=>{
+		res.json({
+			rows : rs[0],
+			total : rs[0].length,
+			success : true
+		})
+	})
+})
 
+//添加商品
+router.get('/shop/list/add',(req,res,next)=>{
+	if(req.query.id){
+		query.query([
+			{sql : 'select * from order_goods where id=?',params : [req.query.id]}
+		]).then(function(rs){
+			var article = rs[0][0];
+			article.types = (article.type || '').split(',');
+			article.types = article.types.filter(function(v){
+				return v != '';
+			});
+			res.render('center/shop/add',{
+				article : article
+			});	
+		}).catch(function(e){
+			console.log(e);
+			res.render('center/shop/add',{article : {}});
+		})
+	}else{
+		res.render('center/shop/add',{article : {}});
+	}
+	
+})
+//商品内容更新
+router.post('/shop/list/update',(req,res,next)=>{
+	var data = req.body;
+	if(data.id){
+		query.query({
+			sql : 'update order_goods set description=? where id=? ',params : [data.content,data.id]
+		}).then(function(rs){
+			var rst = rs[0];
+			res.json({success : true})
+		})
+	}else{
+		res.json({success : false})
+	}
+})
+//保存商品基本信息
+router.post('/shop/list/save',function(req,res,next){
+	var data = req.body;
+	console.log(data);
+	var isnew = false;
+	if(!data.id){
+		data.id = uuid.v4().toString();
+		isnew = true;
+	}
+	console.log(isnew);
+	var sql = !isnew ? {
+		sql : 'update order_goods set name=?,description=?,price=?,content=?,status=?,picpath=?,type=?,updatetime=? where id=?',
+		params : [data.name,data.description,data.price,data.content,data.status,data.picpath,data.type,new Date(),data.id]
+	} : {
+		sql : 'insert into order_goods (id,name,description,price,content,status,picpath,type,updatetime) values (?,?,?,?,?,?,?,?,?)',
+		params : [data.id,data.name,data.description,data.price,data.content,data.status,data.picpath,data.type,new Date()]
+	};
+	query.query(sql)
+	.then(function(rs){
+		var rst = rs[0];
+		res.json({
+			id : data.id,
+			success : true
+		});
+	}).catch(function(e){
+		console.log(e);
+		res.json({success : false});
+	})
+})
+//删除商品
+router.post('/shop/list/delete',function(req,res,next){
+	var id = req.body.id;
+	if(id){
+		query.query({
+			sql : 'delete from order_goods where id=?',params : [id]
+		}).then(function(rs){
+			res.json({success : true})
+		}).catch(function(){
+			res.json({success : false})
+		})
+	}else{
+		res.json({success : false})
+	}
+})
 
 router.get('*',function(req,res,next){
 	res.redirect('/error/404');

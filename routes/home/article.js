@@ -24,7 +24,7 @@ renderer.link = function(href,title,text){
 	return '<a href="'+href+'" title="'+text+'" target="_blank">'+text+'</a>';
 }
 
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 
 var moment = require('moment');
 
@@ -54,7 +54,7 @@ router.get('/',function(req,res,next){
 		p = 1;
 	}
 	var start = (p-1)*20;
-	query([
+	query.query([
 		//轮播
 		{sql : 'select * from user_banner where type=2 and isenable=1',params : []},
 		//分类
@@ -76,7 +76,7 @@ router.get('/',function(req,res,next){
 			article : articles,
 			total : all,
 			page : p,
-			site : this.mysite,
+			site : req.session.mysite,
 			github : req.session.github,
 			d : {
 				header : 'article'
@@ -92,7 +92,7 @@ router.get('/',function(req,res,next){
 router.get('/:id.html',function(req,res,next){
 	var enname = req.params.id;
 	//查询文章本身的信息，作者的信息，关联的文章，评论
-	query([{
+	query.query([{
 		sql : 'select * from user_article where enname=?',params : [enname]
 	},{
 		sql : 'select * from user_article where ispublish=1 and type =0 and enname!=? and category=(select category from user_article where enname=?) order by rand() limit 0,8',
@@ -108,7 +108,7 @@ router.get('/:id.html',function(req,res,next){
 			article.tags = article.tags ? article.tags.split(',') : [];
 			res.render('index/detail',{
 				article : article,
-				site : this.mysite,
+				site : req.session.mysite,
 				github : req.session.github,
 				links : rst2 || [],
 				d : {
@@ -127,7 +127,7 @@ router.get('/:id.html',function(req,res,next){
 router.post('/zan',function(req,res,next){
 	var id = req.body.id;
 	if(id){
-		query({
+		query.query({
 			sql : 'update user_article set likenum=(likenum+1) where id=?',params : [id]
 		}).then(function(){
 			res.json({success : true})
@@ -142,7 +142,7 @@ router.post('/zan',function(req,res,next){
 //保存评论
 router.post('/saveComment',function(req,res,next){
 	var data = req.body;
-	var site = this.mysite,
+	var site = req.session.mysite,
 		user = req.session.github;
 	data.name = user.name;
 	data.email = user.email||'';
@@ -154,8 +154,8 @@ router.post('/saveComment',function(req,res,next){
 		var email = site.email;
 		//还得查询文章的地址
 		Promise.all([
-			query({sql : 'select * from sys_user where id=(select userid from user_comment where id=?)',params : [data.toid]}),
-			query({sql : 'select link,title from user_article where id=?',params : [data.articleId]})])
+			query.query({sql : 'select * from sys_user where id=(select userid from user_comment where id=?)',params : [data.toid]}),
+			query.query({sql : 'select link,title from user_article where id=?',params : [data.articleId]})])
 		.then(rs=>{
 			var rs1 = rs[0],rs2 = rs[1];
 			var email = site.email,link = site.domain,title = '某些文章';
@@ -176,7 +176,7 @@ router.post('/saveComment',function(req,res,next){
 		.then(obj=>{
 			return tool.sendCommentEmail(obj.email,data.name,obj.title,obj.link);
 		});
-		query({
+		query.query({
 			sql : 'insert into user_comment (articleid,name,content,toid,ctime,email,toname,commentid,userid) values (?,?,?,?,?,?,?,?,?) ',
 			params : [data.articleId,data.name,data.content,data.toid,moment(new Date()).format('YYYY-DD-MM HH:mm:ss'),data.email,data.toname,data.commentid,data.userid]
 		})
@@ -195,7 +195,7 @@ router.post('/saveComment',function(req,res,next){
 router.post('/getComment',function(req,res,next){
 	var id = req.body.id;
 	if(id){
-		query({
+		query.query({
 			sql :'select t1.*,t2.avatar_url,(case when(t2.blog = "" or t2.blog is null) then t2.html_url else t2.blog end) as blog from user_comment t1 left join sys_user t2 on t1.userid=t2.id where t1.articleid=? order by ctime desc',
 			params : [id]
 		}).then(function(rs){
@@ -212,7 +212,7 @@ router.post('/getComment',function(req,res,next){
 //增加阅读次数
 router.post('/read',function(req,res,next){
 	if(req.body.id){
-		query({
+		query.query({
 			sql : 'update user_article set readnum=(readnum+1) where id=?',params : [req.body.id]
 		}).then(function(){
 			res.json({success:true});
@@ -241,14 +241,14 @@ router.get('/search',function(req,res,next){
 		});
 		paramsSql = paramsSql.substr(0,paramsSql.length - 3);
 		//对sql进行处理，空格分开的话重新处理
-		query({
+		query.query({
 			sql : 'select * from user_article where ispublish=1 and type=0 and ('+paramsSql+')',
 			params : params
 		})
 		.then(rs=>{
 			var rst = rs[0];
 			res.render('index/search',{
-				site : this.mysite,
+				site : req.session.mysite,
 				github : req.session.github,
 				d : {
 					q : q,

@@ -6,7 +6,7 @@
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 /* GET home page. */
 var ItemMap = {};
 router.get('/get', function(req, res, next) {
@@ -25,7 +25,7 @@ router.get('/get', function(req, res, next) {
 		sql : 'select * from wx_jiexi order by rand() limit 10'
 	}
 	];
-	query(sql).then(function(list){
+	query.query(sql).then(function(list){
 		var danxuan = list[0],
 			duoxuan = list[1],
 			panduan = list[2],
@@ -55,7 +55,7 @@ router.post('/get',function(req,res,next){
 		params : [id]
 	};
 	if(ttype < 3){//0 1 2(判断题目)
-		query(sql).then(function(list){
+		query.query(sql).then(function(list){
 			var rs = list[0];
 			res.end(JSON.stringify(rs));
 		});
@@ -68,7 +68,7 @@ router.post('/get',function(req,res,next){
 			sql : 'select * from wx_tiganitem where tiganid in (select id from wx_tigan where jiexiid=? ) order by seq asc',
 			params : [id]
 		}];
-		query(sql).then(function(list){
+		query.query(sql).then(function(list){
 			var tigan = list[0],item = list[1];
 			//重新进行组装
 			var arr = [];
@@ -97,7 +97,7 @@ router.post('/getAll',function(req,res,next){
 		sql : type == 3 ? 'select * from wx_jiexi order by id asc' : 'select * from wx_tigan where ttype=? order by id asc',
 		params : type == 3 ? [] :[type]
 	};
-	query(sql).then(function(list){
+	query.query(sql).then(function(list){
 		var rs = list[0];
 		res.end(JSON.stringify(rs));
 	})

@@ -1,14 +1,14 @@
 var express = require('express');
 var router = express.Router();
 var crypto = require('crypto');
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	//1.查询banner数据
 	//2.查询博主推荐数据
 	//3.查询DEMO数据
-	query([
+	query.query([
 		{sql : 'select * from user_banner where type=1 and isenable=1 ',params : []},
 		{sql : 'select * from user_article where ispublish=1 and type=0 and recommend=1 order by ctime desc limit 0,8'},
 		{sql : 'select * from user_article where ispublish=1 and type=1 order by likenum desc limit 0,8'}
@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 			banners : banners,
 			articles : articles,
 			demos : demos,
-			site : this.mysite,
+			site : req.session.mysite,
 			github : req.session.github,
 			d : {
 				header : 'home'
@@ -33,11 +33,11 @@ router.get('/', function(req, res, next) {
 });
 //关于-我
 router.get('/about',async function(req,res,next){
-	let links = await query({
+	let links = await query.query({
 		sql : 'select * from user_links order by id asc',params : []
 	});
 	res.render('index/about',{
-		site : this.mysite,
+		site : req.session.mysite,
 		links : links[0],
 		github : req.session.github,
 		d : {
@@ -48,7 +48,7 @@ router.get('/about',async function(req,res,next){
 //demo
 router.get('/demo',function(req,res,next){
 	res.render('demos/index',{
-		site : this.mysite,
+		site : req.session.mysite,
 		github : req.session.github,
 		d : {
 			header : 'demo'
@@ -73,9 +73,9 @@ router.post('/login',function(req,res,next){
 	//加密pwd,检索帐号信息
 	md5.update(pwd);
 	var pwd2 = md5.digest('hex');
-	if(this.mysite.superaccount === user && this.mysite.superpwd === pwd2){
+	if(req.session.mysite.superaccount === user && req.session.mysite.superpwd === pwd2){
 		//登录成功
-		req.session.user = this.mysite;
+		req.session.user = req.session.mysite;
 		res.redirect('/center/home');
 	}else{
 		res.render('index/login',{

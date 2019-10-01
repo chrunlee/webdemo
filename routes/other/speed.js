@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var sql = require('simple-mysql-query');
+var sql = require('sqlquery-tool');
 var moment = require('moment');
 /* GET home page. */
 router.post('/name', function(req, res, next) {
@@ -12,7 +12,7 @@ router.post('/name', function(req, res, next) {
 		params : [name]
 	};
 	var rs = {success : false,msg : 'sorry ，服务器抽风了..请谅解'};
-	sql(list).then(function( rst ){
+	sql.query(list).then(function( rst ){
 		rst = rst[0];
 		if(rst.length > 0){//存在
 			rs = {
@@ -27,7 +27,7 @@ router.post('/name', function(req, res, next) {
 				params : [name,new Date()]
 			};
 
-			sql(list2).then(function(rst){
+			sql.query(list2).then(function(rst){
 				rs = {
 					success : true
 				};
@@ -53,7 +53,7 @@ router.post('/score',function(req,res,next){
 		success : false,
 		msg : 'sorry,服务器出错了..本次排名看不到了'
 	};
-	sql(list).then(function(rst){
+	sql.query(list).then(function(rst){
 		//获得ID
 		console.log(rst);
 		var id = rst[0].insertId;
@@ -65,7 +65,7 @@ router.post('/score',function(req,res,next){
 			,params : []
 		}
 		];
-		sql(list2).then(function(rst2 ){
+		sql.query(list2).then(function(rst2 ){
 			console.log(rst2);
 			var rank= rst2[0],total = rst2[1];
 			rank = rank[0].rank;
@@ -90,7 +90,7 @@ router.get('/rank',function(req,res,next){
 		sql : 'select id,name,usetime,(@ranknum:=@ranknum+1) as rank,createtime from demo_speed,(select (@ranknum :=0) ) b where usetime > 0 order by usetime asc',
 		params : []
 	};
-	sql(list).then(function(rs){
+	sql.query(list).then(function(rs){
 		console.log(rs);
 		var rst = rs[0];
 		//循环处理

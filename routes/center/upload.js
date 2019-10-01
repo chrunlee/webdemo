@@ -12,7 +12,7 @@ var ImageUtil = require('../../util/ImageUtil');
 
 var path = require('path');
 
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 
 var fs = require('fs');
 
@@ -105,7 +105,7 @@ router.post('/dat',upload('file','public/upload/tmp'),(req,res,next)=>{
             fs.unlinkSync(file.filePath);
             res.json({success : false,msg : '文件不符合规范，已经删除'});
         }else{
-            query({sql : 'update site_set set intval=intval+1 where name=?',params : ['datcount']})
+            query.query({sql : 'update site_set set intval=intval+1 where name=?',params : ['datcount']})
             .catch(ea=>{console.log(ea)})
             //转成图片，然后转base64
             fs.readFile(path.join(__dirname,'../../',file.filePath),(err,content)=>{

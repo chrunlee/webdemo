@@ -11,8 +11,8 @@ var redisClient = redis.createClient();
 var RedisStore = require('connect-redis')(session);
 var compression = require('compression');
 
-var sqlquery = require('simple-mysql-query');
-sqlquery(require('./lib/config').mysql);
+var sqlquery = require('sqlquery-tool');
+sqlquery.query(require('./lib/config').mysql);
 
 var app = express();
 

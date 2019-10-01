@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表及维护管理</title>
+    <link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+    <link rel="stylesheet" href="/css/center/home.css">
+</head>
+<body class="grey-bg frame-body">
+    <div class="byy-panel list-panel">
+        <div class="byy-panel-title">
+            <span class="byy-breadcrumb">
+                <a href="/center/home" target="_parent">首页</a>
+                <a><cite>商品列表</cite></a>
+            </span>
+            <span class="byy-btn-group pull-right">
+                <span class="byy-btn small danger" filter="openAdd"><i class="byyicon icon-plus"></i>添加商品</span>
+            </span>
+        </div>
+        <div class="byy-panel-content byy-clear">
+            <table class="byy-table">
+                
+            </table>
+            <div class="page">
+                <div class="pagination pull-right"></div>   
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+    byy.require(['jquery','win','table'],function(){
+        var category = [];
+        byy.bindEvents({
+            
+            openAdd : function(){
+                location.href = '/center/shop/list/add';
+            },
+            edit : function(data){
+                var id = data.id;
+                location.href = '/center/shop/list/add?id='+id;   
+            },
+            delete : function(data){
+                var id = data.id;
+                $.ajax({
+                    url : '/center/shop/list/delete',
+                    type : 'post',
+                    data : {id : id},
+                    success : function(res){
+                        if(res.success){
+                            byy.win.msg('删除成功',function(){
+                                location.reload();  
+                            });
+                        }else{
+                            byy.win.msg('删除失败,请检查');
+                        }
+                    }
+                });
+            }
+            
+        });
+        
+
+        var loadData = function(){
+            //渲染数据
+            byy.table.render({
+                elem : '.byy-table',
+                method : 'post',
+                url : '/center/shop/list',
+                page : {
+                    limit : 100,
+                    pageArray : [100]
+                },
+                cols : [[
+                    {field : 'name',title : '商品名称'},
+                    {field : 'price',title : '单价',width:100},
+                    {field : 'status',title : '状态',width:100,templet : function(data){
+                        return data.status =='0' ?'<span class="green-c">在售</span>' : '<span class="red-c">脱销</span>'
+                    }},
+                    {field : 'viewnum',title : '热度',width:150,sort : true},
+                    {field : 'sucnum',title : '交易成功数量',width:150,sort : true},
+                    {field : 'tool',title:'操作',tool : true,width:150,templet : function( data ){
+                        return ['<span class="byy-btn mini" data-id="'+data.id+'" filter="edit">去编辑</span>',
+                                '<span class="byy-btn mini danger" data-id="'+data.id+'" filter="delete">删除</span>'
+                            ].join('');
+                    }}
+                ]]
+
+            });
+        }
+
+        loadData();
+    })
+
+</script>

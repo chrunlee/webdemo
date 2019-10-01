@@ -2,7 +2,7 @@
 var express = require('express');
 var router = express.Router();
 
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 
 var {github} = require('../../json/config');
 var superagent = require('superagent');
@@ -31,16 +31,16 @@ router.get('/',function(req,res,next){
 	})
 	.then(function(user){
 		//授权成功，检查用户是否存在，然后更新数据，更新session，跳转首页
-		query({sql : 'select count(1) as num from sys_user where id=?',params : [user.id]})
+		query.query({sql : 'select count(1) as num from sys_user where id=?',params : [user.id]})
 		.then(rs=>{
 			var rst = rs[0],obj = rst[0];
 			if(obj.num > 0){//已经存在更新
-				return query({
+				return query.query({
 					sql : 'update sys_user set avatar_url=?,login=?,name=?,company=?,blog=?,location=?,email=?,bio=?,public_repos=?,public_gists=?,followers=?,following=?,html_url=? where id=?',
 					params : [user.avatar_url,user.login,user.name,user.company,user.blog,user.location,user.email,user.bio,user.public_repos,user.public_gists,user.followers,user.following,user.html_url,user.id]
 				});
 			}else{//插入数据
-				return query({
+				return query.query({
 					sql : 'insert into sys_user (id,avatar_url,login,name,company,blog,location,email,bio,public_repos,public_gists,followers,following,html_url) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
 					params : [user.id,user.avatar_url,user.login,user.name,user.company,user.blog,user.location,user.email,user.bio,user.public_repos,user.public_gists,user.followers,user.following,user.html_url]
 				});
@@ -74,7 +74,7 @@ router.get('/login', function(req, res, next) {
 router.post('/auto',function(req,res,next){
 	var id = req.body.id;
 	if(id){
-		query({
+		query.query({
 			sql : 'select * from sys_user where id=?',params : [id]
 		})
 		.then(rs=>{

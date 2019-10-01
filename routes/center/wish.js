@@ -3,11 +3,11 @@
 var express = require('express');
 var router = express.Router();
 
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 
 
 router.get('/view/:id',function(req,res,next){
-    query([{
+    query.query([{
         sql : 'select * from wish_list_option where wishid=?',
         params : [req.params.id]
     },{

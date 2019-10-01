@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="applicable-device" content="pc,mobile">
+    <meta name="MobileOptimized" content="width">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="mobile-agent" content="format=html5;url=https://chrunlee.cn/shop/detail/{{item.id}}.html">
+    <meta name="description" content="{{item.description}}">
+    <meta name="keywords" content="{{item.name}}">
+    <meta name="author" content="{{site.sitename}}">
+    <meta name="site" content="https://chrunlee.cn">
+    <meta name="title" content="{{item.name}} | {{site.sitename}}">
+    <title>{{item.name}} - 成交区 - 采然小店</title>
+    <link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+    <link rel="stylesheet" href="/css/index/index.css">
+    <link rel="stylesheet" href="/css/shop/index.css">
+</head>
+<body>
+    <input type="hidden" name="id" id="id" value="{{item.id}}">
+    <input type="hidden" name="starttime" id="starttime" value="{{data.starttime}}">
+    <header>
+        <ul class="byy-nav">
+            <li class="byy-nav-item"><a href="/shop?type=tool">工具</a></li>
+            <span class="byy-info pull-right">采然小店</span>
+        </ul>
+    </header>
+    <div id="shop-content">
+        <div class="shop-path">
+            <span class="byy-breadcrumb" separator="/">
+                <a href="/">首页</a>
+                <a href="/shop">采然小店</a>
+                <a><cite>{{item.name}}</cite></a>
+            </span>    
+        </div>
+        <div class="deal-info">
+            <div class="tips">
+               请在下方倒计时前完成付款，否则当前订单将失效。付款成功但未收到发货邮件，请带上付款截图，发我邮箱 <email>chrunlee@foxmail.com</email>.
+               {{ if ismobile}}
+                <div style="color:#49e;font-size:14px;">(手机端请截屏后打开支付宝扫码。)</div>
+               {{/if}}
+            </div>
+            <div class="email">
+                接受邮箱为:<span id="emailAddress">{{data.email}}</span>
+                <a href="javascript:;" filter="editEmail">点击修改</a>
+            </div>
+            <div class="qr-top">
+                {{if data.type== 'alipay'}}
+                <img src="/images/alipay.png" alt="">
+                {{else}}
+                <img src="/images/weixinpay.jpg" style="width:120px;" alt="">
+                {{/if}}
+            </div>
+            <div class="qr-body">
+                <p class="qr-price">￥{{data.dealPrice}}<span class="random-price">随机减免</span></p>
+                <div class="qr-image">
+                    <img src="/shop/qr?dealPrice={{data.dealPrice}}&dealId={{data.dealId}}&type={{data.type}}" alt="">
+                    {{if data.type == 'alipay'}}
+                    <img class="center-logo" src="data:image/png;base64,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" alt="">
+                    {{else}}
+                    <img class="center-logo" src="/images/weixin-logo.jpg" />
+                    {{/if}}
+                    <div class="expired">
+                        <img src="data:image/png;base64,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" alt="">
+                    </div>
+                </div>
+                <div class="qr-time">
+                    <span class="time">00</span>
+                    <span class="opt">:</span>
+                    <span class="sec">00</span>
+                </div>
+                <div class="qr-opt">{{data.type == 'alipay' ? '打开支付宝「扫一扫」' : '打开微信「扫一扫」或直接识别二维码'}}</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{{ include '../tpl/commonjs'}}
+<script type="text/javascript">
+    byy.require(['jquery','slider','win'],function(){
+        console.log('suc');
+        //开始及时
+        var starttime = parseInt($('#starttime').val(),10);
+        var f = setInterval(function(){
+            var now = new Date();
+            var nowtime = now.getTime();
+            var diff = (nowtime - starttime)/1000;//seconds
+            //共计5分钟，300s.
+            var left = Math.max(300 - diff,0);
+            var min = Math.floor(left / 60);
+            var sec = Math.floor(left % 60);
+            var minstr = '0'+min;
+            sec = sec < 10 ? '0'+sec : sec+'';
+            $('.time').html(minstr);
+            $('.sec').html(sec);
+            if(left == 0){
+                //
+                clearInterval(f);
+                //给定过期符号。
+                $('.expired').addClass('show');
+            }
+        },1000);
+
+        byy.bindEvents({
+            editEmail:function(){
+                byy.win.prompt({
+                    formType : 0,
+                    value : '',
+                    title : '请输入要接收商品的邮箱地址，请确保可用。',
+                    maxlength : 50
+                },function(value,index,elem){
+                    byy.win.close(index);
+                    //校验邮箱地址是否可用。
+                    var reg = /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/; //正则表达式
+                    value = value.trim();
+                    if(reg.test(value)){
+                        $.ajax({
+                            url : '/shop/email',
+                            method : 'post',
+                            data : {email : value},
+                            success : function(){
+                                $('#emailAddress').html(value);
+                            }
+                        });
+                    }else{
+                        byy.win.msg('邮箱地址未校验通过，请正确输入!')
+                    }
+                });
+            }
+        });
+    })
+</script>

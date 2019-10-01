@@ -50,7 +50,12 @@ module.exports = function( app ){
 	//音乐
 	app.use('/music',require('../routes/other/music'));
 
+	//商店
+	app.use('/shop',require('../routes/shop/index'))
 
+	//APP notify
+	app.use('/notify',require('../routes/shop/notify'))
+	
 	//美图
 	app.use('/picture',require('../routes/other/picture'));
 

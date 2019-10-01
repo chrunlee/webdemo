@@ -6,7 +6,7 @@
 
 //间隔：每周清理一次
 var fs = require('fs');
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 var async = require('async');
 
 var ClearUpload = function(){
@@ -20,7 +20,8 @@ var ClearUpload = function(){
 			{sql : 'select * from user_article where content like ? or postpath like ? ',params : [fileName,fileName]},
 			{sql : 'select * from user_banner where bannerpath like ? ',params : [fileName]},
 			{sql : 'select * from user_record where imgpath like ? ' ,params : [fileName]},
-			{sql : 'select * from user_pdf where postpath like ? or pdfpath like ? ',params : [fileName,fileName]}
+			{sql : 'select * from user_pdf where postpath like ? or pdfpath like ? ',params : [fileName,fileName]},
+			{sql : 'select * from order_goods where picpath like ? ',params : [fileName]}
 		];
 	};
 
@@ -55,7 +56,7 @@ ClearUpload.prototype.start = function(){
 //检查是否存在，并处理
 ClearUpload.prototype.check = function(fileName,cb){
 	var that = this;
-	query(that.table(fileName))
+	query.query(that.table(fileName))
 	.then(function(rs){
 		//检查rs的条目
 		var has = false;

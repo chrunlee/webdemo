@@ -7,11 +7,11 @@ var express = require('express');
 var router = express.Router();
 var moment = require('moment');
 
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 
 router.get('/',function(req,res,next){
 	//随机获得9找照片
-	query({
+	query.query({
 		sql : 'select * from user_record order by utime asc',params : []
 	}).then(rs => {
 		var rst = rs[0];

@@ -1,5 +1,5 @@
 /*菜谱信息*/
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 
 var express = require('express');
 var router = express.Router();
@@ -7,7 +7,7 @@ var fs = require('fs');
 
 router.all('/category',function(req,res,next){
 	//返回所有的菜谱分类并归纳
-	query({
+	query.query({
 		sql : 'select * from caipu_fenlei',
 		params : []
 	}).then(function(rs){
@@ -52,7 +52,7 @@ router.all('/item',function(req,res,next){
 		pagesize = parseInt(pagesize,10);
 	}catch(e){pagesize=10;}
 	if(cid){
-		query({
+		query.query({
 			sql : 'select * from caipu_item where cid=? limit ?,?',
 			params : [cid,start,pagesize]
 		}).then(function(rs){
@@ -79,7 +79,7 @@ router.all('/item',function(req,res,next){
 router.get('/list',function(req,res,next){
 	var cid = req.body.cid || req.query.cid;
 	if(cid){
-		query([{
+		query.query([{
 			sql : 'select * from caipu_item where cid=? ',
 			params : [cid]
 		},{
@@ -136,7 +136,7 @@ router.all('/find',function(req,res,next){
 		pagesize = parseInt(pagesize,10);
 	}catch(e){pagesize=10;}
 	if(name){
-		query({
+		query.query({
 			sql : 'select * from caipu_item where title like ? or ingredients like ? limit ?,?',
 			params : ['%'+name+'%','%'+name+'%',start,pagesize]
 		})
@@ -164,7 +164,7 @@ router.all('/find',function(req,res,next){
 router.all('/get',function(req,res,next){
 	var id = req.body.id || req.query.id;
 	if(id){
-		query([{
+		query.query([{
 			sql : 'select * from caipu_item where id=? ',
 			params : [id]
 		},{
@@ -211,7 +211,7 @@ router.all('/get',function(req,res,next){
 
 /**菜谱相关的页面处理**/
 router.get('/home',function(req,res,next){
-	query({
+	query.query({
 		sql : 'select * from (select f.name,f.category,f.id,count(1) as num,f.icons from caipu_item t left join caipu_fenlei f on f.id=t.cid group by f.name,f.category,f.id,f.icons ) z where z.num > 20 order by id asc',
 		params : []
 	}).then(function(rs){
@@ -273,7 +273,7 @@ router.get('/show/:id',function(req,res,next){
 			sql : 'select * from caipu_item where category=(select category from caipu_item where id=?) order by rand() limit 0,3',
 			params : [id.trim()]
 		}];
-		query(sqlopt).then(function(rs){
+		query.query(sqlopt).then(function(rs){
 			var caipuObj = rs[0][0];
 			var steps = rs[1];
 			var links = rs[2];
@@ -313,7 +313,7 @@ router.get('/fenlei',function(req,res,next){
 		//获得分类信息，然后列出10个菜谱，下拉刷新
 		page = parseInt(page,10);
 		var start = page * 10;
-		query([{
+		query.query([{
 			sql : 'select * from caipu_fenlei where id=?',params : [id]
 		},{
 			sql : 'select * from caipu_item where cid=? order by likenum desc limit ?,10',params :[id,start]
@@ -337,7 +337,7 @@ router.post('/fenlei',function(req,res,next){
 		//获得分类信息，然后列出10个菜谱，下拉刷新
 		page = parseInt(page,10);
 		var start = page * 10;
-		query({
+		query.query({
 			sql : 'select * from caipu_item where cid=? order by likenum desc limit ?,10',params :[id,start]
 		}).then(function(rs){
 			var list = rs[0];
@@ -353,7 +353,7 @@ router.post('/fenlei',function(req,res,next){
 router.post('/zan',function(req,res,next){
 	var id = req.body.id;
 	if(id){
-		query({
+		query.query({
 			sql : 'update caipu_item set likenum=likenum+1 where id=?',params : [id]
 		}).then(function(){
 			res.end('true');
@@ -372,7 +372,7 @@ router.get('/search',function(req,res,next){
 		sql = 'select * from caipu_item where title like ? or tags like ? or ingredients like ? or burden like ? order by likenum desc limit 0,10';
 		params = ['%'+q+'%','%'+q+'%','%'+q+'%','%'+q+'%'];
 	}
-	query({sql : sql,params :params})
+	query.query({sql : sql,params :params})
 	.then(function(rs){
 		var list = rs[0];
 		res.render('other/caipu/search',{
@@ -394,7 +394,7 @@ router.post('/search',function(req,res,next){
 		sql = 'select * from caipu_item where title like ? or tags like ? or ingredients like ? or burden like ? order by likenum desc limit 0,10';
 		params = ['%'+q+'%','%'+q+'%','%'+q+'%','%'+q+'%'];
 	}
-	query({sql : sql,params :params})
+	query.query({sql : sql,params :params})
 	.then(function(rs){
 		var list = rs[0];
 		res.end(JSON.stringify(list));

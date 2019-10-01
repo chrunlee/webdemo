@@ -6,7 +6,7 @@
 var superagent = require('superagent');
 var uautil = require('../lib/UA');
 var URL = require('url');
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 
 
 module.exports = function(req,res,next){
@@ -39,7 +39,7 @@ module.exports = function(req,res,next){
           originurl : urlobj.href
         };
         //保存数据库
-        query({
+        query.query({
           sql : 'insert into demo_logs (url,ip,xitong,ctime,browser,originurl,region) values (?,?,?,?,?,?,?)',
           params : [rs.url,rs.ip,rs.xitong,rs.ctime,rs.browser,rs.originurl,rs.region]
         })

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="applicable-device" content="pc,mobile">
+    <meta name="MobileOptimized" content="width">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="mobile-agent" content="format=html5;url=https://chrunlee.cn/shop/detail/{{item.id}}.html">
+    <meta name="description" content="{{item.description}}">
+    <meta name="keywords" content="{{item.name}}">
+    <meta name="author" content="{{site.sitename}}">
+    <meta name="site" content="https://chrunlee.cn">
+    <meta name="title" content="{{item.name}} | {{site.sitename}}">
+    <title>{{item.name}} - 采然小店</title>
+    <link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+    <link rel="stylesheet" href="/css/index/index.css">
+    <link rel="stylesheet" href="/css/shop/index.css">
+</head>
+<body>
+    <input type="hidden" name="id" id="id" value="{{item.id}}">
+    <input type="hidden" name="ismobile" id="ismobile" value="{{ismobile}}">
+    <input type="hidden" name="email" id="email" value="{{email}}">
+    <header>
+        <ul class="byy-nav">
+            <li class="byy-nav-item"><a href="/shop?type=tool">工具</a></li>
+            <span class="byy-info pull-right">采然小店</span>
+        </ul>
+    </header>
+    <div id="shop-content">
+        <div class="shop-path">
+            <span class="byy-breadcrumb" separator="/">
+                <a href="/">首页</a>
+                <a href="/shop">采然小店</a>
+                <a><cite>{{item.name}}</cite></a>
+            </span>    
+        </div>
+        <div class="shop-info">
+            <div class="left-img">
+                <div class="byy-carousel" id="test" byy-indicator="none" byy-arrow="none">
+                    <div carousel-item="">
+                        <div style="background-image:url({{item.picpath}})">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="right-info">
+                <p class="title">{{item.name}}</p>
+                <p class="price">￥{{item.price}}</p>
+                <p class="btn">
+                    <span class="byy-btn normal alipay" data-type="alipay" filter="topay" title="点击通过支付宝付款"></span>
+                    <span class="byy-btn normal weixin" title="点击通过微信付款" filter="topay" data-type="weixin"></span>
+                </p>
+                <p class="line"></p>
+                <p class="tagq">商品分类:{{item.type}}</p>
+                <p class="tagq">当前已售:{{item.sucnum||0}}</p>
+            </div>
+            <div class="byy-clear"></div>
+            <div class="byy-tab byy-tab-brief byy-tab-scroll " style="">
+                <ul class="byy-tab-title">
+                    <li class="byy-tab-this">商品介绍</li>
+                </ul>
+                <div class="byy-tab-content" style="">
+                    <div class="byy-tab-item show">{{@item.html}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{{ include '../tpl/commonjs'}}
+<script type="text/javascript">
+    byy.require(['jquery','slider','win'],function(){
+        
+        byy.slider.render({
+            elem : '#test',
+            arrow : 'none',
+            indicator : 'none',
+            width:'100%',
+            height : '100%'
+
+        });
+        // if($('#ismobile').val() == 'true'){
+            byy.win.tips('请点我支付',$('[data-type="alipay"]'),{tipsMore : true,tips :3});
+            byy.win.tips('请点我支付',$('[data-type="weixin"]'),{tipsMore : true,tips :3});
+        // }
+        byy.bindEvents({
+            topay :function(dt){
+                var type = dt.type;
+                //如果当前session中有email,则默认不提示，直接上。
+                if($('#email').val() != ''){
+                    location.href = '/shop/deal/'+$('#id').val();
+                }else{
+                    byy.win.prompt({
+                        formType : 0,
+                        value : '',
+                        title : '请输入要接收商品的邮箱地址，请确保可用。',
+                        maxlength : 50
+                    },function(value,index,elem){
+                        byy.win.close(index);
+                        //校验邮箱地址是否可用。
+                        var reg = /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/; //正则表达式
+                        value = value.trim();
+                        if(reg.test(value)){
+                            $.ajax({
+                                url : '/shop/email',
+                                method : 'post',
+                                data : {email : value,type  : type},
+                                success : function(){
+                                    location.href = '/shop/deal/'+$('#id').val();
+                                }
+                            });
+                        }else{
+                            byy.win.msg('邮箱地址未校验通过，请正确输入!')
+                        }
+                    });
+                }
+            }
+        });
+
+        //更新关注度
+        $.ajax({
+            url : '/shop/care',
+            type : 'post',
+            data : {id : $('#id').val()},
+            success : function(){}
+        });
+    })
+</script>

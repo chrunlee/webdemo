@@ -2,7 +2,7 @@
 
 var fs = require('fs');
 var path = require('path');
-var query = require('simple-mysql-query');
+var query = require('sqlquery-tool');
 var db = require('../lib/config').mysql;
 var superagent = require('superagent');
 var cheerio = require('cheerio');
@@ -23,7 +23,7 @@ function fetch(cb){
         {url : '/caipu/search',     changefreq : 'monthly',     priority : 0.8 }
 
     ];
-    query([{
+    query.query([{
         sql : 'select link,ctime from user_article where ispublish=1 order by ctime desc',params : []
     },{
         sql : 'select id,title from caipu_item',params : []
