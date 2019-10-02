@@ -34,7 +34,7 @@ router.all('/',async (req,res,next)=>{
         let rs = await query.search('order_list').insert(insertData);
         //根据价格查找当前时间6分钟以内的该价格的订单
         let  undoList = await query.query({
-            sql : 'select * from order_user where time_to_sec(now()) - time_to_sec(starttime) < 360 and price=? and status=?' ,params : [data.money,'0']
+            sql : 'select * from order_user where UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(starttime) < 360 and price=? and status=?' ,params : [data.money,'0']
         }).then(rs=>rs[0]);
         if(undoList == null || undoList.length == 0){
             //说明有人付款，但是未查到是谁付款。这里请给我个钉钉

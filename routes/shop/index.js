@@ -107,7 +107,7 @@ router.get('/deal/:id',async (req,res,next)=>{
     let dealPrice = price;
     //待支付，且时间不超过5分钟的。
     let list = await query.query({
-        sql : 'select * from order_user where time_to_sec(now()) - time_to_sec(starttime) < 300 and status=? and sid=? and goodid=?',params : ['0',uniqueId,goodId]
+        sql : 'select * from order_user where UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(starttime) < 300 and status=? and sid=? and goodid=?',params : ['0',uniqueId,goodId]
     }).then(rs=>rs[0])
     
     // let list = await query.search('order_user').where({goodid : goodId,status : '0' ,sid : uniqueId}).list();
