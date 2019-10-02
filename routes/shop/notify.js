@@ -32,7 +32,6 @@ router.all('/',async (req,res,next)=>{
             content : data.content || ''
         }
         let rs = await query.search('order_list').insert(insertData);
-        console.log(rs);
         //根据价格查找当前时间6分钟以内的该价格的订单
         let  undoList = await query.query({
             sql : 'select * from order_user where time_to_sec(now()) - time_to_sec(starttime) < 360 and price=? and status=?' ,params : [data.money,'0']
@@ -41,7 +40,6 @@ router.all('/',async (req,res,next)=>{
             //说明有人付款，但是未查到是谁付款。这里请给我个钉钉
             await ding('商品售卖:有人付款，但是未查询到订单来源。('+data.content+')');
         }else{
-            console.log(undoList);
             //找到订单人
             let order = undoList[0];
             //获得邮箱地址，发送内容

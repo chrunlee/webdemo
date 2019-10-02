@@ -122,7 +122,7 @@ router.get('/deal/:id',async (req,res,next)=>{
             let checkPrice = parseFloat(tempPrice.toFixed(2));
             //检查
             let existsList = await query.query({
-                sql : 'select * from order_user where time_to_sec(now()) - time_to_sec(starttime) < 300 and price=? and status=?',params : [checkPrice,'0']
+                sql : 'select * from order_user where UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(starttime) < 300 and price=? and status=?',params : [checkPrice,'0']
             }).then(rs=>rs[0]);
             if(null == existsList || existsList.length == 0){
                 //不存在，可以插入
@@ -133,8 +133,10 @@ router.get('/deal/:id',async (req,res,next)=>{
             }
         }
         if(!hasCheck){
-            //
-            res.end('<script>alert("当前商品交易比较火爆，请稍后几分钟进行尝试")</script>');
+            res.writeHead(200,{'Content-Type':'text/html'});    
+            res.write('<head><meta charset="utf-8"/></head>');
+            res.write('<script>alert("当前商品交易比较火爆，请稍后几分钟进行尝试")</script>');
+            res.end();
             return;
         }
         //根据价格生成支付宝的二维码，检查有没有该二维码，没有则生成。
