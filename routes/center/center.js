@@ -835,6 +835,9 @@ router.post('/shop/resend',async (req,res,next)=>{
 	let sendContent = goodItem.content;
 	//对内容进行发送
 	await tool.sendOrderEmail(email,goodName,sendContent);
+	await query.query({
+		sql : 'update order_goods set sucnum=sucnum+1 where id=?',params : [goodId]
+	});
 	//更新order的状态
 	await query.search('order_user').where({id : id}).update({status : '1'});
 	res.json({success : true});
