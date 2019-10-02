@@ -16,6 +16,8 @@ var uuid = require('node-uuid');
 
 var axios = require('axios');
 
+var tool = require('../../util/tool');
+
 var fs = require('fs');
 var path = require('path');
 //测试
@@ -743,7 +745,6 @@ router.post('/shop/list/update',(req,res,next)=>{
 //保存商品基本信息
 router.post('/shop/list/save',function(req,res,next){
 	var data = req.body;
-	console.log(data);
 	var isnew = false;
 	if(!data.id){
 		data.id = uuid.v4().toString();
@@ -784,7 +785,66 @@ router.post('/shop/list/delete',function(req,res,next){
 		res.json({success : false})
 	}
 })
+//商品订单-推送过来的数据。
+router.get('/shop/order',async (req,res,next)=>{
+	// let list = await query.search('order_list').order({
+	// 	order : 'desc',
+	// 	column : 'ordertime'
+	// }).list();
+	res.render('center/shop/order',{
+		// rows : list
+	});
+})
+router.post('/shop/order',async (req,res,next)=>{
+	let list = await query.search('order_list').order({
+		order : 'desc',
+		column : 'ordertime'
+	}).list();
+	console.log(list);
+	res.json({success : true,total : list.length,rows : list});
+})
+//支付用户列表
+router.get('/shop/success',async (req,res,next)=>{
+	res.render('center/shop/success',{});
+})
+router.post('/shop/success',async (req,res,next)=>{
+	let list = await query.query({
+		sql : 'select t1.*,t2.name,t2.price as goodprice from order_user t1 left join order_goods t2 on t1.goodid = t2.id order by t1.starttime desc',params : []
+	}).then(rs=>{return rs[0]}).catch(e=>{console.log(e)})
+	res.json({success : true,total : list.length,rows : list});
+})
+//重新补发
+router.post('/shop/resend',async (req,res,next)=>{
+	let id = req.body.id;
+	//获得数据
+	let order = await query.search('order_user').where({id : id}).list();
+	if(null == order || order.length == 0){
+		res.json({success : false});
+		return;
+	}
+	order = order[0];
+	let goodId = order.goodid;
+	let goodItem = await query.search('order_goods').where({id : goodId}).list();
+	if(null == goodItem || goodItem.length ==0){
+		res.json({success : false})
+		return;
+	}
+	goodItem = goodItem[0];
+	let email = order.email;
+	let goodName = goodItem.name;
+	let sendContent = goodItem.content;
+	//对内容进行发送
+	await tool.sendOrderEmail(email,goodName,sendContent);
+	//更新order的状态
+	await query.search('order_user').where({id : id}).update({status : '1'});
+	res.json({success : true});
+})
 
+router.post('/shop/delete',async (req,res,next)=>{
+	let id = req.body.id;
+	await query.search('order_user').where({id : id}).delete();
+	res.json({success : true});
+})
 router.get('*',function(req,res,next){
 	res.redirect('/error/404');
 })

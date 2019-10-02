@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单列表</title>
+    <link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+    <link rel="stylesheet" href="/css/center/home.css">
+</head>
+<body class="grey-bg frame-body">
+    <div class="byy-panel list-panel">
+        <div class="byy-panel-title">
+            <span class="byy-breadcrumb">
+                <a href="/center/home" target="_parent">首页</a>
+                <a><cite>商品列表</cite></a>
+            </span>
+            <span class="byy-btn-group pull-right">
+                <span class="byy-btn small danger" filter="openAdd"><i class="byyicon icon-plus"></i>添加商品</span>
+            </span>
+        </div>
+        <div class="byy-panel-content byy-clear">
+            <table class="byy-table">
+                
+            </table>
+            <div class="page">
+                <div class="pagination pull-right"></div>   
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+    byy.require(['jquery','win','table'],function(){
+        var loadData = function(){
+            //渲染数据
+            byy.table.render({
+                elem : '.byy-table',
+                method : 'post',
+                url : '/center/shop/order',
+                page : {
+                    limit : 100,
+                    pageArray : [100]
+                },
+                cols : [[
+                    {field : 'fromtype',title : '支付来源',width:100},
+                    {field : 'orderprice',title : '支付金额',width:100},
+                    {field : 'ordertime',title : '推送时间',width:200},
+                    {field : 'title',title : '支付名称',width:150},
+                    {field : 'sendstatus',title : '是否发货',width:100,templet : function(data){
+                        return data.sendstatus == '0' ? '<span style="color:red;">未发货</span>' : '<span style="color:green;">已发货</span>'
+                    }},
+                    {field : 'content',title : '支付内容'},
+
+                ]]
+
+            });
+        }
+
+        loadData();
+    })
+
+</script>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单列表</title>
+    <link rel="stylesheet" href="/plugins/byy/css/default/byy.css">
+    <link rel="stylesheet" href="/css/center/home.css">
+</head>
+<body class="grey-bg frame-body">
+    <div class="byy-panel list-panel">
+        <div class="byy-panel-title">
+            <span class="byy-breadcrumb">
+                <a href="/center/home" target="_parent">首页</a>
+                <a><cite>商品列表</cite></a>
+            </span>
+            <span class="byy-btn-group pull-right">
+                <span class="byy-btn small danger" filter="openAdd"><i class="byyicon icon-plus"></i>添加商品</span>
+            </span>
+        </div>
+        <div class="byy-panel-content byy-clear">
+            <table class="byy-table">
+                
+            </table>
+            <div class="page">
+                <div class="pagination pull-right"></div>   
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="/plugins/byy/byy.js"></script>
+<script type="text/javascript">
+    byy.require(['jquery','win','table'],function(){
+
+        byy.bindEvents({
+            resend : function(data){
+                $.ajax({
+                    url : '/center/shop/resend',
+                    type : 'post',
+                    data : {id : data.id},
+                    success : function(){
+                        location.reload();
+                    }
+                });
+            },
+            delete : function(data){
+                $.ajax({
+                    url : '/center/shop/delete',
+                    type : 'post',
+                    data : {id : data.id},
+                    success : function(){
+                        location.reload();
+                    }
+                });
+            }
+        });
+        var loadData = function(){
+            //渲染数据
+            byy.table.render({
+                elem : '.byy-table',
+                method : 'post',
+                url : '/center/shop/success',
+                page : {
+                    limit : 100,
+                    pageArray : [100]
+                },
+                cols : [[
+                    {field : 'name',title : '商品名称'},
+                    {field : 'email',title : '邮箱地址',width:200},
+                    {field : 'price',title : '成交价格',width:100},
+                    {field : 'status',title : '成交状态',width:100,templet : function(data){
+                        return data.status == '0' ? '<span style="color:red;">未成交</span>' : '<span style="color:green;">成功</span>'
+                    }},
+                    {field : 'starttime',title : '交易时间',width:250},
+                    {field : 'tool',tool : true,title : '操作',width:170,templet : function(data){
+                        return '<span class="byy-btn mini" filter="resend" data-id="'+data.id+'">补发</span><span class="byy-btn mini danger" filter="delete" data-id="'+data.id+'">删除</span>';
+                    }}
+                ]]
+
+            });
+        }
+
+        loadData();
+    })
+
+</script>
