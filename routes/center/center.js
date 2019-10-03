@@ -811,6 +811,12 @@ router.post('/shop/success',async (req,res,next)=>{
 	let list = await query.query({
 		sql : 'select t1.*,t2.name,t2.price as goodprice from order_user t1 left join order_goods t2 on t1.goodid = t2.id order by t1.starttime desc',params : []
 	}).then(rs=>{return rs[0]}).catch(e=>{console.log(e)})
+	if(list && list.length > 0){
+		list.forEach(item=>{
+			item.starttime = item.starttime ? item.starttime.toLocaleString() : '';
+		})
+	}
+	console.log(list);
 	res.json({success : true,total : list.length,rows : list});
 })
 //重新补发

@@ -9,7 +9,7 @@ let tool = require('../../util/tool');
 router.all('/',async (req,res,next)=>{
     console.log(req.body);
     let data = req.body;
-    if(!data.price || null == data.price || undefined == data.price){
+    if(!data.money || null == data.money || undefined == data.money){
         res.json({success : false,msg : '无效金额'});
         return;
     }
