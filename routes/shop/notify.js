@@ -9,6 +9,10 @@ let tool = require('../../util/tool');
 router.all('/',async (req,res,next)=>{
     console.log(req.body);
     let data = req.body;
+    if(!data.price || null == data.price || undefined == data.price){
+        res.json({success : false,msg : '无效金额'});
+        return;
+    }
     //根据deviceid 来进行校验设备
     let deviceList = await query.search('order_device').list();
     let currentId = data.deviceid;
