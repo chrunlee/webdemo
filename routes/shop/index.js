@@ -81,7 +81,6 @@ router.post('/email',async (req,res,next)=>{
 //交易区
 router.get('/deal/:id',async (req,res,next)=>{
     try{
-    await ding('商品售卖:有人进入交易区，请保持打开支付助手并打开微信支付宝消息提醒推送消息！！！');
     let goodId = req.params.id;
     if(!goodId){
         res.redirect('/shop/');
@@ -105,6 +104,7 @@ router.get('/deal/:id',async (req,res,next)=>{
     let uniqueId = sessionId+'_'+datestr;
     //检查当前数据库中是否存在待支付的订单
     let dealPrice = price;
+    await ding('商品售卖:客户进入交易区['+goodItem.name+']，请保持打开支付助手并打开微信支付宝消息提醒推送消息！！！');
     //待支付，且时间不超过5分钟的。
     let list = await query.query({
         sql : 'select * from order_user where UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(starttime) < 300 and status=? and sid=? and goodid=?',params : ['0',uniqueId,goodId]

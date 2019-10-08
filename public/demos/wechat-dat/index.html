@@ -26,6 +26,17 @@
         .right p,.right img{text-align:center;font-weight:bold;line-height:22px;}
         .money{}
         .right img{float:left;width:200px;height:220px;}
+        @media screen and (max-width:1000px){
+            .left{
+                padding-right:0px;
+            }
+            .right{
+                position:relative;
+            }
+            .text-center{
+                margin-top:30px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -111,7 +122,6 @@
             url : '/datcount/count',
             type : 'GET',
             success : function(rs){
-                console.log(rs);
                 $('#tipss').html(rs.msg);
             }
         });
